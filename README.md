@@ -42,6 +42,7 @@ const mosCore = require('mos-core')
 - [trim](https://npmjs.org/package/trim): Trim string whitespace
 - [unist-util-remove-position](https://github.com/wooorm/unist-util-remove-position): Remove `position`s from a unist tree
 - [vfile](https://github.com/wooorm/vfile): Virtual file format for text processing
+- [vfile-location](https://github.com/wooorm/vfile-location): Convert between positions (line and column-based) and offsets (range-based) locations in a virtual file
 
 <!--/@-->
 
