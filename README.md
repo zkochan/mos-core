@@ -40,6 +40,7 @@ const mosCore = require('mos-core')
 - [repeat-string](https://github.com/jonschlinkert/repeat-string): Repeat the given string n times. Fastest implementation for repeating a string.
 - [run-async](https://github.com/sboudrias/run-async): Utility method to run function either synchronously or asynchronously using the common `this.async()` style.
 - [trim](https://npmjs.org/package/trim): Trim string whitespace
+- [trim-trailing-lines](https://github.com/wooorm/trim-trailing-lines): Remove final newline characters from a string
 - [unist-util-remove-position](https://github.com/wooorm/unist-util-remove-position): Remove `position`s from a unist tree
 - [vfile](https://github.com/wooorm/vfile): Virtual file format for text processing
 - [vfile-location](https://github.com/wooorm/vfile-location): Convert between positions (line and column-based) and offsets (range-based) locations in a virtual file
