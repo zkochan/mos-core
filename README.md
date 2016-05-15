@@ -7,7 +7,7 @@
 <!--/@-->
 
 <!--@shields.flatSquare('npm', 'travis', 'coveralls')-->
-[![NPM version](https://img.shields.io/npm/v/mos-core.svg?style=flat-square)](https://www.npmjs.com/package/mos-core) [![Build status for master](https://img.shields.io/travis/zkochan/mos-core/master.svg?style=flat-square)](https://travis-ci.org/zkochan/mos-core) [![Test coverage for master](https://img.shields.io/coveralls/zkochan/mos-core/master.svg?style=flat-square)](https://coveralls.io/r/zkochan/mos-core?branch=master)
+[![NPM version](https://img.shields.io/npm/v/mos-core.svg?style=flat-square)](https://www.npmjs.com/package/mos-core) [![Build status for master](https://img.shields.io/travis/mosjs/mos-core/master.svg?style=flat-square)](https://travis-ci.org/mosjs/mos-core) [![Test coverage for master](https://img.shields.io/coveralls/mosjs/mos-core/master.svg?style=flat-square)](https://coveralls.io/r/mosjs/mos-core?branch=master)
 <!--/@-->
 
 <!--@installation()-->
@@ -33,7 +33,7 @@ const mosCore = require('mos-core')
 * * *
 
 <!--@dependencies({ shield: 'flat-square' })-->
-## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/zkochan/mos-core/master.svg?style=flat-square)](https://david-dm.org/zkochan/mos-core/master)
+## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master)
 
 - [ccount](https://github.com/wooorm/ccount): Count characters
 - [collapse-white-space](https://github.com/wooorm/collapse-white-space): Replace multiple white-space characters with a single space
@@ -52,7 +52,7 @@ const mosCore = require('mos-core')
 <!--/@-->
 
 <!--@devDependencies({ shield: 'flat-square' })-->
-## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/zkochan/mos-core/master.svg?style=flat-square)](https://david-dm.org/zkochan/mos-core/master#info=devDependencies)
+## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master#info=devDependencies)
 
 - [chai](https://github.com/chaijs/chai): BDD/TDD assertion library for node.js and the browser. Test framework agnostic.
 - [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog): Commitizen adapter following the conventional-changelog format.

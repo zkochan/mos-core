@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/zkochan/mos-core"
+    "url": "https://github.com/mosjs/mos-core"
   },
   "keywords": [
     "markdown",
@@ -35,9 +35,9 @@
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/zkochan/mos-core/issues"
+    "url": "https://github.com/mosjs/mos-core/issues"
   },
-  "homepage": "https://github.com/zkochan/mos-core#readme",
+  "homepage": "https://github.com/mosjs/mos-core#readme",
   "dependencies": {
     "ccount": "^1.0.0",
     "collapse-white-space": "^1.0.0",
