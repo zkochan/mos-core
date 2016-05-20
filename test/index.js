@@ -7,7 +7,7 @@ var fs = require('fs')
 var assert = require('assert')
 var VFile = require('vfile')
 var extend = require('extend')
-var mosCore = require('..')
+var mosCore = require('../src')
 var fixtures = require('./fixtures.js')
 var expect = require('chai').expect
 

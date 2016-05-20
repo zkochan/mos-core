@@ -10,7 +10,7 @@ var fs = require('fs')
 var path = require('path')
 var camelcase = require('camelcase')
 var clone = require('clone')
-var defaults = require('../lib/defaults.js')
+var defaults = require('../src/defaults.js')
 
 /*
  * Methods.
