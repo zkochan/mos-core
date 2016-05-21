@@ -4,9 +4,11 @@
   "description": "Markdown parser",
   "files": [
     "index.js",
-    "lib/"
+    "lib/",
+    "src/"
   ],
   "main": "lib/index.js",
+  "jsnext:main": "src/index.js",
   "scripts": {
     "test:code": "mocha --compilers js:babel-register",
     "test": "npm run test:code && npm run lint",
@@ -77,7 +79,7 @@
     "validate-commit-msg": "^2.6.1"
   },
   "engines": {
-    "node": ">=4"
+    "node": ">=0.10"
   },
   "config": {
     "commitizen": {
