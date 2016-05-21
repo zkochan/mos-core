@@ -38,6 +38,7 @@ const mosCore = require('mos-core')
 - [babel-runtime](https://github.com/babel/babel/blob/master/packages): babel selfContained runtime
 - [ccount](https://github.com/wooorm/ccount): Count characters
 - [collapse-white-space](https://github.com/wooorm/collapse-white-space): Replace multiple white-space characters with a single space
+- [core-js](https://github.com/zloirock/core-js): Standard library
 - [is-promise](https://github.com/then/is-promise): Test whether an object looks like a promises-a+ promise
 - [longest-streak](https://github.com/wooorm/longest-streak): Count the longest repeating streak of a character
 - [markdown-table](https://github.com/wooorm/markdown-table): Markdown/ASCII tables
