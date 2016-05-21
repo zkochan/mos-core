@@ -9,7 +9,7 @@
   "main": "lib/index.js",
   "scripts": {
     "test:code": "mocha --compilers js:babel-register",
-    "test": "npm run test:code && npm run lint && mos test",
+    "test": "npm run test:code && npm run lint",
     "lint": "eslint {src,test}/**/*.js",
     "commit": "git-cz",
     "coverage": "istanbul cover -x \"**/*.spec.js\" node_modules/mocha/bin/_mocha -- --compilers js:babel-register -R spec",
