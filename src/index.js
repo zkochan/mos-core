@@ -1,4 +1,5 @@
 import 'core-js/fn/array/find'
+import 'core-js/fn/array/find-index'
 
 import parse from './parse'
 import blockTokenizers from './parse/block-tokenizers'
