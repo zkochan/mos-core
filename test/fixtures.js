@@ -1,56 +1,44 @@
-'use strict'
-
-/* eslint-env node */
-
-/*
- * Dependencies.
- */
-
-var fs = require('fs')
-var path = require('path')
-var camelcase = require('camelcase')
-var clone = require('clone')
-var defaults = require('../lib/defaults.js')
+import fs from 'fs'
+import path from 'path'
+import camelcase from 'camelcase'
+import clone from 'clone'
+import * as defaults from '../src/defaults.js'
 
 /*
  * Methods.
  */
 
-var read = fs.readFileSync
-var exists = fs.existsSync
-var stat = fs.statSync
-var join = path.join
+const read = fs.readFileSync
+const exists = fs.existsSync
+const stat = fs.statSync
+const join = path.join
 
-var typeMap = {
+const typeMap = {
   'true': 'all',
   'false': 'physical',
 }
 
-var TYPE = typeMap[Boolean(process.env.TEST_EXTENDED)]
+const TYPE = typeMap[Boolean(process.env.TEST_EXTENDED)]
 
 /*
  * Defaults.
  */
 
-var keys = Object.keys(defaults.parse)
+const keys = Object.keys(defaults.parse)
 
 /*
  * Create a single source with all parse options turned
  * to their default values.
  */
 
-var sources = [keys.join('.')]
+let sources = [keys.join('.')]
 
 /*
  * Create all possible `parse` values.
  */
 
-keys.forEach(function (key) {
-  sources = [].concat.apply(sources, sources.map(function (source) {
-    return source.split('.').map(function (subkey) {
-      return subkey === key ? 'no' + key : subkey
-    }).join('.')
-  }))
+keys.forEach(key => {
+  sources = [].concat.apply(sources, sources.map(source => source.split('.').map(subkey => subkey === key ? `no${key}` : subkey).join('.')))
 })
 
 /**
@@ -87,21 +75,16 @@ augment.ruleRepetition = Number
  * @return {Object} - Configuration.
  */
 function parseOptions (name) {
-  var index = -1
-  var parts = name.split('.')
-  var results = []
-  var length = parts.length
-  var options = clone(defaults)
-  var part
-  var augmented
-  var key
-  var value
+  let index = -1
+  const parts = name.split('.')
+  const results = []
+  const length = parts.length
+  const options = clone(defaults)
+  let part
 
   while (++index < length) {
     part = parts[index].split('=')
-    augmented = augment(part[0], part.slice(1).join('='))
-    key = augmented.key
-    value = augmented.value
+    const {key, value} = augment(part[0], part.slice(1).join('='))
 
     if (key === 'output') {
       options[key] = value
@@ -140,12 +123,12 @@ function parseOptions (name) {
  * exists.
  */
 
-var virtual = {}
-var physical = {}
-var all = {}
+const virtual = {}
+const physical = {}
+const all = {}
 
-sources.forEach(function (source) {
-  var options = parseOptions(source)
+sources.forEach(source => {
+  const options = parseOptions(source)
 
   source = options.source
 
@@ -181,9 +164,9 @@ sources.forEach(function (source) {
  * @return {number} - Difference.
  */
 function difference (options, compare) {
-  var count = 0
+  let count = 0
 
-  Object.keys(options).forEach(function (key) {
+  Object.keys(options).forEach(key => {
     if (options[key] !== compare[key]) {
       count++
     }
@@ -202,11 +185,11 @@ function difference (options, compare) {
  * @return {string} - Resolved file-name.
  */
 function resolveFixture (source, fixtures, options) {
-  var minimum = Infinity
-  var resolved
-  var offset
+  let minimum = Infinity
+  let resolved
+  let offset
 
-  Object.keys(fixtures).forEach(function (key) {
+  Object.keys(fixtures).forEach(key => {
     offset = difference(options[source], options[key])
 
     if (offset < minimum) {
@@ -227,9 +210,9 @@ function resolveFixture (source, fixtures, options) {
  * @return {Object} - Resolved fixtures.
  */
 function resolveFixtures (fixtures, options) {
-  var resolved = {}
+  const resolved = {}
 
-  Object.keys(options).forEach(function (source) {
+  Object.keys(options).forEach(source => {
     resolved[source] = resolveFixture(source, fixtures, options)
   })
 
@@ -240,25 +223,23 @@ function resolveFixtures (fixtures, options) {
  * Gather fixtures.
  */
 
-var tests = fs.readdirSync(join(__dirname, 'input'))
-    .filter(function (filepath) {
-      return filepath.indexOf('.') !== 0
-    }).map(function (filepath) {
-      var filename = filepath.split('.').slice(0, -1)
-      var name = filename.join('.')
-      var settings = parseOptions(name)
-      var input = read(join(__dirname, 'input', filepath), 'utf-8')
-      var fixtures = {}
-      var possibilities = {}
-      var resolved
+const tests = fs.readdirSync(join(__dirname, 'input'))
+    .filter(filepath => filepath.indexOf('.') !== 0).map(filepath => {
+      const filename = filepath.split('.').slice(0, -1)
+      const name = filename.join('.')
+      const settings = parseOptions(name)
+      const input = read(join(__dirname, 'input', filepath), 'utf-8')
+      const fixtures = {}
+      const possibilities = {}
+      let resolved
 
-      Object.keys(all).forEach(function (source) {
-        var treename
-        var tree
+      Object.keys(all).forEach(source => {
+        let treename
+        let tree
 
         treename = [
           filename.join('.'),
-          source ? '.' + source : '',
+          source ? `.${source}` : '',
           '.json',
         ].join('')
 
@@ -278,7 +259,7 @@ var tests = fs.readdirSync(join(__dirname, 'input'))
       })
 
       if (!Object.keys(fixtures).length) {
-        throw new Error('Missing fixture for `' + name + '`')
+        throw new Error(`Missing fixture for \`${name}\``)
       }
 
       resolved = resolveFixtures(fixtures, possibilities)
@@ -286,7 +267,7 @@ var tests = fs.readdirSync(join(__dirname, 'input'))
       if (settings.output) {
         if (Object.keys(fixtures).length > 1) {
           throw new Error(
-                'Multiple fixtures for output `' + name + '`'
+                `Multiple fixtures for output \`${name}\``
             )
         }
       }
@@ -304,8 +285,4 @@ var tests = fs.readdirSync(join(__dirname, 'input'))
     }
 )
 
-/*
- * Expose tests.
- */
-
-module.exports = tests
+export default tests

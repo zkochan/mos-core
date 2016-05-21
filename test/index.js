@@ -1,15 +1,12 @@
-'use strict'
-
-/* eslint-env node, mocha */
-
-var path = require('path')
-var fs = require('fs')
-var assert = require('assert')
-var VFile = require('vfile')
-var extend = require('extend')
-var mosCore = require('..')
-var fixtures = require('./fixtures.js')
-var expect = require('chai').expect
+import path from 'path'
+import fs from 'fs'
+import assert from 'assert'
+import VFile from 'vfile'
+import extend from 'extend'
+import mosCore from '../src'
+import fixtures from './fixtures.js'
+import {expect} from 'chai'
+import {describe, it} from 'mocha'
 
 /*
  * Settings.
@@ -104,7 +101,7 @@ describe('parse(file, options?)', () => {
   })
 
   it('should throw parse errors', done => {
-    var message = 'Found it!'
+    const message = 'Found it!'
 
     /**
      * Tokenizer.
@@ -145,13 +142,13 @@ describe('parse(file, options?)', () => {
         assert(exception.line === 1)
         assert(exception.column === 7)
         assert(exception.reason === message)
-        assert(exception.toString() === '1:7: ' + message)
+        assert(exception.toString() === `1:7: ${message}`)
         done()
       })
   })
 
-  it('should warn when missing locators', function (done) {
-    var file = new VFile('Hello *World*!')
+  it('should warn when missing locators', done => {
+    const file = new VFile('Hello *World*!')
 
     /** Tokenizer. */
     function noop () {}
@@ -173,37 +170,38 @@ describe('parse(file, options?)', () => {
   })
 
   it.skip('should warn with entity messages', done => {
-    var filePath = path.join('test', 'input', 'entities-advanced.text')
-    var doc = fs.readFileSync(filePath, 'utf8')
-    var file = new VFile(doc)
-    var notTerminated = 'Named character references must be terminated by a semicolon'
+    const filePath = path.join('test', 'input', 'entities-advanced.text')
+    const doc = fs.readFileSync(filePath, 'utf8')
+    const file = new VFile(doc)
+    const notTerminated = 'Named character references must be terminated by a semicolon'
 
     file.quiet = true
 
+    let remark = null
     remark.process(file)
       .then(() => {
         assert.deepEqual(file.messages.map(String), [
           '1:13: Named character references must be known',
-          '5:15: ' + notTerminated,
-          '10:14: ' + notTerminated,
-          '12:38: ' + notTerminated,
-          '15:16: ' + notTerminated,
-          '15:37: ' + notTerminated,
-          '14:16: ' + notTerminated,
-          '18:17: ' + notTerminated,
-          '19:21: ' + notTerminated,
-          '17:16: ' + notTerminated,
-          '24:16: ' + notTerminated,
-          '24:37: ' + notTerminated,
-          '22:11: ' + notTerminated,
-          '29:17: ' + notTerminated,
-          '30:21: ' + notTerminated,
-          '28:17: ' + notTerminated,
-          '33:11: ' + notTerminated,
-          '36:27: ' + notTerminated,
-          '37:10: ' + notTerminated,
-          '41:25: ' + notTerminated,
-          '42:10: ' + notTerminated,
+          `5:15: ${notTerminated}`,
+          `10:14: ${notTerminated}`,
+          `12:38: ${notTerminated}`,
+          `15:16: ${notTerminated}`,
+          `15:37: ${notTerminated}`,
+          `14:16: ${notTerminated}`,
+          `18:17: ${notTerminated}`,
+          `19:21: ${notTerminated}`,
+          `17:16: ${notTerminated}`,
+          `24:16: ${notTerminated}`,
+          `24:37: ${notTerminated}`,
+          `22:11: ${notTerminated}`,
+          `29:17: ${notTerminated}`,
+          `30:21: ${notTerminated}`,
+          `28:17: ${notTerminated}`,
+          `33:11: ${notTerminated}`,
+          `36:27: ${notTerminated}`,
+          `37:10: ${notTerminated}`,
+          `41:25: ${notTerminated}`,
+          `42:10: ${notTerminated}`,
         ])
         done()
       })
@@ -212,7 +210,7 @@ describe('parse(file, options?)', () => {
 
   it('should be able to set options', done => {
     const blockTokenizers = mosCore.blockTokenizers.slice()
-    var htmlIndex = blockTokenizers.findIndex(t => t.name === 'html')
+    const htmlIndex = blockTokenizers.findIndex(t => t.name === 'html')
     const originalTokenizer = blockTokenizers[htmlIndex]
 
     /**
@@ -223,8 +221,8 @@ describe('parse(file, options?)', () => {
      * @param {string} value - Rest of content.
      */
     function replacement (parser, value) {
-      var node = /<!--\s*(.*?)\s*-->/g.exec(value)
-      var options = {}
+      const node = /<!--\s*(.*?)\s*-->/g.exec(value)
+      const options = {}
 
       if (node) {
         options[node[1]] = true
@@ -235,7 +233,7 @@ describe('parse(file, options?)', () => {
       return originalTokenizer.func.apply(null, arguments)
     }
 
-    var newTokenizer = Object.assign({}, originalTokenizer, { func: replacement })
+    const newTokenizer = Object.assign({}, originalTokenizer, { func: replacement })
 
     blockTokenizers.splice(htmlIndex, 1, newTokenizer)
 
@@ -270,7 +268,7 @@ describe('stringify(ast, file, options?)', () => {
   })
 
   it.skip('should not throw when given a parsed file', done => {
-    var file = new VFile('foo')
+    const file = new VFile('foo')
 
     parse(file)
       .then(() => {
@@ -412,7 +410,7 @@ describe('stringify(ast, file, options?)', () => {
   })
 
   it('should be able to set options', done => {
-    var html = mosCore.visitors.html
+    const html = mosCore.visitors.html
 
     const parse = mosCore.parser(mosCore)
     parse([
@@ -430,9 +428,9 @@ describe('stringify(ast, file, options?)', () => {
        * @return {string} - Compiled `node`.
        */
       function replacement (compiler, node) {
-        var value = node.value
-        var result = /<!--\s*(.*?)\s*-->/g.exec(value)
-        var options = {}
+        const value = node.value
+        const result = /<!--\s*(.*?)\s*-->/g.exec(value)
+        const options = {}
 
         if (result) {
           options[result[1]] = true
@@ -440,7 +438,7 @@ describe('stringify(ast, file, options?)', () => {
           compiler.setOptions(options)
         }
 
-        return html.apply(null, arguments)
+        return html(...arguments)
       }
 
       const visitors = Object.assign({}, mosCore.visitors, { html: replacement })
@@ -460,15 +458,15 @@ describe('stringify(ast, file, options?)', () => {
   })
 })
 
-var validateToken
-var validateTokens
+let validateToken
+let validateTokens
 
 /**
  * Validate `children`.
  *
  * @param {Array.<Object>} children - Nodes to validate.
  */
-validateTokens = function (children) {
+validateTokens = children => {
   children.forEach(validateToken)
 }
 
@@ -477,11 +475,11 @@ validateTokens = function (children) {
  *
  * @param {Object} context - Node to validate.
  */
-validateToken = function (context) {
-  var keys = Object.keys(context).length
-  var type = context.type
+validateToken = context => {
+  let keys = Object.keys(context).length
+  const type = context.type
 
-  assert('type' in context)
+  expect(context.type).to.exist
 
   if ('children' in context) {
     assert(Array.isArray(context.children))
@@ -515,7 +513,7 @@ validateToken = function (context) {
     assert('children' in context)
 
     if (context.footnotes) {
-      Object.keys(context.footnotes).forEach(function (id) {
+      Object.keys(context.footnotes).forEach(id => {
         validateToken(context.footnotes[id])
       })
     }
@@ -715,7 +713,7 @@ validateToken = function (context) {
 
     assert(Array.isArray(context.align))
 
-    context.align.forEach(function (align) {
+    context.align.forEach(align => {
       assert(
         align === null ||
         align === 'left' ||
@@ -749,9 +747,9 @@ function mergeTextNodes (nodes) {
     return nodes
   }
 
-  var result = [nodes[0]]
+  const result = [nodes[0]]
 
-  nodes.slice(1).forEach(function (node) {
+  nodes.slice(1).forEach(node => {
     if (node.type === 'text' && result[result.length - 1].type === 'text') {
       result[result.length - 1].value += node.value
     } else {
@@ -770,10 +768,10 @@ function mergeTextNodes (nodes) {
  * @return {Object} - Cloned node.
  */
 function clone (node, clean) {
-  var result = Array.isArray(node) ? [] : {}
+  const result = Array.isArray(node) ? [] : {}
 
-  Object.keys(node).forEach(function (key) {
-    var value = node[key]
+  Object.keys(node).forEach(key => {
+    const value = node[key]
 
     if (value === undefined) {
       return
@@ -840,27 +838,27 @@ function compare (node, baseline, clean, cleanBaseline) {
 
 describe('fixtures', () => {
   let fixtureNo = 0
-  fixtures.forEach(function (fixture) {
+  fixtures.forEach(fixture => {
     describe(`fixture #${++fixtureNo}, ${fixture.name}`, () => {
-      var input = fixture.input
-      var possibilities = fixture.possibilities
-      var mapping = fixture.mapping
-      var trees = fixture.trees
-      var output = fixture.output
+      const input = fixture.input
+      const possibilities = fixture.possibilities
+      const mapping = fixture.mapping
+      const trees = fixture.trees
+      const output = fixture.output
 
-      Object.keys(possibilities).forEach(function (key) {
-        var name = key || 'default'
-        var parseOpts = possibilities[key]
-        var stringifyOpts = extend({}, fixture.stringify, {
+      Object.keys(possibilities).forEach(key => {
+        const name = key || 'default'
+        const parseOpts = possibilities[key]
+        const stringifyOpts = extend({}, fixture.stringify, {
           gfm: parseOpts.gfm,
           commonmark: parseOpts.commonmark,
           pedantic: parseOpts.pedantic,
         })
-        var initialClean = !parseOpts.position
-        var node
-        var markdown
+        const initialClean = !parseOpts.position
+        let node
+        let markdown
 
-        it('should parse `' + name + '` correctly', done => {
+        it(`should parse \`${name}\` correctly`, done => {
           return parse(input, parseOpts)
             .then(node_ => {
               node = node_
@@ -882,7 +880,7 @@ describe('fixtures', () => {
         })
 
         if (output !== false) {
-          it('should stringify `' + name + '`', done => {
+          it(`should stringify \`${name}\``, done => {
             return parse(markdown, parseOpts)
               .then(res => {
                 compare(node, res, true)
@@ -893,7 +891,7 @@ describe('fixtures', () => {
         }
 
         if (output === true) {
-          it('should stringify `' + name + '` exact', () => {
+          it(`should stringify \`${name}\` exact`, () => {
             expect(markdown).to.eq(fixture.input)
           })
         }

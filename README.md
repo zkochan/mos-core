@@ -35,13 +35,15 @@ const mosCore = require('mos-core')
 <!--@dependencies({ shield: 'flat-square' })-->
 ## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master)
 
+- [babel-runtime](https://github.com/babel/babel/blob/master/packages): babel selfContained runtime
 - [ccount](https://github.com/wooorm/ccount): Count characters
 - [collapse-white-space](https://github.com/wooorm/collapse-white-space): Replace multiple white-space characters with a single space
+- [core-js](https://github.com/zloirock/core-js): Standard library
+- [is-promise](https://github.com/then/is-promise): Test whether an object looks like a promises-a+ promise
 - [longest-streak](https://github.com/wooorm/longest-streak): Count the longest repeating streak of a character
 - [markdown-table](https://github.com/wooorm/markdown-table): Markdown/ASCII tables
 - [parse-entities](https://github.com/wooorm/parse-entities): Parse HTML character references: fast, spec-compliant, positional information
 - [repeat-string](https://github.com/jonschlinkert/repeat-string): Repeat the given string n times. Fastest implementation for repeating a string.
-- [run-async](https://github.com/sboudrias/run-async): Utility method to run function either synchronously or asynchronously using the common `this.async()` style.
 - [stringify-entities](https://github.com/wooorm/stringify-entities): Encode HTML character references and character entities
 - [trim](https://npmjs.org/package/trim): Trim string whitespace
 - [trim-trailing-lines](https://github.com/wooorm/trim-trailing-lines): Remove final newline characters from a string
@@ -54,6 +56,10 @@ const mosCore = require('mos-core')
 <!--@devDependencies({ shield: 'flat-square' })-->
 ## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master#info=devDependencies)
 
+- [babel-cli](https://github.com/babel/babel/blob/master/packages): Babel command line.
+- [babel-plugin-transform-runtime](https://github.com/babel/babel/blob/master/packages): Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals
+- [babel-preset-es2015](https://github.com/babel/babel/blob/master/packages): Babel preset for all es2015 plugins.
+- [babel-register](https://github.com/babel/babel/blob/master/packages): babel require hook
 - [chai](https://github.com/chaijs/chai): BDD/TDD assertion library for node.js and the browser. Test framework agnostic.
 - [cz-conventional-changelog](https://github.com/commitizen/cz-conventional-changelog): Commitizen adapter following the conventional-changelog format.
 - [eslint](https://github.com/eslint/eslint): An AST-based pattern checker for JavaScript.
