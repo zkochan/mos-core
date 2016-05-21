@@ -1,7 +1,6 @@
-export default tokenizeLink
 import isWhiteSpace from '../is-white-space'
-const has = {}.hasOwnProperty
 import locateLink from './locators/link'
+const has = {}.hasOwnProperty
 
 /*
  * A map of characters, which can be used to mark link
@@ -11,7 +10,7 @@ import locateLink from './locators/link'
 const COMMONMARK_LINK_TITLE_MARKERS = {}
 
 COMMONMARK_LINK_TITLE_MARKERS['"'] = '"'
-COMMONMARK_LINK_TITLE_MARKERS['\''] = '\''
+COMMONMARK_LINK_TITLE_MARKERS["'"] = "'"
 COMMONMARK_LINK_TITLE_MARKERS['('] = ')'
 
 /*
@@ -22,7 +21,7 @@ COMMONMARK_LINK_TITLE_MARKERS['('] = ')'
 const LINK_TITLE_MARKERS = {}
 
 LINK_TITLE_MARKERS['"'] = '"'
-LINK_TITLE_MARKERS['\''] = '\''
+LINK_TITLE_MARKERS["'"] = "'"
 
 /**
  * Tokenise a link.
@@ -36,7 +35,7 @@ LINK_TITLE_MARKERS['\''] = '\''
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `link` or `image` node.
  */
-function tokenizeLink (parser, value, silent) {
+export default function tokenizeLink (parser, value, silent) {
   let subvalue = ''
   let index = 0
   let character = value.charAt(0)

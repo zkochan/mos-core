@@ -1,4 +1,3 @@
-export default tokenizeDeletion
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
 
@@ -28,14 +27,11 @@ function locateDeletion (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `delete` node.
  */
-function tokenizeDeletion (parser, value, silent) {
+export default function tokenizeDeletion (parser, value, silent) {
   let character = ''
   let previous = ''
   let preceding = ''
   let subvalue = ''
-  let index
-  let length
-  let now
 
   if (
     !parser.options.gfm ||
@@ -46,13 +42,12 @@ function tokenizeDeletion (parser, value, silent) {
     return
   }
 
-  index = 1
-  length = value.length
-  now = parser.eat.now()
+  let index = 1
+  const now = parser.eat.now()
   now.column += 2
   now.offset += 2
 
-  while (++index < length) {
+  while (++index < value.length) {
     character = value.charAt(index)
 
     if (

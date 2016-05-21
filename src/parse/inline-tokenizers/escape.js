@@ -13,10 +13,8 @@ import nodeTypes from '../node-types'
  * @return {Node?|boolean} - `text` or `break` node.
  */
 function tokenizeEscape (parser, value, silent) {
-  let character
-
   if (value.charAt(0) === '\\') {
-    character = value.charAt(1)
+    const character = value.charAt(1)
 
     if (parser.escape.indexOf(character) !== -1) {
       /* istanbul ignore if - never used (yet) */

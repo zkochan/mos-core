@@ -1,4 +1,3 @@
-export default tokenizeInlineCode
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
 
@@ -28,7 +27,7 @@ function locateInlineCode (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `inlineCode` node.
  */
-function tokenizeInlineCode (parser, value, silent) {
+export default function tokenizeInlineCode (parser, value, silent) {
   let index = 0
   let queue = ''
   let tickQueue = ''

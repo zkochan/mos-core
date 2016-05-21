@@ -1,4 +1,3 @@
-export default tokenizeReference
 import locateLink from './locators/link'
 import nodeTypes from '../node-types'
 import isWhiteSpace from '../is-white-space'
@@ -27,7 +26,7 @@ const REFERENCE_TYPE_FULL = 'full'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - Reference node.
  */
-function tokenizeReference (parser, value, silent) {
+export default function tokenizeReference (parser, value, silent) {
   let character = value.charAt(0)
   let index = 0
   const length = value.length

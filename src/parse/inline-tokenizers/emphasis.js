@@ -1,18 +1,8 @@
-export default tokenizeEmphasis
 import isWhiteSpace from '../is-white-space'
 import isAlphabetic from '../is-alphabetic'
 import isNumeric from '../is-numeric'
 import trim from 'trim'
 import nodeTypes from '../node-types'
-
-/*
- * A map of characters, which can be used to mark emphasis.
- */
-
-const EMPHASIS_MARKERS = {}
-
-EMPHASIS_MARKERS['*'] = true
-EMPHASIS_MARKERS['_'] = true
 
 /**
  * Check whether `character` is a word character.
@@ -49,7 +39,7 @@ function locateEmphasis (parser, value, fromIndex) {
     return underscore
   }
 
-  return underscore < asterisk ? underscore : asterisk
+  return Math.min(underscore, asterisk)
 }
 
 /**
@@ -65,33 +55,27 @@ function locateEmphasis (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `emphasis` node.
  */
-function tokenizeEmphasis (parser, value, silent) {
-  let index = 0
+export default function tokenizeEmphasis (parser, value, silent) {
   let character = value.charAt(index)
-  let now
-  let pedantic
-  let marker
-  let queue
-  let subvalue
-  let length
-  let prev
 
-  if (EMPHASIS_MARKERS[character] !== true) {
+  if (!~'*_'.indexOf(character)) {
     return
   }
 
-  pedantic = parser.options.pedantic
-  subvalue = marker = character
-  length = value.length
+  let index = 0
+
+  const pedantic = parser.options.pedantic
+  const subvalue = character
+  const marker = character
   index++
-  queue = character = ''
+  let queue = character = ''
 
   if (pedantic && isWhiteSpace(value.charAt(index))) {
     return
   }
 
-  while (index < length) {
-    prev = character
+  while (index < value.length) {
+    const prev = character
     character = value.charAt(index)
 
     if (
@@ -115,7 +99,7 @@ function tokenizeEmphasis (parser, value, silent) {
             return true
           }
 
-          now = parser.eat.now()
+          const now = parser.eat.now()
           now.column++
           now.offset++
 

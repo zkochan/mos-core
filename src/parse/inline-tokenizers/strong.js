@@ -3,15 +3,6 @@ import trim from 'trim'
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
 
-/*
- * A map of characters, which can be used to mark emphasis.
- */
-
-const EMPHASIS_MARKERS = {}
-
-EMPHASIS_MARKERS['*'] = true
-EMPHASIS_MARKERS['_'] = true
-
 /**
  * Find a possible strong emphasis.
  *
@@ -55,7 +46,7 @@ function tokenizeStrong (parser, value, silent) {
   let character = value.charAt(index)
 
   if (
-    EMPHASIS_MARKERS[character] !== true ||
+    !~'*_'.indexOf(character) ||
     value.charAt(++index) !== character
   ) {
     return
@@ -64,7 +55,6 @@ function tokenizeStrong (parser, value, silent) {
   const pedantic = parser.options.pedantic
   const marker = character
   const subvalue = marker + marker
-  const length = value.length
   index++
   let queue = character = ''
 
@@ -73,7 +63,7 @@ function tokenizeStrong (parser, value, silent) {
   }
 
   let prev
-  while (index < length) {
+  while (index < value.length) {
     prev = character
     character = value.charAt(index)
 
