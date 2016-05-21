@@ -1,6 +1,6 @@
 export default tokenizeFactory
 import {mergeable, MERGEABLE_NODES} from '../utilities'
-import runAsync from '../run-async'
+import runAsync from 'babel-run-async'
 
 /*
  * Error messages.

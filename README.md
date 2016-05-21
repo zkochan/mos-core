@@ -35,6 +35,7 @@ const mosCore = require('mos-core')
 <!--@dependencies({ shield: 'flat-square' })-->
 ## <a name="dependencies">Dependencies</a> [![Dependency status for master](https://img.shields.io/david/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master)
 
+- [babel-run-async](https://github.com/zkochan/run-async): Utility method to run function either synchronously or asynchronously using the common `this.async()` style.
 - [babel-runtime](https://github.com/babel/babel/blob/master/packages): babel selfContained runtime
 - [ccount](https://github.com/wooorm/ccount): Count characters
 - [collapse-white-space](https://github.com/wooorm/collapse-white-space): Replace multiple white-space characters with a single space
@@ -57,6 +58,7 @@ const mosCore = require('mos-core')
 ## <a name="dev-dependencies">Dev Dependencies</a> [![devDependency status for master](https://img.shields.io/david/dev/mosjs/mos-core/master.svg?style=flat-square)](https://david-dm.org/mosjs/mos-core/master#info=devDependencies)
 
 - [babel-cli](https://github.com/babel/babel/blob/master/packages): Babel command line.
+- [babel-plugin-add-module-exports](https://github.com/59naga/babel-plugin-add-module-exports): Fix babel/babel#2212
 - [babel-plugin-transform-runtime](https://github.com/babel/babel/blob/master/packages): Externalise references to helpers and builtins, automatically polyfilling your code without polluting globals
 - [babel-preset-es2015](https://github.com/babel/babel/blob/master/packages): Babel preset for all es2015 plugins.
 - [babel-register](https://github.com/babel/babel/blob/master/packages): babel require hook

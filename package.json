@@ -44,6 +44,7 @@
   },
   "homepage": "https://github.com/mosjs/mos-core#readme",
   "dependencies": {
+    "babel-run-async": "^1.0.0",
     "babel-runtime": "^6.9.0",
     "ccount": "^1.0.0",
     "collapse-white-space": "^1.0.0",
