@@ -1,6 +1,4 @@
-'use strict'
-
-var nodeTypes = require('../node-types')
+import nodeTypes from '../node-types'
 
 /**
  * Tokenise an escape sequence.
@@ -15,7 +13,7 @@ var nodeTypes = require('../node-types')
  * @return {Node?|boolean} - `text` or `break` node.
  */
 function tokenizeEscape (parser, value, silent) {
-  var character
+  let character
 
   if (value.charAt(0) === '\\') {
     character = value.charAt(1)
@@ -26,7 +24,7 @@ function tokenizeEscape (parser, value, silent) {
         return true
       }
 
-      return parser.eat('\\' + character)(
+      return parser.eat(`\\${character}`)(
         character === '\n'
           ? { type: nodeTypes.BREAK }
           : { type: nodeTypes.TEXT, value: character }
@@ -51,4 +49,4 @@ function locateEscape (parser, value, fromIndex) {
   return value.indexOf('\\', fromIndex)
 }
 
-module.exports = tokenizeEscape
+export default tokenizeEscape

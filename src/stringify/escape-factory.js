@@ -1,9 +1,6 @@
-'use strict'
-
-module.exports = escapeFactory
-
-const entityPrefixLength = require('./entity-prefix-length')
-const LIST_BULLETS = require('./list-bullets')
+export default escapeFactory
+import entityPrefixLength from './entity-prefix-length'
+import LIST_BULLETS from './list-bullets'
 
 /**
  * Check whether `character` is alphanumeric.
@@ -19,9 +16,9 @@ function isAlphanumeric (character) {
  * Entities.
  */
 
-var ENTITY_AMPERSAND = '&amp;'
-var ENTITY_BRACKET_OPEN = '&lt;'
-var ENTITY_COLON = '&#x3A;'
+const ENTITY_AMPERSAND = '&amp;'
+const ENTITY_BRACKET_OPEN = '&lt;'
+const ENTITY_COLON = '&#x3A;'
 
 /**
  * Checks if a string starts with HTML entity.
@@ -68,9 +65,9 @@ function isAlignmentRowCharacter (character) {
  *   an alignment row.
  */
 function isInAlignmentRow (value, index) {
-  var length = value.length
-  var start = index
-  var character
+  const length = value.length
+  const start = index
+  let character
 
   while (++index < length) {
     character = value.charAt(index)
@@ -123,22 +120,22 @@ function escapeFactory (options) {
      * @return {string} - Escaped `value`.
      */
   return function escape (value, node, parent) {
-    var self = this
-    var gfm = options.gfm
-    var commonmark = options.commonmark
-    var pedantic = options.pedantic
-    var siblings = parent && parent.children
-    var index = siblings && siblings.indexOf(node)
-    var prev = siblings && siblings[index - 1]
-    var next = siblings && siblings[index + 1]
-    var length = value.length
-    var position = -1
-    var queue = []
-    var escaped = queue
-    var afterNewLine
-    var character
-    var wordCharBefore
-    var wordCharAfter
+    const self = this
+    const gfm = options.gfm
+    const commonmark = options.commonmark
+    const pedantic = options.pedantic
+    const siblings = parent && parent.children
+    const index = siblings && siblings.indexOf(node)
+    const prev = siblings && siblings[index - 1]
+    const next = siblings && siblings[index + 1]
+    let length = value.length
+    let position = -1
+    let queue = []
+    const escaped = queue
+    let afterNewLine
+    let character
+    let wordCharBefore
+    let wordCharAfter
 
     if (prev) {
       afterNewLine = prev.type === 'text' && /\n\s*$/.test(prev.value)
@@ -280,12 +277,12 @@ function escapeFactory (options) {
           }
 
           if (character === '(') {
-            escaped[position] = '\\' + character
+            escaped[position] = `\\${character}`
           }
 
           if (character === ':') {
             if (commonmark) {
-              escaped[position] = '\\' + character
+              escaped[position] = `\\${character}`
             } else {
               escaped[position] = ENTITY_COLON
             }
@@ -332,7 +329,7 @@ function escapeFactory (options) {
           next &&
           next.type === 'text' &&
           value.slice(-1) === '&' &&
-          startsWithEntity('&' + next.value)
+          startsWithEntity(`&${next.value}`)
       ) {
         if (commonmark) {
           escaped.splice(escaped.length - 1, 0, '\\')

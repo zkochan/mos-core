@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = eatHTMLProcessingInstruction
+export default eatHTMLProcessingInstruction
 
 /**
  * Try to match a processing instruction.
@@ -10,10 +8,10 @@ module.exports = eatHTMLProcessingInstruction
  *   instruction at the start of `value`.
  */
 function eatHTMLProcessingInstruction (value) {
-  var index = 0
-  var queue = ''
-  var length = value.length
-  var character
+  let index = 0
+  let queue = ''
+  const length = value.length
+  let character
 
   if (
       value.charAt(index) === '<' &&
@@ -29,7 +27,7 @@ function eatHTMLProcessingInstruction (value) {
         character === '?' &&
         value.charAt(index + 1) === '>'
       ) {
-        return queue + character + '>'
+        return `${queue + character}>`
       }
 
       queue += character

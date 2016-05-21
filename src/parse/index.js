@@ -1,48 +1,38 @@
-'use strict'
-var decode = require('parse-entities')
-var repeat = require('repeat-string')
-var trim = require('trim')
-const VFile = require('vfile')
-var vfileLocation = require('vfile-location')
-var removePosition = require('unist-util-remove-position')
-var utilities = require('../utilities.js')
-var defaultOptions = require('../defaults.js').parse
-var tokenizeFactory = require('./tokenize-factory')
-
-var raise = utilities.raise
-var clean = utilities.clean
-var validate = utilities.validate
-var stateToggler = utilities.stateToggler
+import decode from 'parse-entities'
+import repeat from 'repeat-string'
+import trim from 'trim'
+import VFile from 'vfile'
+import vfileLocation from 'vfile-location'
+import removePosition from 'unist-util-remove-position'
+import {raise, clean, validate, stateToggler} from '../utilities'
+import {parse as defaultOptions} from '../defaults'
+import tokenizeFactory from './tokenize-factory'
 
 /*
  * Numeric constants.
  */
 
-var SPACE_SIZE = 1
-var TAB_SIZE = 4
+const SPACE_SIZE = 1
+const TAB_SIZE = 4
 
 /*
  * Expressions.
  */
 
-var EXPRESSION_BULLET = /^([ \t]*)([*+-]|\d+[.)])( {1,4}(?! )| |\t|$|(?=\n))([^\n]*)/
-var EXPRESSION_PEDANTIC_BULLET = /^([ \t]*)([*+-]|\d+[.)])([ \t]+)/
-var EXPRESSION_INITIAL_INDENT = /^( {1,4}|\t)?/gm
-var EXPRESSION_LOOSE_LIST_ITEM = /\n\n(?!\s*$)/
-var EXPRESSION_TASK_ITEM = /^\[([ \t]|x|X)\][ \t]/
+const EXPRESSION_BULLET = /^([ \t]*)([*+-]|\d+[.)])( {1,4}(?! )| |\t|$|(?=\n))([^\n]*)/
+const EXPRESSION_PEDANTIC_BULLET = /^([ \t]*)([*+-]|\d+[.)])([ \t]+)/
+const EXPRESSION_INITIAL_INDENT = /^( {1,4}|\t)?/gm
+const EXPRESSION_LOOSE_LIST_ITEM = /\n\n(?!\s*$)/
+const EXPRESSION_TASK_ITEM = /^\[([ \t]|x|X)\][ \t]/
 
-/*
- * Textual constants.
- */
-
-var nodeTypes = require('./node-types')
+import nodeTypes from './node-types'
 
 /*
  * A map of characters, and their column length,
  * which can be used as indentation.
  */
 
-var INDENTATION_CHARACTERS = {}
+const INDENTATION_CHARACTERS = {}
 
 INDENTATION_CHARACTERS[' '] = SPACE_SIZE
 INDENTATION_CHARACTERS['\t'] = TAB_SIZE
@@ -150,11 +140,11 @@ function descapeFactory (scope, key) {
    * @return {string} - Unescaped string.
    */
   function descape (value) {
-    var prev = 0
-    var index = value.indexOf('\\')
-    var escape = scope[key]
-    var queue = []
-    var character
+    let prev = 0
+    let index = value.indexOf('\\')
+    const escape = scope[key]
+    const queue = []
+    let character
 
     while (index !== -1) {
       queue.push(value.slice(prev, index))
@@ -201,11 +191,11 @@ function descapeFactory (scope, key) {
  * @return {Object} - Indetation information.
  */
 function getIndent (value) {
-  var index = 0
-  var indent = 0
-  var character = value.charAt(index)
-  var stops = {}
-  var size
+  let index = 0
+  let indent = 0
+  let character = value.charAt(index)
+  const stops = {}
+  let size
 
   while (character in INDENTATION_CHARACTERS) {
     size = INDENTATION_CHARACTERS[character]
@@ -241,16 +231,16 @@ function getIndent (value) {
  * @return {string} - Unindented `value`.
  */
 function removeIndentation (value, maximum) {
-  var values = value.split('\n')
-  var position = values.length + 1
-  var minIndent = Infinity
-  var matrix = []
-  var index
-  var indentation
-  var stops
-  var padding
+  const values = value.split('\n')
+  let position = values.length + 1
+  let minIndent = Infinity
+  const matrix = []
+  let index
+  let indentation
+  let stops
+  let padding
 
-  values.unshift(repeat(' ', maximum) + '!')
+  values.unshift(`${repeat(' ', maximum)}!`)
 
   while (position--) {
     indentation = getIndent(values[position])
@@ -321,7 +311,7 @@ function parserFactory (processor) {
    * A map of two functions which can create list items.
    */
 
-  var LIST_ITEM_MAP = {}
+  const LIST_ITEM_MAP = {}
 
   LIST_ITEM_MAP.true = renderPedanticListItem
   LIST_ITEM_MAP.false = renderNormalListItem
@@ -337,7 +327,7 @@ function parserFactory (processor) {
    * @return {string} - Cleaned `value`.
    */
   function renderPedanticListItem (value, position) {
-    var indent = parser.indent(position.line)
+    let indent = parser.indent(position.line)
 
     /**
      * A simple replacer which removed all matches,
@@ -379,14 +369,14 @@ function parserFactory (processor) {
    * @return {string} - Cleaned `value`.
    */
   function renderNormalListItem (value, position) {
-    var indent = parser.indent(position.line)
-    var max
-    var bullet
-    var rest
-    var lines
-    var trimmedLines
-    var index
-    var length
+    const indent = parser.indent(position.line)
+    let max
+    let bullet
+    let rest
+    let lines
+    let trimmedLines
+    let index
+    let length
 
     /*
      * Remove the list-item’s bullet.
@@ -403,7 +393,7 @@ function parserFactory (processor) {
        */
 
       if (Number($2) < 10 && bullet.length % 2 === 1) {
-        $2 = ' ' + $2
+        $2 = ` ${$2}`
       }
 
       max = $1 + repeat(' ', $2.length) + $3
@@ -440,7 +430,7 @@ function parserFactory (processor) {
     return trimmedLines.join('\n')
   }
 
-  const parser = {
+  var parser = {
     /**
      * Set options.  Does not overwrite previously set
      * options.
@@ -455,9 +445,9 @@ function parserFactory (processor) {
      * @return {Parser} - `parser`.
      */
     setOptions (options) {
-      var escape = parser.data.escape
-      var current = parser.options
-      var key
+      const escape = parser.data.escape
+      const current = parser.options
+      let key
 
       if (options === null || options === undefined) {
         options = {}
@@ -492,7 +482,7 @@ function parserFactory (processor) {
      * @return {function(offset)} - Indenter.
      */
     indent (start) {
-      var line = start
+      let line = start
 
       /**
        * Intender which increments the global offset,
@@ -521,8 +511,8 @@ function parserFactory (processor) {
      * @return {Array.<number>} - Offsets starting at `start`.
      */
     getIndent (start) {
-      var offset = parser.offset
-      var result = []
+      const offset = parser.offset
+      const result = []
 
       while (++start) {
         if (!(start in offset)) {
@@ -622,8 +612,8 @@ function parserFactory (processor) {
      * @return {Object} - `link` or `image` node.
      */
     renderLink (isLink, url, text, title, position) {
-      var exitLink = parser.state.enterLink()
-      var node
+      const exitLink = parser.state.enterLink()
+      let node
 
       node = {
         type: isLink ? nodeTypes.LINK : nodeTypes.IMAGE,
@@ -729,7 +719,7 @@ function parserFactory (processor) {
      * @return {Object} - `footnoteDefinition` node.
      */
     renderFootnoteDefinition (identifier, value, position) {
-      var exitBlockquote = parser.state.enterBlockquote()
+      const exitBlockquote = parser.state.enterBlockquote()
 
       return parser.tokenizeBlock(value, position)
         .then(children => {
@@ -836,8 +826,4 @@ function parserFactory (processor) {
   return parser.parse
 }
 
-/*
- * Expose `parse` on `module.exports`.
- */
-
-module.exports = parserFactory
+export default parserFactory

@@ -1,47 +1,21 @@
-'use strict'
-var repeat = require('repeat-string')
-const pad = require('./pad')
+import repeat from 'repeat-string'
+import pad from './pad'
 
-var BREAK = '\n\n'
-var LIST_ITEM_ONE = '1'
-var LIST_ITEM_MIXED = 'mixed'
-var INDENT = 4
+const BREAK = '\n\n'
+const LIST_ITEM_ONE = '1'
+const LIST_ITEM_MIXED = 'mixed'
+const INDENT = 4
 
 /*
  * Which method to use based on `list.ordered`.
  */
 
-var ORDERED_MAP = {}
+const ORDERED_MAP = {}
 
 ORDERED_MAP.true = visitOrderedItems
 ORDERED_MAP.false = visitUnorderedItems
 
-/**
- * Stringify a list. See `Compiler#visitOrderedList()` and
- * `Compiler#visitUnorderedList()` for internal working.
- *
- * @example
- *   var compiler = new Compiler();
- *
- *   compiler.visitUnorderedItems({
- *     type: 'list',
- *     ordered: false,
- *     children: [{
- *       type: 'listItem',
- *       children: [{
- *         type: 'text',
- *         value: 'bar'
- *       }]
- *     }]
- *   });
- *   // '-   bar'
- *
- * @param {Object} node - `list` node.
- * @return {string} - Markdown list.
- */
-module.exports = function (compiler, node) {
-  return ORDERED_MAP[node.ordered](compiler, node)
-}
+export default (compiler, node) => ORDERED_MAP[node.ordered](compiler, node)
 
 /**
  * Visit ordered list items.
@@ -87,7 +61,7 @@ function visitOrderedItems (compiler, node) {
   let index = -1
 
   while (++index < node.children.length) {
-    const bullet = (compiler.options.incrementListMarker ? node.start + index : node.start) + '.'
+    const bullet = `${compiler.options.incrementListMarker ? node.start + index : node.start}.`
     values[index] = listItem(compiler, node.children[index], node, index, bullet)
   }
 
@@ -137,7 +111,7 @@ function visitUnorderedItems (compiler, node) {
  * Which checkbox to use.
  */
 
-var CHECKBOX_MAP = {}
+const CHECKBOX_MAP = {}
 
 CHECKBOX_MAP.null = ''
 CHECKBOX_MAP.undefined = ''

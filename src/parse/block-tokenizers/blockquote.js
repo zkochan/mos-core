@@ -1,8 +1,5 @@
-'use strict'
-module.exports = tokenizeBlockquote
-
-const trim = require('trim')
-const tryBlockTokenize = require('../try-block-tokenize')
+import trim from 'trim'
+import tryBlockTokenize from '../try-block-tokenize'
 
 /**
  * Tokenise a blockquote.
@@ -15,7 +12,7 @@ const tryBlockTokenize = require('../try-block-tokenize')
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `blockquote` node.
  */
-function tokenizeBlockquote (parser, value, silent) {
+export default function tokenizeBlockquote (parser, value, silent) {
   const now = parser.eat.now()
   const indent = parser.indent(now.line)
   const values = []

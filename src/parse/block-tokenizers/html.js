@@ -1,16 +1,12 @@
-'use strict'
+import eatHTMLComment from '../eat/html-comment'
+import eatHTMLCDATA from '../eat/html-cdata'
+import eatHTMLProcessingInstruction from '../eat/html-processing-instructions'
+import eatHTMLDeclaration from '../eat/html-declaration'
+import eatHTMLClosingTag from '../eat/html-closing-tag'
+import eatHTMLOpeningTag from '../eat/html-opening-tag'
+import nodeTypes from '../node-types'
 
-module.exports = tokenizeHTML
-
-var eatHTMLComment = require('../eat/html-comment')
-var eatHTMLCDATA = require('../eat/html-cdata')
-var eatHTMLProcessingInstruction = require('../eat/html-processing-instructions')
-var eatHTMLDeclaration = require('../eat/html-declaration')
-var eatHTMLClosingTag = require('../eat/html-closing-tag')
-var eatHTMLOpeningTag = require('../eat/html-opening-tag')
-var nodeTypes = require('../node-types')
-
-var MIN_CLOSING_HTML_NEWLINE_COUNT = 2
+const MIN_CLOSING_HTML_NEWLINE_COUNT = 2
 
 /**
  * Tokenise HTML.
@@ -23,14 +19,14 @@ var MIN_CLOSING_HTML_NEWLINE_COUNT = 2
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `html` node.
  */
-function tokenizeHTML (parser, value, silent) {
-  var index = 0
-  var length = value.length
-  var subvalue = ''
-  var offset
-  var lineCount
-  var character
-  var queue
+export default function tokenizeHTML (parser, value, silent) {
+  let index = 0
+  const length = value.length
+  let subvalue = ''
+  let offset
+  let lineCount
+  let character
+  let queue
 
     /*
      * Eat initial spacing.

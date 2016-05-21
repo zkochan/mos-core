@@ -1,6 +1,5 @@
-'use strict'
-const decode = require('parse-entities')
-const isWhiteSpace = require('../is-white-space')
+import decode from 'parse-entities'
+import isWhiteSpace from '../is-white-space'
 
 /*
  * Protocols.
@@ -9,7 +8,7 @@ const isWhiteSpace = require('../is-white-space')
 const MAILTO_PROTOCOL = 'mailto:'
 
 const protocolPattern = /https?:\/\/|mailto:/gi
-const beginsWithProtocol = new RegExp('^(' + protocolPattern.source + ')', 'i')
+const beginsWithProtocol = new RegExp(`^(${protocolPattern.source})`, 'i')
 
 /**
  * Find a possible URL.
@@ -51,7 +50,7 @@ function tokenizeURL (parser, value, silent) {
     return
   }
 
-  var match = value.match(beginsWithProtocol)
+  const match = value.match(beginsWithProtocol)
 
   if (!match) {
     return
@@ -60,19 +59,19 @@ function tokenizeURL (parser, value, silent) {
   let subvalue = match[0]
 
   let index = subvalue.length
-  let length = value.length
+  const length = value.length
   let queue = ''
   let parenCount = 0
 
   while (index < length) {
-    let character = value.charAt(index)
+    const character = value.charAt(index)
 
     if (isWhiteSpace(character) || character === '<') {
       break
     }
 
     if (~'.,:;"\')]'.indexOf(character)) {
-      let nextCharacter = value.charAt(index + 1)
+      const nextCharacter = value.charAt(index + 1)
 
       if (
         !nextCharacter ||
@@ -112,7 +111,7 @@ function tokenizeURL (parser, value, silent) {
   let content = subvalue
 
   if (subvalue.indexOf(MAILTO_PROTOCOL) === 0) {
-    let position = queue.indexOf('@')
+    const position = queue.indexOf('@')
 
     if (position === -1 || position === length - 1) {
       return
@@ -126,7 +125,7 @@ function tokenizeURL (parser, value, silent) {
     return true
   }
 
-  let now = parser.eat.now()
+  const now = parser.eat.now()
 
   return parser.eat(subvalue)(
     parser.renderLink(true, decode(subvalue), content, null, now, parser.eat)
@@ -136,4 +135,4 @@ function tokenizeURL (parser, value, silent) {
 tokenizeURL.notInLink = true
 tokenizeURL.locator = locateURL
 
-module.exports = tokenizeURL
+export default tokenizeURL

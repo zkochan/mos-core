@@ -1,8 +1,4 @@
-'use strict'
-
-module.exports = tokenizeNewline
-
-var isWhiteSpace = require('../is-white-space')
+import isWhiteSpace from '../is-white-space'
 
 /**
  * Tokenise a line.
@@ -15,12 +11,12 @@ var isWhiteSpace = require('../is-white-space')
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {boolean?} - `true` when matching.
  */
-function tokenizeNewline (parser, value, silent) {
-  var character = value.charAt(0)
-  var length
-  var subvalue
-  var queue
-  var index
+export default function tokenizeNewline (parser, value, silent) {
+  let character = value.charAt(0)
+  let length
+  let subvalue
+  let queue
+  let index
 
   if (character !== '\n') {
     return

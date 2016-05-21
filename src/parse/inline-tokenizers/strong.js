@@ -1,16 +1,13 @@
-'use strict'
-
-module.exports = tokenizeStrong
-
-var trim = require('trim')
-var isWhiteSpace = require('../is-white-space')
-var nodeTypes = require('../node-types')
+export default tokenizeStrong
+import trim from 'trim'
+import isWhiteSpace from '../is-white-space'
+import nodeTypes from '../node-types'
 
 /*
  * A map of characters, which can be used to mark emphasis.
  */
 
-var EMPHASIS_MARKERS = {}
+const EMPHASIS_MARKERS = {}
 
 EMPHASIS_MARKERS['*'] = true
 EMPHASIS_MARKERS['_'] = true
@@ -26,8 +23,8 @@ EMPHASIS_MARKERS['_'] = true
  * @return {number} - Location of possible strong emphasis.
  */
 function locateStrong (parser, value, fromIndex) {
-  var asterisk = value.indexOf('**', fromIndex)
-  var underscore = value.indexOf('__', fromIndex)
+  const asterisk = value.indexOf('**', fromIndex)
+  const underscore = value.indexOf('__', fromIndex)
 
   if (underscore === -1) {
     return asterisk
@@ -64,10 +61,10 @@ function tokenizeStrong (parser, value, silent) {
     return
   }
 
-  let pedantic = parser.options.pedantic
-  let marker = character
-  let subvalue = marker + marker
-  let length = value.length
+  const pedantic = parser.options.pedantic
+  const marker = character
+  const subvalue = marker + marker
+  const length = value.length
   index++
   let queue = character = ''
 

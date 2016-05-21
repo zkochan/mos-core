@@ -1,6 +1,5 @@
-'use strict'
-var decode = require('parse-entities')
-var MAILTO_PROTOCOL = 'mailto:'
+import decode from 'parse-entities'
+const MAILTO_PROTOCOL = 'mailto:'
 
 /**
  * Find a possible auto-link.
@@ -35,7 +34,7 @@ function tokenizeAutoLink (parser, value, silent) {
   }
 
   let subvalue = ''
-  let length = value.length
+  const length = value.length
   let index = 0
   let queue = ''
   let hasAtCharacter = false
@@ -45,7 +44,7 @@ function tokenizeAutoLink (parser, value, silent) {
   subvalue = '<'
 
   while (index < length) {
-    const character = value.charAt(index)
+    var character = value.charAt(index)
 
     if (
       character === ' ' ||
@@ -67,7 +66,7 @@ function tokenizeAutoLink (parser, value, silent) {
   link += queue
   queue = ''
 
-  let character = value.charAt(index)
+  character = value.charAt(index)
   link += character
   index++
 
@@ -135,10 +134,10 @@ function tokenizeAutoLink (parser, value, silent) {
     inlineTokenizers: parser.inlineTokenizers.filter(tok => tok.name !== 'escape'),
   })
 
-  var eater = parserWithNoEscape.eat(subvalue)
+  const eater = parserWithNoEscape.eat(subvalue)
   return parserWithNoEscape.renderLink(true, decode(link), content, null, now, parserWithNoEscape.eat)
     .then(node => {
-      let addedNode = eater(node)
+      const addedNode = eater(node)
       return addedNode
     })
 }
@@ -146,4 +145,4 @@ function tokenizeAutoLink (parser, value, silent) {
 tokenizeAutoLink.notInLink = true
 tokenizeAutoLink.locator = locateAutoLink
 
-module.exports = tokenizeAutoLink
+export default tokenizeAutoLink

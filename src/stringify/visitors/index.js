@@ -1,56 +1,107 @@
-'use strict'
 const visitors = {}
 
-visitors.block = require('./block')
+import block from './block'
 
-visitors.root = require('./root')
+visitors.block = block
 
-visitors.heading = require('./heading')
+import root from './root'
 
-visitors.text = require('./text')
+visitors.root = root
 
-visitors.paragraph = require('./paragraph')
+import heading from './heading'
 
-visitors.blockquote = require('./blockquote')
+visitors.heading = heading
 
-visitors.list = require('./list')
+import text from './text'
 
-visitors.inlineCode = require('./inline-code')
+visitors.text = text
 
-visitors.yaml = require('./yaml')
+import paragraph from './paragraph'
 
-visitors.code = require('./code')
+visitors.paragraph = paragraph
 
-visitors.html = require('./html')
+import blockquote from './blockquote'
 
-visitors.thematicBreak = require('./thematic-break')
+visitors.blockquote = blockquote
 
-visitors.strong = require('./strong')
+import list from './list'
 
-visitors.emphasis = require('./emphasis')
+visitors.list = list
 
-visitors.break = require('./break')
+import inlineCode from './inline-code'
 
-visitors.delete = require('./delete')
+visitors.inlineCode = inlineCode
 
-visitors.link = require('./link')
+import yaml from './yaml'
 
-visitors.linkReference = require('./link-reference')
+visitors.yaml = yaml
 
-visitors.imageReference = require('./image-reference')
+import code from './code'
 
-visitors.footnoteReference = require('./footnote-reference')
+visitors.code = code
 
-visitors.definition = require('./definition')
+import html from './html'
 
-visitors.image = require('./image')
+visitors.html = html
 
-visitors.footnote = require('./footnote')
+import thematicBreak from './thematic-break'
 
-visitors.footnoteDefinition = require('./footnote-definition')
+visitors.thematicBreak = thematicBreak
 
-visitors.table = require('./table')
+import strong from './strong'
 
-visitors.tableCell = require('./table-cell')
+visitors.strong = strong
 
-module.exports = visitors
+import emphasis from './emphasis'
+
+visitors.emphasis = emphasis
+
+import breakVisitor from './break'
+
+visitors.break = breakVisitor
+
+import deleteVisitor from './delete'
+
+visitors.delete = deleteVisitor
+
+import link from './link'
+
+visitors.link = link
+
+import linkReference from './link-reference'
+
+visitors.linkReference = linkReference
+
+import imageReference from './image-reference'
+
+visitors.imageReference = imageReference
+
+import footnoteReference from './footnote-reference'
+
+visitors.footnoteReference = footnoteReference
+
+import definition from './definition'
+
+visitors.definition = definition
+
+import image from './image'
+
+visitors.image = image
+
+import footnote from './footnote'
+
+visitors.footnote = footnote
+
+import footnoteDefinition from './footnote-definition'
+
+visitors.footnoteDefinition = footnoteDefinition
+
+import table from './table'
+
+visitors.table = table
+
+import tableCell from './table-cell'
+
+visitors.tableCell = tableCell
+
+export default visitors

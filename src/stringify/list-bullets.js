@@ -1,13 +1,11 @@
-'use strict'
-
 /*
  * Allowed list-bullet characters.
  */
 
-var LIST_BULLETS = {}
+const LIST_BULLETS = {}
 
 LIST_BULLETS['*'] = true
 LIST_BULLETS['-'] = true
 LIST_BULLETS['+'] = true
 
-module.exports = LIST_BULLETS
+export default LIST_BULLETS

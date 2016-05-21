@@ -1,10 +1,7 @@
-'use strict'
-module.exports = eatHTMLClosingTag
-
-var isAlphabetic = require('../is-alphabetic')
-var isNumeric = require('../is-numeric')
-var isWhiteSpace = require('../is-white-space')
-var blockElements = require('../block-elements.json')
+import isAlphabetic from '../is-alphabetic'
+import isNumeric from '../is-numeric'
+import isWhiteSpace from '../is-white-space'
+import blockElements from '../block-elements.json'
 
 /**
  * Try to match a closing tag.
@@ -15,12 +12,12 @@ var blockElements = require('../block-elements.json')
  * @return {string?} - When applicable, the closing tag at
  *   the start of `value`.
  */
-function eatHTMLClosingTag (value, isBlock) {
-  var index = 0
-  var length = value.length
-  var queue = ''
-  var subqueue = ''
-  var character
+export default function eatHTMLClosingTag (value, isBlock) {
+  let index = 0
+  const length = value.length
+  let queue = ''
+  let subqueue = ''
+  let character
 
   if (
     value.charAt(index) === '<' &&
@@ -73,7 +70,7 @@ function eatHTMLClosingTag (value, isBlock) {
     }
 
     if (value.charAt(index) === '>') {
-      return queue + '>'
+      return `${queue}>`
     }
   }
 }

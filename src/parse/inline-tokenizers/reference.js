@@ -1,19 +1,16 @@
-'use strict'
-
-module.exports = tokenizeReference
-
-var locateLink = require('./locators/link')
-var nodeTypes = require('../node-types')
-var isWhiteSpace = require('../is-white-space')
-var normalize = require('../../utilities.js').normalizeIdentifier
+export default tokenizeReference
+import locateLink from './locators/link'
+import nodeTypes from '../node-types'
+import isWhiteSpace from '../is-white-space'
+import {normalizeIdentifier as normalize} from '../../utilities.js'
 
 /*
  * Available reference types.
  */
 
-var REFERENCE_TYPE_SHORTCUT = 'shortcut'
-var REFERENCE_TYPE_COLLAPSED = 'collapsed'
-var REFERENCE_TYPE_FULL = 'full'
+const REFERENCE_TYPE_SHORTCUT = 'shortcut'
+const REFERENCE_TYPE_COLLAPSED = 'collapsed'
+const REFERENCE_TYPE_FULL = 'full'
 
 /**
  * Tokenise a reference link, image, or footnote
@@ -31,13 +28,13 @@ var REFERENCE_TYPE_FULL = 'full'
  * @return {Node?|boolean} - Reference node.
  */
 function tokenizeReference (parser, value, silent) {
-  var character = value.charAt(0)
-  var index = 0
-  var length = value.length
-  var subvalue = ''
-  var intro = ''
-  var type = nodeTypes.LINK
-  var referenceType = REFERENCE_TYPE_SHORTCUT
+  let character = value.charAt(0)
+  let index = 0
+  const length = value.length
+  let subvalue = ''
+  let intro = ''
+  let type = nodeTypes.LINK
+  let referenceType = REFERENCE_TYPE_SHORTCUT
 
   /*
    * Check whether we’re eating an image.
@@ -189,7 +186,7 @@ function tokenizeReference (parser, value, silent) {
   if (type === nodeTypes.FOOTNOTE && referenceType !== REFERENCE_TYPE_SHORTCUT) {
     type = nodeTypes.LINK
     intro = '[^'
-    text = '^' + text
+    text = `^${text}`
   }
 
   subvalue = intro + subvalue
@@ -207,13 +204,13 @@ function tokenizeReference (parser, value, silent) {
     return parser.eat(subvalue)(parser.renderFootnote(text, parser.eat.now()))
   }
 
-  let now = parser.eat.now()
+  const now = parser.eat.now()
   now.column += intro.length
   now.offset += intro.length
   identifier = referenceType === REFERENCE_TYPE_FULL ? identifier : text
 
-  let node = {
-    type: type + 'Reference',
+  const node = {
+    type: `${type}Reference`,
     identifier: normalize(identifier),
   }
 

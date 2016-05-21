@@ -1,30 +1,29 @@
-'use strict'
 /*
  * Characters.
  */
 
-var C_FORM_FEED = '\f'
-var C_CARRIAGE_RETURN = '\r'
-var C_VERTICAL_TAB = '\v'
-var C_NO_BREAK_SPACE = '\u00a0'
-var C_OGHAM_SPACE = '\u1680'
-var C_MONGOLIAN_VOWEL_SEPARATOR = '\u180e'
-var C_EN_QUAD = '\u2000'
-var C_EM_QUAD = '\u2001'
-var C_EN_SPACE = '\u2002'
-var C_EM_SPACE = '\u2003'
-var C_THREE_PER_EM_SPACE = '\u2004'
-var C_FOUR_PER_EM_SPACE = '\u2005'
-var C_SIX_PER_EM_SPACE = '\u2006'
-var C_FIGURE_SPACE = '\u2007'
-var C_PUNCTUATION_SPACE = '\u2008'
-var C_THIN_SPACE = '\u2009'
-var C_HAIR_SPACE = '\u200a'
-var C_LINE_SEPARATOR = '​\u2028'
-var C_PARAGRAPH_SEPARATOR = '​\u2029'
-var C_NARROW_NO_BREAK_SPACE = '\u202f'
-var C_IDEOGRAPHIC_SPACE = '\u3000'
-var C_ZERO_WIDTH_NO_BREAK_SPACE = '\ufeff'
+const C_FORM_FEED = '\f'
+const C_CARRIAGE_RETURN = '\r'
+const C_VERTICAL_TAB = '\v'
+const C_NO_BREAK_SPACE = '\u00a0'
+const C_OGHAM_SPACE = '\u1680'
+const C_MONGOLIAN_VOWEL_SEPARATOR = '\u180e'
+const C_EN_QUAD = '\u2000'
+const C_EM_QUAD = '\u2001'
+const C_EN_SPACE = '\u2002'
+const C_EM_SPACE = '\u2003'
+const C_THREE_PER_EM_SPACE = '\u2004'
+const C_FOUR_PER_EM_SPACE = '\u2005'
+const C_SIX_PER_EM_SPACE = '\u2006'
+const C_FIGURE_SPACE = '\u2007'
+const C_PUNCTUATION_SPACE = '\u2008'
+const C_THIN_SPACE = '\u2009'
+const C_HAIR_SPACE = '\u200a'
+const C_LINE_SEPARATOR = '​\u2028'
+const C_PARAGRAPH_SEPARATOR = '​\u2029'
+const C_NARROW_NO_BREAK_SPACE = '\u202f'
+const C_IDEOGRAPHIC_SPACE = '\u3000'
+const C_ZERO_WIDTH_NO_BREAK_SPACE = '\ufeff'
 /**
  * Check whether `character` is white-space.
  *
@@ -59,4 +58,4 @@ function isWhiteSpace (character) {
         character === C_ZERO_WIDTH_NO_BREAK_SPACE
 }
 
-module.exports = isWhiteSpace
+export default isWhiteSpace

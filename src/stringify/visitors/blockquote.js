@@ -1,31 +1,6 @@
-'use strict'
-const block = require('./block')
+import block from './block'
 
-/**
- * Stringify a block quote.
- *
- * @example
- *   var compiler = new Compiler();
- *
- *   compiler.paragraph({
- *     type: 'blockquote',
- *     children: [{
- *       type: 'paragraph',
- *       children: [{
- *         type: 'strong',
- *         children: [{
- *           type: 'text',
- *           value: 'bar'
- *         }]
- *       }]
- *     }]
- *   });
- *   // '> **bar**'
- *
- * @param {Object} node - `blockquote` node.
- * @return {string} - Markdown block quote.
- */
-module.exports = function (compiler, node) {
+export default (compiler, node) => {
   const values = block(compiler, node).split('\n')
   const result = []
   let index = -1
@@ -35,5 +10,5 @@ module.exports = function (compiler, node) {
     result[index] = (value ? ' ' : '') + value
   }
 
-  return '>' + result.join('\n>')
+  return `>${result.join('\n>')}`
 }

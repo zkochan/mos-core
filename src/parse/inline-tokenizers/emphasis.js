@@ -1,18 +1,15 @@
-'use strict'
-
-module.exports = tokenizeEmphasis
-
-var isWhiteSpace = require('../is-white-space')
-var isAlphabetic = require('../is-alphabetic')
-var isNumeric = require('../is-numeric')
-var trim = require('trim')
-var nodeTypes = require('../node-types')
+export default tokenizeEmphasis
+import isWhiteSpace from '../is-white-space'
+import isAlphabetic from '../is-alphabetic'
+import isNumeric from '../is-numeric'
+import trim from 'trim'
+import nodeTypes from '../node-types'
 
 /*
  * A map of characters, which can be used to mark emphasis.
  */
 
-var EMPHASIS_MARKERS = {}
+const EMPHASIS_MARKERS = {}
 
 EMPHASIS_MARKERS['*'] = true
 EMPHASIS_MARKERS['_'] = true
@@ -41,8 +38,8 @@ function isWordCharacter (character) {
  * @return {number} - Location of possible slight emphasis.
  */
 function locateEmphasis (parser, value, fromIndex) {
-  var asterisk = value.indexOf('*', fromIndex)
-  var underscore = value.indexOf('_', fromIndex)
+  const asterisk = value.indexOf('*', fromIndex)
+  const underscore = value.indexOf('_', fromIndex)
 
   if (underscore === -1) {
     return asterisk
@@ -69,15 +66,15 @@ function locateEmphasis (parser, value, fromIndex) {
  * @return {Node?|boolean} - `emphasis` node.
  */
 function tokenizeEmphasis (parser, value, silent) {
-  var index = 0
-  var character = value.charAt(index)
-  var now
-  var pedantic
-  var marker
-  var queue
-  var subvalue
-  var length
-  var prev
+  let index = 0
+  let character = value.charAt(index)
+  let now
+  let pedantic
+  let marker
+  let queue
+  let subvalue
+  let length
+  let prev
 
   if (EMPHASIS_MARKERS[character] !== true) {
     return

@@ -1,11 +1,8 @@
-'use strict'
-var CDATA_START = '<![CDATA['
-var CDATA_START_LENGTH = CDATA_START.length
-var CDATA_END = ']]>'
-var CDATA_END_CHAR = CDATA_END.charAt(0)
-var CDATA_END_LENGTH = CDATA_END.length
-
-module.exports = eatHTMLCDATA
+const CDATA_START = '<![CDATA['
+const CDATA_START_LENGTH = CDATA_START.length
+const CDATA_END = ']]>'
+const CDATA_END_CHAR = CDATA_END.charAt(0)
+const CDATA_END_LENGTH = CDATA_END.length
 
 /**
  * Try to match CDATA.
@@ -14,15 +11,13 @@ module.exports = eatHTMLCDATA
  * @return {string?} - When applicable, the CDATA at the
  *   start of `value`.
  */
-function eatHTMLCDATA (value) {
-  var index = CDATA_START_LENGTH
-  var queue = value.slice(0, index)
-  var length = value.length
-  var character
+export default function eatHTMLCDATA (value) {
+  let index = CDATA_START_LENGTH
+  let queue = value.slice(0, index)
 
   if (queue.toUpperCase() === CDATA_START) {
-    while (index < length) {
-      character = value.charAt(index)
+    while (index < value.length) {
+      const character = value.charAt(index)
 
       if (
         character === CDATA_END_CHAR &&

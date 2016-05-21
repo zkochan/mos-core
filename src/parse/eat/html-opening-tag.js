@@ -1,11 +1,7 @@
-'use strict'
-
-module.exports = eatHTMLOpeningTag
-
-var isAlphabetic = require('../is-alphabetic')
-var isNumeric = require('../is-numeric')
-var isWhiteSpace = require('../is-white-space')
-var blockElements = require('../block-elements.json')
+import isAlphabetic from '../is-alphabetic'
+import isNumeric from '../is-numeric'
+import isWhiteSpace from '../is-white-space'
+import blockElements from '../block-elements.json'
 
 /**
  * Check whether `character` can be inside an unquoted
@@ -63,14 +59,14 @@ isSingleQuotedAttributeCharacter.delimiter = '\''
  * @return {string?} - When applicable, the opening tag at
  *   the start of `value`.
  */
-function eatHTMLOpeningTag (value, isBlock) {
-  var index = 0
-  var length = value.length
-  var queue = ''
-  var subqueue = ''
-  var character = value.charAt(index)
-  var hasEquals
-  var test
+export default function eatHTMLOpeningTag (value, isBlock) {
+  let index = 0
+  const length = value.length
+  let queue = ''
+  let subqueue = ''
+  let character = value.charAt(index)
+  let hasEquals
+  let test
 
   if (character === '<') {
     queue = character

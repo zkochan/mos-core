@@ -1,10 +1,6 @@
-'use strict'
-
-module.exports = tokenizeDefinition
-
-var isWhiteSpace = require('../is-white-space')
-var nodeTypes = require('../node-types')
-var normalize = require('../../utilities.js').normalizeIdentifier
+import isWhiteSpace from '../is-white-space'
+import nodeTypes from '../node-types'
+import {normalizeIdentifier as normalize} from '../../utilities'
 
 /**
  * Check whether `character` can be inside an enclosed
@@ -51,19 +47,19 @@ function isUnclosedURLCharacter (character) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `definition` node.
  */
-function tokenizeDefinition (parser, value, silent) {
-  var commonmark = parser.options.commonmark
-  var index = 0
-  var length = value.length
-  var subvalue = ''
-  var beforeURL
-  var beforeTitle
-  var queue
-  var character
-  var test
-  var identifier
-  var url
-  var title
+export default function tokenizeDefinition (parser, value, silent) {
+  const commonmark = parser.options.commonmark
+  let index = 0
+  const length = value.length
+  let subvalue = ''
+  let beforeURL
+  let beforeTitle
+  let queue
+  let character
+  let test
+  let identifier
+  let url
+  let title
 
   while (index < length) {
     character = value.charAt(index)
@@ -110,7 +106,7 @@ function tokenizeDefinition (parser, value, silent) {
   }
 
   identifier = queue
-  subvalue += queue + ']:'
+  subvalue += `${queue}]:`
   index = subvalue.length
   queue = ''
 
@@ -157,7 +153,7 @@ function tokenizeDefinition (parser, value, silent) {
       index -= queue.length + 1
       queue = ''
     } else {
-      subvalue += '<' + queue + character
+      subvalue += `<${queue}${character}`
       index++
     }
   }

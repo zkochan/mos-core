@@ -1,9 +1,7 @@
-'use strict'
+export default tokenizeText
 
-module.exports = tokenizeText
-
-var ERR_MISSING_LOCATOR = 'Missing locator: '
-var nodeTypes = require('../node-types')
+const ERR_MISSING_LOCATOR = 'Missing locator: '
+import nodeTypes from '../node-types'
 
 /**
  * Tokenise a text node.
@@ -30,7 +28,7 @@ function tokenizeText (parser, value, silent) {
       const locator = tokenizer.func.locator
 
       if (!locator) {
-        parser.eat.file.fail(ERR_MISSING_LOCATOR + '`' + tokenizer.name + '`')
+        parser.eat.file.fail(`${ERR_MISSING_LOCATOR}\`${tokenizer.name}\``)
         return
       }
 

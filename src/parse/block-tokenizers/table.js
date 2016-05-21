@@ -1,21 +1,17 @@
-'use strict'
+import isWhiteSpace from '../is-white-space'
+import nodeTypes from '../node-types'
 
-module.exports = tokenizeTable
-
-var isWhiteSpace = require('../is-white-space')
-var nodeTypes = require('../node-types')
-
-var MIN_TABLE_COLUMNS = 2
-var MIN_TABLE_ROWS = 2
+const MIN_TABLE_COLUMNS = 2
+const MIN_TABLE_ROWS = 2
 
 /*
  * Available table alignments.
  */
 
-var TABLE_ALIGN_LEFT = 'left'
-var TABLE_ALIGN_CENTER = 'center'
-var TABLE_ALIGN_RIGHT = 'right'
-var TABLE_ALIGN_NONE = null
+const TABLE_ALIGN_LEFT = 'left'
+const TABLE_ALIGN_CENTER = 'center'
+const TABLE_ALIGN_RIGHT = 'right'
+const TABLE_ALIGN_NONE = null
 
 /**
  * Tokenise a table.
@@ -29,7 +25,7 @@ var TABLE_ALIGN_NONE = null
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `table` node.
  */
-function tokenizeTable (parser, value, silent) {
+export default function tokenizeTable (parser, value, silent) {
   /*
    * Exit when not in gfm-mode.
    */
@@ -48,11 +44,11 @@ function tokenizeTable (parser, value, silent) {
 
   let lineCount = 0
   let index = 0
-  let lines = []
+  const lines = []
 
   while (index <= value.length) {
     let lineIndex = value.indexOf('\n', index)
-    let pipeIndex = value.indexOf('|', index + 1)
+    const pipeIndex = value.indexOf('|', index + 1)
 
     if (lineIndex === -1) {
       lineIndex = value.length
@@ -79,16 +75,16 @@ function tokenizeTable (parser, value, silent) {
    */
 
   let subvalue = lines.join('\n')
-  let alignments = lines.splice(1, 1)[0] || []
+  const alignments = lines.splice(1, 1)[0] || []
   index = 0
   lineCount--
   let alignment = false
-  let align = []
+  const align = []
   let hasDash
   let first
 
   while (index < alignments.length) {
-    let character = alignments.charAt(index)
+    const character = alignments.charAt(index)
 
     if (character === '|') {
       hasDash = null
@@ -148,8 +144,8 @@ function tokenizeTable (parser, value, silent) {
 
     function eachRow (lines, position) {
       if (!lines.length) return
-      let line = lines.shift()
-      let row = {
+      const line = lines.shift()
+      const row = {
         type: position ? nodeTypes.TABLE_ROW : nodeTypes.TABLE_HEADER,
         children: [],
       }
@@ -183,14 +179,14 @@ function tokenizeTable (parser, value, silent) {
                * Eat the alignment row.
                */
               if (!position) {
-                parser.eat('\n' + alignments)
+                parser.eat(`\n${alignments}`)
               }
 
               return
             }
 
             let index = 0
-            let character = line[index]
+            const character = line[index]
 
             if (character === '\t' || character === ' ') {
               if (cell) {
@@ -224,7 +220,7 @@ function tokenizeTable (parser, value, silent) {
                     }
                   }
 
-                  let now = parser.eat.now()
+                  const now = parser.eat.now()
 
                   return parser.eat(subvalue)(
                     parser.renderInline(nodeTypes.TABLE_CELL, cell, now), row

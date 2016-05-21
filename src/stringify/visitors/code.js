@@ -1,65 +1,17 @@
-'use strict'
-const pad = require('./pad')
-const repeat = require('repeat-string')
-const longestStreak = require('longest-streak')
-var MINIMUM_CODE_FENCE_LENGTH = 3
-var ERROR_LIST_ITEM_INDENT = 'Cannot indent code properly. See ' +
+import pad from './pad'
+import repeat from 'repeat-string'
+import longestStreak from 'longest-streak'
+const MINIMUM_CODE_FENCE_LENGTH = 3
+const ERROR_LIST_ITEM_INDENT = 'Cannot indent code properly. See ' +
     'http://git.io/vgFvT'
-var LIST_ITEM_TAB = 'tab'
+const LIST_ITEM_TAB = 'tab'
 /*
  * Naive fence expression.
  */
 
 const FENCE = /([`~])\1{2}/
 
-/**
- * Stringify a code block.
- *
- * Creates indented code when:
- *
- * - No language tag exists;
- * - Not in `fences: true` mode;
- * - A non-'' value exists.
- *
- * Otherwise, GFM fenced code is created:
- *
- *     ```js
- *     foo();
- *     ```
- *
- * When in ``fence: `~` `` mode, uses tildes as fences:
- *
- *     ~~~js
- *     foo();
- *     ~~~
- *
- * Knows about internal fences (Note: GitHub/Kramdown does
- * not support this):
- *
- *     ````javascript
- *     ```markdown
- *     foo
- *     ```
- *     ````
- *
- * Supports named entities in the language flag with
- * `settings.encode` mode.
- *
- * @example
- *   var compiler = new Compiler();
- *
- *   compiler.code({
- *     type: 'code',
- *     lang: 'js',
- *     value: 'fooo();'
- *   });
- *   // '```js\nfooo();\n```'
- *
- * @param {Object} node - `code` node.
- * @param {Object} parent - Parent of `node`.
- * @return {string} - Markdown code block.
- */
-module.exports = function (compiler, node, parent) {
+export default (compiler, node, parent) => {
   let value = node.value
   const options = compiler.options
   const marker = options.fence
@@ -103,5 +55,5 @@ module.exports = function (compiler, node, parent) {
 
   fence = repeat(marker, Math.max(fence, MINIMUM_CODE_FENCE_LENGTH))
 
-  return fence + language + '\n' + value + '\n' + fence
+  return `${fence + language}\n${value}\n${fence}`
 }

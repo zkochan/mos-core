@@ -1,11 +1,7 @@
-'use strict'
+import isWhiteSpace from '../is-white-space'
+import {normalizeIdentifier as normalize} from '../../utilities'
 
-module.exports = tokenizeFootnoteDefinition
-
-var isWhiteSpace = require('../is-white-space')
-var normalize = require('../../utilities').normalizeIdentifier
-
-var EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
+const EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
 
 /**
  * Tokenise a footnote definition.
@@ -20,17 +16,17 @@ var EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `footnoteDefinition` node.
  */
-function tokenizeFootnoteDefinition (parser, value, silent) {
-  var index
-  var length
-  var subvalue
-  var now
-  var indent
-  var content
-  var queue
-  var subqueue
-  var character
-  var identifier
+export default function tokenizeFootnoteDefinition (parser, value, silent) {
+  let index
+  let length
+  let subvalue
+  let now
+  let indent
+  let content
+  let queue
+  let subqueue
+  let character
+  let identifier
 
   if (!parser.options.footnotes) {
     return
@@ -92,7 +88,7 @@ function tokenizeFootnoteDefinition (parser, value, silent) {
   }
 
   identifier = normalize(queue)
-  subvalue += queue + ']:'
+  subvalue += `${queue}]:`
   index = subvalue.length
 
   while (index < length) {
@@ -163,7 +159,7 @@ function tokenizeFootnoteDefinition (parser, value, silent) {
 
   subvalue += content
 
-  content = content.replace(EXPRESSION_INITIAL_TAB, function (line) {
+  content = content.replace(EXPRESSION_INITIAL_TAB, line => {
     indent(line.length)
 
     return ''

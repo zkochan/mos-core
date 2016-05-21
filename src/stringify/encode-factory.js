@@ -1,7 +1,5 @@
-'use strict'
-module.exports = encodeFactory
-
-var encode = require('stringify-entities')
+export default encodeFactory
+import encode from 'stringify-entities'
 
 /**
  * Encode noop.
@@ -37,7 +35,7 @@ function encodeNoop (value) {
  *   takes a value and returns its encoded version.
  */
 function encodeFactory (type) {
-  var options = {}
+  const options = {}
 
   if (type === 'false') {
     return encodeNoop

@@ -1,8 +1,4 @@
-/*
- * Node types.
- */
-
-module.exports = {
+export default {
   THEMATIC_BREAK: 'thematicBreak',
   HTML: 'html',
   YAML: 'yaml',

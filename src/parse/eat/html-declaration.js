@@ -1,8 +1,5 @@
-'use strict'
-module.exports = eatHTMLDeclaration
-
-var isWhiteSpace = require('../is-white-space')
-var isAlphabetic = require('../is-alphabetic')
+import isWhiteSpace from '../is-white-space'
+import isAlphabetic from '../is-alphabetic'
 
 /**
  * Try to match a declaration.
@@ -11,12 +8,12 @@ var isAlphabetic = require('../is-alphabetic')
  * @return {string?} - When applicable, the declaration at
  *   the start of `value`.
  */
-function eatHTMLDeclaration (value) {
-  var index = 0
-  var length = value.length
-  var queue = ''
-  var subqueue = ''
-  var character
+export default function eatHTMLDeclaration (value) {
+  let index = 0
+  const length = value.length
+  let queue = ''
+  let subqueue = ''
+  let character
 
   if (
       value.charAt(index) === '<' &&

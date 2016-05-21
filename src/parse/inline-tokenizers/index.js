@@ -1,51 +1,64 @@
-module.exports = [
+import escape from './escape'
+import autoLink from './auto-link'
+import url from './url'
+import tag from './tag'
+import link from './link'
+import reference from './reference'
+import strong from './strong'
+import emphasis from './emphasis'
+import deletion from './deletion'
+import inlineCode from './code'
+import breakTokenizer from './break'
+import text from './text'
+
+export default [
   {
     name: 'escape',
-    func: require('./escape'),
+    func: escape,
   },
   {
     name: 'autoLink',
-    func: require('./auto-link'),
+    func: autoLink,
   },
   {
     name: 'url',
-    func: require('./url'),
+    func: url,
   },
   {
     name: 'tag',
-    func: require('./tag'),
+    func: tag,
   },
   {
     name: 'link',
-    func: require('./link'),
+    func: link,
   },
   {
     name: 'reference',
-    func: require('./reference'),
+    func: reference,
   },
   // shortcutReference?
   {
     name: 'strong',
-    func: require('./strong'),
+    func: strong,
   },
   {
     name: 'emphasis',
-    func: require('./emphasis'),
+    func: emphasis,
   },
   {
     name: 'deletion',
-    func: require('./deletion'),
+    func: deletion,
   },
   {
     name: 'inlineCode',
-    func: require('./code'),
+    func: inlineCode,
   },
   {
     name: 'break',
-    func: require('./break'),
+    func: breakTokenizer,
   },
   {
     name: 'inlineText',
-    func: require('./text'),
+    func: text,
   },
 ]

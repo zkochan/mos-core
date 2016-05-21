@@ -1,18 +1,13 @@
-'use strict'
-
-module.exports = tokenizeFactory
-
-var utilities = require('../utilities')
-var mergeable = utilities.mergeable
-var MERGEABLE_NODES = utilities.MERGEABLE_NODES
-const runAsync = require('run-async')
+export default tokenizeFactory
+import {mergeable, MERGEABLE_NODES} from '../utilities'
+import runAsync from 'run-async'
 
 /*
  * Error messages.
  */
 
-var ERR_INFINITE_LOOP = 'Infinite loop'
-var ERR_INCORRECTLY_EATEN = 'Incorrectly eaten value: please report this ' +
+const ERR_INFINITE_LOOP = 'Infinite loop'
+const ERR_INCORRECTLY_EATEN = 'Incorrectly eaten value: please report this ' +
     'warning on http://git.io/vg5Ft'
 
 /**
@@ -43,11 +38,11 @@ function tokenizeFactory (parser, type) {
    * @return {Array.<Object>} - Nodes.
    */
   function tokenize (value, location) {
-    var offset = parser.offset
-    var tokens = []
-    var tokenizers = parser[type + 'Tokenizers']
-    var line = location ? location.line : 1
-    var column = location ? location.column : 1
+    const offset = parser.offset
+    const tokens = []
+    const tokenizers = parser[`${type}Tokenizers`]
+    let line = location ? location.line : 1
+    let column = location ? location.column : 1
 
     /*
      * Trim white space only lines.
@@ -67,8 +62,8 @@ function tokenizeFactory (parser, type) {
      * @param {string} subvalue - Subvalue to eat.
      */
     function updatePosition (subvalue) {
-      var lastIndex = -1
-      var index = subvalue.indexOf('\n')
+      let lastIndex = -1
+      let index = subvalue.indexOf('\n')
 
       while (index !== -1) {
         line++
@@ -99,8 +94,8 @@ function tokenizeFactory (parser, type) {
      *   the last character is eaten.
      */
     function getOffset () {
-      var indentation = []
-      var pos = line + 1
+      const indentation = []
+      let pos = line + 1
 
       /**
        * Done. Called when the last character is
@@ -109,7 +104,7 @@ function tokenizeFactory (parser, type) {
        * @return {Array.<number>} - Offset.
        */
       function done () {
-        var last = line + 1
+        const last = line + 1
 
         while (pos < last) {
           indentation.push((offset[pos] || 0) + 1)
@@ -132,7 +127,7 @@ function tokenizeFactory (parser, type) {
      * @return {Object} - Current Position.
      */
     function now () {
-      var pos = { line, column }
+      const pos = { line, column }
 
       pos.offset = parser.toOffset(pos)
 
@@ -198,7 +193,7 @@ function tokenizeFactory (parser, type) {
      * @returns {Function} - Updater.
      */
     function position () {
-      var before = now()
+      const before = now()
 
       /**
        * Add the position to a node.
@@ -213,11 +208,11 @@ function tokenizeFactory (parser, type) {
        * @return {Node} - `node`.
        */
       function update (node, indent) {
-        var prev = node.position
-        var start = prev ? prev.start : before
-        var combined = []
-        var n = prev && prev.end.line
-        var l = before.line
+        const prev = node.position
+        const start = prev ? prev.start : before
+        let combined = []
+        let n = prev && prev.end.line
+        const l = before.line
 
         node.position = new Position(start)
 
@@ -268,8 +263,8 @@ function tokenizeFactory (parser, type) {
      * @return {Object} - Added or merged into node.
      */
     function add (node, parent) {
-      var prev
-      var children
+      let prev
+      let children
 
       if (!parent) {
         children = tokens
@@ -316,9 +311,9 @@ function tokenizeFactory (parser, type) {
      *   also adds `position` to node.
      */
     function eat (subvalue) {
-      var indent = getOffset()
-      var pos = position()
-      var current = now()
+      let indent = getOffset()
+      const pos = position()
+      const current = now()
 
       validateEat(subvalue)
 
@@ -354,7 +349,7 @@ function tokenizeFactory (parser, type) {
        * @return {Node} - Added node.
        */
       function reset () {
-        return apply.apply(null, arguments)
+        return apply(...arguments)
           .then(node => {
             line = current.line
             column = current.column
@@ -371,7 +366,7 @@ function tokenizeFactory (parser, type) {
        * @return {Position} - Position after eating `subvalue`.
        */
       function test () {
-        var result = pos({})
+        const result = pos({})
 
         line = current.line
         column = current.column
@@ -429,7 +424,7 @@ function tokenizeFactory (parser, type) {
       return Promise.resolve(tokens)
 
       function matchMethods (tokenizers) {
-        var tokenizer = tokenizers.shift()
+        const tokenizer = tokenizers.shift()
         if (!tokenizer) {
           parser.file.fail(ERR_INFINITE_LOOP, eat.now())
           return Promise.resolve()
@@ -442,11 +437,11 @@ function tokenizeFactory (parser, type) {
           (!tokenizer.func.notInBlockquote || !parser.state.inBlockquote) &&
           (!tokenizer.func.notInLink || !parser.state.inLink)
         ) {
-          var valueLength = value.length
+          const valueLength = value.length
 
           return runAsync(tokenizer.func)(Object.assign({}, parser, {eat}), value)
             .then(() => {
-              var matched = valueLength !== value.length
+              const matched = valueLength !== value.length
 
               if (!matched) {
                 return matchMethods(tokenizers)

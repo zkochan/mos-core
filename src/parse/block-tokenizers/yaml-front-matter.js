@@ -1,10 +1,6 @@
-'use strict'
-
-module.exports = tokenizeYAMLFrontMatter
-
-var repeat = require('repeat-string')
-var YAML_FENCE = repeat('-', 3)
-var nodeTypes = require('../node-types')
+import repeat from 'repeat-string'
+const YAML_FENCE = repeat('-', 3)
+import nodeTypes from '../node-types'
 
 /**
  * Tokenise YAML front matter.
@@ -18,13 +14,13 @@ var nodeTypes = require('../node-types')
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `yaml` node.
  */
-function tokenizeYAMLFrontMatter (parser, value, silent) {
-  var subvalue
-  var content
-  var index
-  var length
-  var character
-  var queue
+export default function tokenizeYAMLFrontMatter (parser, value, silent) {
+  let subvalue
+  let content
+  let index
+  let length
+  let character
+  let queue
 
   if (
     !parser.options.yaml ||
@@ -36,7 +32,7 @@ function tokenizeYAMLFrontMatter (parser, value, silent) {
     return
   }
 
-  subvalue = YAML_FENCE + '\n'
+  subvalue = `${YAML_FENCE}\n`
   content = queue = ''
   index = 3
   length = value.length

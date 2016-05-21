@@ -1,9 +1,6 @@
-'use strict'
-
-module.exports = tokenizeDeletion
-
-var isWhiteSpace = require('../is-white-space')
-var nodeTypes = require('../node-types')
+export default tokenizeDeletion
+import isWhiteSpace from '../is-white-space'
+import nodeTypes from '../node-types'
 
 /**
  * Find a possible deletion.
@@ -32,13 +29,13 @@ function locateDeletion (parser, value, fromIndex) {
  * @return {Node?|boolean} - `delete` node.
  */
 function tokenizeDeletion (parser, value, silent) {
-  var character = ''
-  var previous = ''
-  var preceding = ''
-  var subvalue = ''
-  var index
-  var length
-  var now
+  let character = ''
+  let previous = ''
+  let preceding = ''
+  let subvalue = ''
+  let index
+  let length
+  let now
 
   if (
     !parser.options.gfm ||

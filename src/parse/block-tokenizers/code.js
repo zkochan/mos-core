@@ -1,12 +1,8 @@
-'use strict'
+import repeat from 'repeat-string'
+import renderCodeBlock from './renderers/code-block'
 
-module.exports = tokenizeCode
-
-var repeat = require('repeat-string')
-var renderCodeBlock = require('./renderers/code-block')
-
-var CODE_INDENT_LENGTH = 4
-var CODE_INDENT = repeat(' ', CODE_INDENT_LENGTH)
+const CODE_INDENT_LENGTH = 4
+const CODE_INDENT = repeat(' ', CODE_INDENT_LENGTH)
 
 /**
  * Tokenise an indented code block.
@@ -19,7 +15,7 @@ var CODE_INDENT = repeat(' ', CODE_INDENT_LENGTH)
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `code` node.
  */
-function tokenizeCode (parser, value, silent) {
+export default function tokenizeCode (parser, value, silent) {
   let index = -1
   let subvalue = ''
   let content = ''

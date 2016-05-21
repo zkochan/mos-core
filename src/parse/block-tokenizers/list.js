@@ -1,21 +1,16 @@
-'use strict'
+import isNumeric from '../is-numeric'
+import nodeTypes from '../node-types'
+import trim from 'trim'
+import tryBlockTokenize from '../try-block-tokenize'
 
-module.exports = tokenizeList
-
-var isNumeric = require('../is-numeric')
-var nodeTypes = require('../node-types')
-var trim = require('trim')
-const tryBlockTokenize = require('../try-block-tokenize')
-
-var TAB_SIZE = require('../shared-constants').TAB_SIZE
-var RULE_MARKERS = require('../shared-constants').RULE_MARKERS
+import {TAB_SIZE, RULE_MARKERS} from '../shared-constants'
 
 /*
  * A map of characters which can be used to mark
  * list-items.
  */
 
-var LIST_UNORDERED_MARKERS = {}
+const LIST_UNORDERED_MARKERS = {}
 
 LIST_UNORDERED_MARKERS['*'] = true
 LIST_UNORDERED_MARKERS['+'] = true
@@ -26,7 +21,7 @@ LIST_UNORDERED_MARKERS['-'] = true
  * list-items after a digit.
  */
 
-var LIST_ORDERED_MARKERS = {}
+const LIST_ORDERED_MARKERS = {}
 
 LIST_ORDERED_MARKERS['.'] = true
 
@@ -35,7 +30,7 @@ LIST_ORDERED_MARKERS['.'] = true
  * list-items after a digit.
  */
 
-var LIST_ORDERED_COMMONMARK_MARKERS = {}
+const LIST_ORDERED_COMMONMARK_MARKERS = {}
 
 LIST_ORDERED_COMMONMARK_MARKERS['.'] = true
 LIST_ORDERED_COMMONMARK_MARKERS[')'] = true
@@ -51,36 +46,36 @@ LIST_ORDERED_COMMONMARK_MARKERS[')'] = true
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `list` node.
  */
-function tokenizeList (parser, value, silent) {
-  var commonmark = parser.options.commonmark
-  var pedantic = parser.options.pedantic
-  var markers
-  var index = 0
-  var length = value.length
-  var start = null
-  var queue
-  var ordered
-  var character
-  var marker
-  var nextIndex
-  var startIndex
-  var prefixed
-  var currentMarker
-  var content
-  var line
-  var prevEmpty
-  var empty
-  var items
-  var allLines
-  var emptyLines
-  var item
-  var enterTop
-  var exitBlockquote
-  var isLoose
-  var now
-  var end
-  var indented
-  var size
+export default function tokenizeList (parser, value, silent) {
+  const commonmark = parser.options.commonmark
+  const pedantic = parser.options.pedantic
+  let markers
+  let index = 0
+  let length = value.length
+  let start = null
+  let queue
+  let ordered
+  let character
+  let marker
+  let nextIndex
+  let startIndex
+  let prefixed
+  let currentMarker
+  let content
+  let line
+  let prevEmpty
+  let empty
+  let items
+  let allLines
+  let emptyLines
+  let item
+  let enterTop
+  let exitBlockquote
+  let isLoose
+  let now
+  let end
+  let indented
+  let size
 
   while (index < length) {
     character = value.charAt(index)
@@ -145,8 +140,8 @@ function tokenizeList (parser, value, silent) {
     .then(() => parser.eat(allLines.join('\n'))
       .reset({
         type: nodeTypes.LIST,
-        ordered: ordered,
-        start: start,
+        ordered,
+        start,
         loose: null,
         children: [],
       })

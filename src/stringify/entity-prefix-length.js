@@ -1,8 +1,5 @@
-'use strict'
-
-module.exports = entityPrefixLength
-
-var decode = require('parse-entities')
+export default entityPrefixLength
+import decode from 'parse-entities'
 
 /**
  * Returns the length of HTML entity that is a prefix of
@@ -17,7 +14,7 @@ var decode = require('parse-entities')
  * @return {number} - Length of an entity.
  */
 function entityPrefixLength (value) {
-  var prefix
+  let prefix
 
     /* istanbul ignore if - Currently also tested for at
      * implemention, but we keep it here because that’s

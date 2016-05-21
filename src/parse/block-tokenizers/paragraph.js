@@ -1,13 +1,9 @@
-'use strict'
+import trim from 'trim'
+import trimTrailingLines from 'trim-trailing-lines'
+import nodeTypes from '../node-types'
+import tryBlockTokenize from '../try-block-tokenize'
 
-module.exports = tokenizeParagraph
-
-var trim = require('trim')
-var trimTrailingLines = require('trim-trailing-lines')
-var nodeTypes = require('../node-types')
-const tryBlockTokenize = require('../try-block-tokenize')
-
-var TAB_SIZE = require('../shared-constants').TAB_SIZE
+import {TAB_SIZE} from '../shared-constants'
 
 /**
  * Tokenise a paragraph node.
@@ -20,17 +16,17 @@ var TAB_SIZE = require('../shared-constants').TAB_SIZE
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `paragraph` node.
  */
-function tokenizeParagraph (parser, value, silent) {
-  var settings = parser.options
-  var commonmark = settings.commonmark
-  var gfm = settings.gfm
-  var index = value.indexOf('\n')
-  var length = value.length
-  var position
-  var subvalue
-  var character
-  var size
-  var now
+export default function tokenizeParagraph (parser, value, silent) {
+  const settings = parser.options
+  const commonmark = settings.commonmark
+  const gfm = settings.gfm
+  const index = value.indexOf('\n')
+  const length = value.length
+  let position
+  let subvalue
+  let character
+  let size
+  let now
 
   return tokenizeEach(index)
     .then(index => {

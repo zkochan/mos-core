@@ -1,11 +1,7 @@
-'use strict'
+import renderCodeBlock from './renderers/code-block'
 
-module.exports = tokenizeFences
-
-var renderCodeBlock = require('./renderers/code-block')
-
-var MIN_FENCE_COUNT = 3
-var CODE_INDENT_LENGTH = 4
+const MIN_FENCE_COUNT = 3
+const CODE_INDENT_LENGTH = 4
 
 /**
  * Tokenise a fenced code block.
@@ -18,22 +14,22 @@ var CODE_INDENT_LENGTH = 4
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `code` node.
  */
-function tokenizeFences (parser, value, silent) {
-  var settings = parser.options
-  var length = value.length + 1
-  var index = 0
-  var subvalue = ''
-  var fenceCount
-  var marker
-  var character
-  var flag
-  var queue
-  var content
-  var exdentedContent
-  var closing
-  var exdentedClosing
-  var indent
-  var now
+export default function tokenizeFences (parser, value, silent) {
+  const settings = parser.options
+  const length = value.length + 1
+  let index = 0
+  let subvalue = ''
+  let fenceCount
+  let marker
+  let character
+  let flag
+  let queue
+  let content
+  let exdentedContent
+  let closing
+  let exdentedClosing
+  let indent
+  let now
 
   if (!settings.gfm) {
     return

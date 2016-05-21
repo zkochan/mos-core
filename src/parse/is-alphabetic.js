@@ -1,10 +1,9 @@
-'use strict'
-module.exports = isAlphabetic
+export default isAlphabetic
 
-var CC_A_LOWER = 'a'.charCodeAt(0)
-var CC_A_UPPER = 'A'.charCodeAt(0)
-var CC_Z_LOWER = 'z'.charCodeAt(0)
-var CC_Z_UPPER = 'Z'.charCodeAt(0)
+const CC_A_LOWER = 'a'.charCodeAt(0)
+const CC_A_UPPER = 'A'.charCodeAt(0)
+const CC_Z_LOWER = 'z'.charCodeAt(0)
+const CC_Z_UPPER = 'Z'.charCodeAt(0)
 
 /**
  * Check whether `character` is alphabetic.
@@ -13,7 +12,7 @@ var CC_Z_UPPER = 'Z'.charCodeAt(0)
  * @return {boolean} - Whether `character` is alphabetic.
  */
 function isAlphabetic (character) {
-  var code = character.charCodeAt(0)
+  const code = character.charCodeAt(0)
 
   return (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||
         (code >= CC_A_UPPER && code <= CC_Z_UPPER)

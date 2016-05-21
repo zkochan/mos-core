@@ -1,12 +1,11 @@
-'use strict'
-const label = require('./label')
-const entityPrefixLength = require('../entity-prefix-length')
+import label from './label'
+import entityPrefixLength from '../entity-prefix-length'
 
 /*
  * Punctuation characters.
  */
 
-var PUNCTUATION = /[-!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~_]/
+const PUNCTUATION = /[-!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~_]/
 
 /**
  * For shortcut and collapsed reference links, the contents
@@ -86,29 +85,7 @@ function copyIdentifierEncoding (value, identifier) {
   return result.join('')
 }
 
-/**
- * Stringify a link reference.
- *
- * See `label()` on how reference labels are created.
- *
- * @example
- *   var compiler = new Compiler();
- *
- *   compiler.linkReference({
- *     type: 'linkReference',
- *     referenceType: 'collapsed',
- *     identifier: 'foo',
- *     children: [{
- *       type: 'text',
- *       value: 'Foo'
- *     }]
- *   });
- *   // '[Foo][]'
- *
- * @param {Object} node - `linkReference` node.
- * @return {string} - Markdown link reference.
- */
-module.exports = function (compiler, node) {
+export default (compiler, node) => {
   const exitLinkReference = compiler.enterLinkReference(compiler, node)
   let value = compiler.all(node).join('')
 

@@ -1,25 +1,8 @@
-'use strict'
-
-/* eslint-env commonjs */
-
-/*
- * Dependencies.
- */
-
-var utilities = require('../utilities.js')
-var defaultOptions = require('../defaults.js').stringify
-const encodeFactory = require('./encode-factory')
-const escapeFactory = require('./escape-factory')
-const LIST_BULLETS = require('./list-bullets')
-
-/*
- * Methods.
- */
-
-var raise = utilities.raise
-var validate = utilities.validate
-var mergeable = utilities.mergeable
-var MERGEABLE_NODES = utilities.MERGEABLE_NODES
+import {raise, validate, mergeable, MERGEABLE_NODES} from '../utilities'
+import {stringify as defaultOptions} from '../defaults'
+import encodeFactory from './encode-factory'
+import escapeFactory from './escape-factory'
+import LIST_BULLETS from './list-bullets'
 
 /**
  * Construct a state `toggler`: a function which inverses
@@ -53,8 +36,8 @@ function stateToggler (key, state) {
    * @return {Function} - Exit state.
    */
   function enter () {
-    var self = this
-    var current = self[key]
+    const self = this
+    const current = self[key]
 
     self[key] = !state
 
@@ -75,7 +58,7 @@ function stateToggler (key, state) {
  * Constants.
  */
 
-var MINIMUM_RULE_LENGTH = 3
+const MINIMUM_RULE_LENGTH = 3
 
 /*
  * Character combinations.
@@ -85,7 +68,7 @@ var MINIMUM_RULE_LENGTH = 3
  * Allowed entity options.
  */
 
-var ENTITY_OPTIONS = {}
+const ENTITY_OPTIONS = {}
 
 ENTITY_OPTIONS.true = true
 ENTITY_OPTIONS.false = true
@@ -96,7 +79,7 @@ ENTITY_OPTIONS.escape = true
  * Allowed horizontal-rule bullet characters.
  */
 
-var THEMATIC_BREAK_BULLETS = {}
+const THEMATIC_BREAK_BULLETS = {}
 
 THEMATIC_BREAK_BULLETS['*'] = true
 THEMATIC_BREAK_BULLETS['-'] = true
@@ -106,7 +89,7 @@ THEMATIC_BREAK_BULLETS['_'] = true
  * Allowed emphasis characters.
  */
 
-var EMPHASIS_MARKERS = {}
+const EMPHASIS_MARKERS = {}
 
 EMPHASIS_MARKERS['_'] = true
 EMPHASIS_MARKERS['*'] = true
@@ -115,7 +98,7 @@ EMPHASIS_MARKERS['*'] = true
  * Allowed fence markers.
  */
 
-var FENCE_MARKERS = {}
+const FENCE_MARKERS = {}
 
 FENCE_MARKERS['`'] = true
 FENCE_MARKERS['~'] = true
@@ -124,11 +107,11 @@ FENCE_MARKERS['~'] = true
  * Allowed list-item-indent's.
  */
 
-var LIST_ITEM_INDENTS = {}
+const LIST_ITEM_INDENTS = {}
 
-var LIST_ITEM_TAB = 'tab'
-var LIST_ITEM_ONE = '1'
-var LIST_ITEM_MIXED = 'mixed'
+const LIST_ITEM_TAB = 'tab'
+const LIST_ITEM_ONE = '1'
+const LIST_ITEM_MIXED = 'mixed'
 
 LIST_ITEM_INDENTS[LIST_ITEM_ONE] = true
 LIST_ITEM_INDENTS[LIST_ITEM_TAB] = true
@@ -164,9 +147,9 @@ function compilerFactory (visitors) {
      * @return {Compiler} - `self`.
      */
     setOptions (options) {
-      var current = compiler.options
-      var ruleRepetition
-      var key
+      const current = compiler.options
+      let ruleRepetition
+      let key
 
       if (options === null || options === undefined) {
         options = {}
@@ -214,16 +197,16 @@ function compilerFactory (visitors) {
      * @return {Function} - Exit state.
      */
     enterLinkReference (compiler, node) {
-      var encode = compiler.encode
-      var escape = compiler.escape
-      var exitLink = compiler.enterLink()
+      const encode = compiler.encode
+      const escape = compiler.escape
+      const exitLink = compiler.enterLink()
 
       if (
           node.referenceType === 'shortcut' ||
           node.referenceType === 'collapsed'
       ) {
         compiler.encode = compiler.escape = value => value
-        return function () {
+        return () => {
           compiler.encode = encode
           compiler.escape = escape
           exitLink()
@@ -259,8 +242,7 @@ function compilerFactory (visitors) {
 
       if (typeof visitors[node.type] !== 'function') {
         throw new Error(
-            'Missing compiler for node of type `' +
-            node.type + '`: `' + node + '`',
+            `Missing compiler for node of type \`${node.type}\`: \`${node}\``,
             node
         )
       }
@@ -291,13 +273,13 @@ function compilerFactory (visitors) {
      * @return {Array.<string>} - List of compiled children.
      */
     all (parent) {
-      var children = parent.children
-      var values = []
-      var index = 0
-      var length = children.length
-      var mergedLength = 1
-      var node = children[0]
-      var next
+      const children = parent.children
+      const values = []
+      let index = 0
+      const length = children.length
+      let mergedLength = 1
+      let node = children[0]
+      let next
 
       if (length === 0) {
         return values
@@ -369,8 +351,4 @@ var maps = {
   'fence': FENCE_MARKERS,
 }
 
-/*
- * Expose `stringify` on `module.exports`.
- */
-
-module.exports = compilerFactory
+export default compilerFactory

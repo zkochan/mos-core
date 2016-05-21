@@ -1,36 +1,13 @@
-'use strict'
-const encloseURI = require('./enclose-uri')
-const encloseTitle = require('./enclose-title')
+import encloseURI from './enclose-uri'
+import encloseTitle from './enclose-title'
 
-/**
- * Stringify a link- or image definition.
- *
- * Is smart about enclosing `url` (see `encloseURI()`) and
- * `title` (see `encloseTitle()`).
- *
- *    [foo]: <foo at bar '.' com> 'An "example" e-mail'
- *
- * @example
- *   var compiler = new Compiler();
- *
- *   compiler.definition({
- *     type: 'definition',
- *     url: 'http://example.com',
- *     title: 'Example Domain',
- *     identifier: 'foo'
- *   });
- *   // '[foo]: http://example.com "Example Domain"'
- *
- * @param {Object} node - `definition` node.
- * @return {string} - Markdown link- or image definition.
- */
-module.exports = function (compiler, node) {
+export default (compiler, node) => {
   const value = `[${node.identifier}]`
   let url = encloseURI(node.url)
 
   if (node.title) {
-    url += ' ' + encloseTitle(node.title)
+    url += ` ${encloseTitle(node.title)}`
   }
 
-  return value + ': ' + url
+  return `${value}: ${url}`
 }

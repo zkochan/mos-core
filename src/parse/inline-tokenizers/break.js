@@ -1,10 +1,7 @@
-'use strict'
+export default tokenizeBreak
+import nodeTypes from '../node-types'
 
-module.exports = tokenizeBreak
-
-var nodeTypes = require('../node-types')
-
-var MIN_BREAK_LENGTH = 2
+const MIN_BREAK_LENGTH = 2
 
 /**
  * Find a possible break.
@@ -17,7 +14,7 @@ var MIN_BREAK_LENGTH = 2
  * @return {number} - Location of possible break.
  */
 function locateBreak (parser, value, fromIndex) {
-  var index = value.indexOf('\n', fromIndex)
+  let index = value.indexOf('\n', fromIndex)
 
   while (index > fromIndex) {
     if (value.charAt(index - 1) !== ' ') {

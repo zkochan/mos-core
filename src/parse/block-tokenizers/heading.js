@@ -1,8 +1,4 @@
-'use strict'
-
-module.exports = tokenizeHeading
-
-var MAX_ATX_COUNT = 6
+const MAX_ATX_COUNT = 6
 
 /**
  * Tokenise an ATX-style heading.
@@ -15,16 +11,16 @@ var MAX_ATX_COUNT = 6
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `heading` node.
  */
-function tokenizeHeading (parser, value, silent) {
-  var settings = parser.options
-  var length = value.length + 1
-  var index = -1
-  var now = parser.eat.now()
-  var subvalue = ''
-  var content = ''
-  var character
-  var queue
-  var depth
+export default function tokenizeHeading (parser, value, silent) {
+  const settings = parser.options
+  let length = value.length + 1
+  let index = -1
+  const now = parser.eat.now()
+  let subvalue = ''
+  let content = ''
+  let character
+  let queue
+  let depth
 
   /*
    * Eat initial spacing.

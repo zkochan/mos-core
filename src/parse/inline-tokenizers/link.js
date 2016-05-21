@@ -1,17 +1,14 @@
-'use strict'
-
-module.exports = tokenizeLink
-
-var isWhiteSpace = require('../is-white-space')
-var has = {}.hasOwnProperty
-var locateLink = require('./locators/link')
+export default tokenizeLink
+import isWhiteSpace from '../is-white-space'
+const has = {}.hasOwnProperty
+import locateLink from './locators/link'
 
 /*
  * A map of characters, which can be used to mark link
  * and image titles in commonmark-mode.
  */
 
-var COMMONMARK_LINK_TITLE_MARKERS = {}
+const COMMONMARK_LINK_TITLE_MARKERS = {}
 
 COMMONMARK_LINK_TITLE_MARKERS['"'] = '"'
 COMMONMARK_LINK_TITLE_MARKERS['\''] = '\''
@@ -22,7 +19,7 @@ COMMONMARK_LINK_TITLE_MARKERS['('] = ')'
  * and image titles.
  */
 
-var LINK_TITLE_MARKERS = {}
+const LINK_TITLE_MARKERS = {}
 
 LINK_TITLE_MARKERS['"'] = '"'
 LINK_TITLE_MARKERS['\''] = '\''
@@ -40,25 +37,25 @@ LINK_TITLE_MARKERS['\''] = '\''
  * @return {Node?|boolean} - `link` or `image` node.
  */
 function tokenizeLink (parser, value, silent) {
-  var subvalue = ''
-  var index = 0
-  var character = value.charAt(0)
-  var beforeURL
-  var beforeTitle
-  var whiteSpaceQueue
-  var commonmark
-  var openCount
-  var hasMarker
-  var markers
-  var isImage
-  var content
-  var marker
-  var length
-  var title
-  var depth
-  var queue
-  var url
-  var now
+  let subvalue = ''
+  let index = 0
+  let character = value.charAt(0)
+  let beforeURL
+  let beforeTitle
+  let whiteSpaceQueue
+  let commonmark
+  let openCount
+  let hasMarker
+  let markers
+  let isImage
+  let content
+  let marker
+  let length
+  let title
+  let depth
+  let queue
+  let url
+  let now
 
   /*
    * Detect whether this is an image.
@@ -144,7 +141,7 @@ function tokenizeLink (parser, value, silent) {
     return
   }
 
-  subvalue += queue + ']('
+  subvalue += `${queue}](`
   index++
   content = queue
 
@@ -196,7 +193,7 @@ function tokenizeLink (parser, value, silent) {
       return
     }
 
-    subvalue += '<' + queue + '>'
+    subvalue += `<${queue}>`
     url = queue
     index++
   } else {

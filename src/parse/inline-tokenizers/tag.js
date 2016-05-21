@@ -1,14 +1,13 @@
-'use strict'
-var eatHTMLComment = require('../eat/html-comment')
-var eatHTMLCDATA = require('../eat/html-cdata')
-var eatHTMLProcessingInstruction = require('../eat/html-processing-instructions')
-var eatHTMLDeclaration = require('../eat/html-declaration')
-var eatHTMLClosingTag = require('../eat/html-closing-tag')
-var eatHTMLOpeningTag = require('../eat/html-opening-tag')
-var nodeTypes = require('../node-types')
+import eatHTMLComment from '../eat/html-comment'
+import eatHTMLCDATA from '../eat/html-cdata'
+import eatHTMLProcessingInstruction from '../eat/html-processing-instructions'
+import eatHTMLDeclaration from '../eat/html-declaration'
+import eatHTMLClosingTag from '../eat/html-closing-tag'
+import eatHTMLOpeningTag from '../eat/html-opening-tag'
+import nodeTypes from '../node-types'
 
-var EXPRESSION_HTML_LINK_OPEN = /^<a /i
-var EXPRESSION_HTML_LINK_CLOSE = /^<\/a>/i
+const EXPRESSION_HTML_LINK_OPEN = /^<a /i
+const EXPRESSION_HTML_LINK_CLOSE = /^<\/a>/i
 
 /**
  * Find a possible tag.
@@ -37,7 +36,7 @@ function locateTag (parser, value, fromIndex) {
  * @return {Node?|boolean} - `html` node.
  */
 function tokenizeTag (parser, value, silent) {
-  var subvalue = eatHTMLComment(value, parser.options) ||
+  const subvalue = eatHTMLComment(value, parser.options) ||
     eatHTMLCDATA(value) ||
     eatHTMLProcessingInstruction(value) ||
     eatHTMLDeclaration(value) ||
@@ -67,4 +66,4 @@ function tokenizeTag (parser, value, silent) {
 
 tokenizeTag.locator = locateTag
 
-module.exports = tokenizeTag
+export default tokenizeTag

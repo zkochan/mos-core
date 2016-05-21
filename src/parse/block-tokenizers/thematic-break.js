@@ -1,10 +1,6 @@
-'use strict'
-
-module.exports = tokenizeThematicBreak
-
-var RULE_MARKERS = require('../shared-constants').RULE_MARKERS
-var nodeTypes = require('../node-types')
-var THEMATIC_BREAK_MARKER_COUNT = 3
+import {RULE_MARKERS} from '../shared-constants'
+import nodeTypes from '../node-types'
+const THEMATIC_BREAK_MARKER_COUNT = 3
 
 /**
  * Tokenise a horizontal rule.
@@ -17,14 +13,14 @@ var THEMATIC_BREAK_MARKER_COUNT = 3
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `thematicBreak` node.
  */
-function tokenizeThematicBreak (parser, value, silent) {
-  var index = -1
-  var length = value.length + 1
-  var subvalue = ''
-  var character
-  var marker
-  var markerCount
-  var queue
+export default function tokenizeThematicBreak (parser, value, silent) {
+  let index = -1
+  const length = value.length + 1
+  let subvalue = ''
+  let character
+  let marker
+  let markerCount
+  let queue
 
   while (++index < length) {
     character = value.charAt(index)

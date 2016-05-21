@@ -1,9 +1,6 @@
-'use strict'
-
-module.exports = tokenizeInlineCode
-
-var isWhiteSpace = require('../is-white-space')
-var nodeTypes = require('../node-types')
+export default tokenizeInlineCode
+import isWhiteSpace from '../is-white-space'
+import nodeTypes from '../node-types'
 
 /**
  * Find possible inline code.
@@ -32,9 +29,9 @@ function locateInlineCode (parser, value, fromIndex) {
  * @return {Node?|boolean} - `inlineCode` node.
  */
 function tokenizeInlineCode (parser, value, silent) {
-  var index = 0
-  var queue = ''
-  var tickQueue = ''
+  let index = 0
+  let queue = ''
+  let tickQueue = ''
 
   while (index < value.length) {
     if (value.charAt(index) !== '`') {
@@ -50,14 +47,14 @@ function tokenizeInlineCode (parser, value, silent) {
   }
 
   let subvalue = queue
-  let openingCount = index
+  const openingCount = index
   queue = ''
   let next = value.charAt(index)
   let count = 0
   let found
 
   while (index < value.length) {
-    const character = next
+    var character = next
     next = value.charAt(index + 1)
 
     if (character === '`') {

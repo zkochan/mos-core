@@ -1,6 +1,4 @@
-'use strict'
-
-module.exports = locateLink
+export default locateLink
 
 /**
  * Find a possible link.
@@ -13,8 +11,8 @@ module.exports = locateLink
  * @return {number} - Location of possible link.
  */
 function locateLink (parser, value, fromIndex) {
-  var link = value.indexOf('[', fromIndex)
-  var image = value.indexOf('![', fromIndex)
+  const link = value.indexOf('[', fromIndex)
+  const image = value.indexOf('![', fromIndex)
 
   if (image === -1) {
     return link

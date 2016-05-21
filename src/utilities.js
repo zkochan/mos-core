@@ -1,20 +1,12 @@
-'use strict'
-
-/* eslint-env commonjs */
-
-/*
- * Dependencies.
- */
-
-var collapseWhiteSpace = require('collapse-white-space')
+import collapseWhiteSpace from 'collapse-white-space'
 
 /*
  * Expressions.
  */
 
-var EXPRESSION_LINE_BREAKS = /\r\n|\r/g
-var EXPRESSION_SYMBOL_FOR_NEW_LINE = /\u2424/g
-var EXPRESSION_BOM = /^\ufeff/
+const EXPRESSION_LINE_BREAKS = /\r\n|\r/g
+const EXPRESSION_SYMBOL_FOR_NEW_LINE = /\u2424/g
+const EXPRESSION_BOM = /^\ufeff/
 
 /**
  * Throw an exception with in its `message` `value`
@@ -23,10 +15,9 @@ var EXPRESSION_BOM = /^\ufeff/
  * @param {*} value - Invalid value.
  * @param {string} name - Setting name.
  */
-function raise (value, name) {
+export function raise (value, name) {
   throw new Error(
-    'Invalid value `' + value + '` ' +
-    'for setting `' + name + '`'
+    `Invalid value \`${value}\` for setting \`${name}\``
   )
 }
 
@@ -47,14 +38,14 @@ function raise (value, name) {
  * @param {boolean} def - Default value.
  */
 function validateBoolean (context, name, def) {
-  var value = context[name]
+  let value = context[name]
 
   if (value === null || value === undefined) {
     value = def
   }
 
   if (typeof value !== 'boolean') {
-    raise(value, 'options.' + name)
+    raise(value, `options.${name}`)
   }
 
   context[name] = value
@@ -77,14 +68,14 @@ function validateBoolean (context, name, def) {
  * @param {number} def - Default value.
  */
 function validateNumber (context, name, def) {
-  var value = context[name]
+  let value = context[name]
 
   if (value === null || value === undefined) {
     value = def
   }
 
   if (typeof value !== 'number' || value !== value) { // eslint-disable-line no-self-compare
-    raise(value, 'options.' + name)
+    raise(value, `options.${name}`)
   }
 
   context[name] = value
@@ -109,14 +100,14 @@ function validateNumber (context, name, def) {
  * @param {Object} map - Enum.
  */
 function validateString (context, name, def, map) {
-  var value = context[name]
+  let value = context[name]
 
   if (value === null || value === undefined) {
     value = def
   }
 
   if (!(value in map)) {
-    raise(value, 'options.' + name)
+    raise(value, `options.${name}`)
   }
 
   context[name] = value
@@ -133,7 +124,7 @@ function validateString (context, name, def, map) {
  * @param {string} value - Content to clean.
  * @return {string} - Cleaned content.
  */
-function clean (value) {
+export function clean (value) {
   return String(value)
         .replace(EXPRESSION_BOM, '')
         .replace(EXPRESSION_LINE_BREAKS, '\n')
@@ -150,7 +141,7 @@ function clean (value) {
  * @param {string} value - Content to normalize.
  * @return {string} - Normalized content.
  */
-function normalizeIdentifier (value) {
+export function normalizeIdentifier (value) {
   return collapseWhiteSpace(value).toLowerCase()
 }
 
@@ -179,14 +170,14 @@ function normalizeIdentifier (value) {
  * @param {boolean} state - It's default state.
  * @return {function(): function()} - Enter.
  */
-function stateToggler (target, key, state) {
+export function stateToggler (target, key, state) {
     /**
      * Construct a toggler for the bound `key`.
      *
      * @return {Function} - Exit state.
      */
   function enter () {
-    var current = target[key]
+    const current = target[key]
 
     target[key] = !state
 
@@ -207,7 +198,7 @@ function stateToggler (target, key, state) {
  * Define nodes of a type which can be merged.
  */
 
-var MERGEABLE_NODES = {}
+export const MERGEABLE_NODES = {}
 
 /**
  * Check whether a node is mergeable with adjacent nodes.
@@ -215,9 +206,9 @@ var MERGEABLE_NODES = {}
  * @param {Object} node - Node to check.
  * @return {boolean} - Whether `node` is mergable.
  */
-function mergeable (node) {
-  var start
-  var end
+export function mergeable (node) {
+  let start
+  let end
 
   if (node.type !== 'text' || !node.position) {
     return true
@@ -242,7 +233,7 @@ function mergeable (node) {
  * @param {Object} node - Following sibling.
  * @return {Object} - `prev`.
  */
-MERGEABLE_NODES.text = function (prev, node) {
+MERGEABLE_NODES.text = (prev, node) => {
   prev.value += node.value
 
   return prev
@@ -266,23 +257,8 @@ MERGEABLE_NODES.blockquote = function (prev, node) {
   return prev
 }
 
-/*
- * Expose `validate`.
- */
-
-exports.validate = {
-  'boolean': validateBoolean,
-  'string': validateString,
-  'number': validateNumber,
+export const validate = {
+  boolean: validateBoolean,
+  string: validateString,
+  number: validateNumber,
 }
-
-/*
- * Expose.
- */
-
-exports.normalizeIdentifier = normalizeIdentifier
-exports.clean = clean
-exports.raise = raise
-exports.stateToggler = stateToggler
-exports.mergeable = mergeable
-exports.MERGEABLE_NODES = MERGEABLE_NODES

@@ -1,15 +1,11 @@
-'use strict'
-
-module.exports = tokenizeLineHeading
-
-var MAX_LINE_HEADING_INDENT = 3
+const MAX_LINE_HEADING_INDENT = 3
 
 /*
  * A map of characters which can be used to mark setext
  * headers, mapping to their corresponding depth.
  */
 
-var SETEXT_MARKERS = {}
+const SETEXT_MARKERS = {}
 
 SETEXT_MARKERS['='] = 1
 SETEXT_MARKERS['-'] = 2
@@ -25,16 +21,16 @@ SETEXT_MARKERS['-'] = 2
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `heading` node.
  */
-function tokenizeLineHeading (parser, value, silent) {
-  var now = parser.eat.now()
-  var length = value.length
-  var index = -1
-  var subvalue = ''
-  var content
-  var queue
-  var character
-  var marker
-  var depth
+export default function tokenizeLineHeading (parser, value, silent) {
+  const now = parser.eat.now()
+  const length = value.length
+  let index = -1
+  let subvalue = ''
+  let content
+  let queue
+  let character
+  let marker
+  let depth
 
   /*
    * Eat initial indentation.

@@ -1,19 +1,7 @@
-'use strict'
-var repeat = require('repeat-string')
-var INDENT = 4
+import repeat from 'repeat-string'
+const INDENT = 4
 
-/**
- * Pad `value` with `level * INDENT` spaces.  Respects
- * lines. Ignores '' lines.
- *
- * @example
- *   pad('foo', 1) // '    foo'
- *
- * @param {string} value - Content.
- * @param {number} level - Indentation level.
- * @return {string} - Padded `value`.
- */
-module.exports = function pad (value, level) {
+export default function pad (value, level) {
   value = value.split('\n')
 
   let index = value.length
@@ -26,4 +14,4 @@ module.exports = function pad (value, level) {
   }
 
   return value.join('\n')
-}
+};

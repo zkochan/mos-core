@@ -1,10 +1,8 @@
-'use strict'
-
-var COMMENT_START = '<!--'
-var COMMENT_START_LENGTH = COMMENT_START.length
-var COMMENT_END = '-->'
-var COMMENT_END_CHAR = COMMENT_END.charAt(0)
-var COMMENT_END_LENGTH = COMMENT_END.length
+const COMMENT_START = '<!--'
+const COMMENT_START_LENGTH = COMMENT_START.length
+const COMMENT_END = '-->'
+const COMMENT_END_CHAR = COMMENT_END.charAt(0)
+const COMMENT_END_LENGTH = COMMENT_END.length
 
 /**
  * Try to match comment.
@@ -15,13 +13,13 @@ var COMMENT_END_LENGTH = COMMENT_END.length
  * @return {string?} - When applicable, the comment at the
  *   start of `value`.
  */
-function eatHTMLComment (value, settings) {
-  var index = COMMENT_START_LENGTH
-  var queue = COMMENT_START
-  var length = value.length
-  var commonmark = settings.commonmark
-  var character
-  var hasNonDash
+export default function eatHTMLComment (value, settings) {
+  let index = COMMENT_START_LENGTH
+  let queue = COMMENT_START
+  const length = value.length
+  const commonmark = settings.commonmark
+  let character
+  let hasNonDash
 
   if (value.slice(0, index) === queue) {
     while (index < length) {
@@ -54,4 +52,4 @@ function eatHTMLComment (value, settings) {
   }
 }
 
-module.exports = eatHTMLComment
+export default eatHTMLComment

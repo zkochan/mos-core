@@ -1,9 +1,5 @@
-'use strict'
-
-module.exports = renderCodeBlock
-
-var nodeTypes = require('../../node-types')
-var trimTrailingLines = require('trim-trailing-lines')
+import nodeTypes from '../../node-types'
+import trimTrailingLines from 'trim-trailing-lines'
 
 /**
  * Create a code-block node.
@@ -16,10 +12,10 @@ var trimTrailingLines = require('trim-trailing-lines')
  * @param {Function} eat - Eater.
  * @return {Object} - `code` node.
  */
-function renderCodeBlock (value, language) {
+export default function renderCodeBlock (value, language) {
   return {
-    'type': nodeTypes.CODE,
-    'lang': language || null,
-    'value': trimTrailingLines(value || ''),
+    type: nodeTypes.CODE,
+    lang: language || null,
+    value: trimTrailingLines(value || ''),
   }
 }
