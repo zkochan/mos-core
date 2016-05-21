@@ -1,6 +1,6 @@
 export default tokenizeFactory
 import {mergeable, MERGEABLE_NODES} from '../utilities'
-import runAsync from 'run-async'
+import runAsync from '../run-async'
 
 /*
  * Error messages.

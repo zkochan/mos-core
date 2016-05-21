@@ -479,7 +479,7 @@ validateToken = context => {
   let keys = Object.keys(context).length
   const type = context.type
 
-  assert('type' in context)
+  expect(context.type).to.exist
 
   if ('children' in context) {
     assert(Array.isArray(context.children))

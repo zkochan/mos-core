@@ -81,15 +81,10 @@ function parseOptions (name) {
   const length = parts.length
   const options = clone(defaults)
   let part
-  let augmented
-  let key
-  let value
 
   while (++index < length) {
     part = parts[index].split('=')
-    augmented = augment(part[0], part.slice(1).join('='))
-    key = augmented.key
-    value = augmented.value
+    const {key, value} = augment(part[0], part.slice(1).join('='))
 
     if (key === 'output') {
       options[key] = value
