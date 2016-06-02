@@ -1,6 +1,7 @@
+import {Visitor} from '../visitor'
 import table from 'markdown-table'
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   let index = node.children.length
   const exit = compiler.enterTable()
   const result = []
@@ -22,3 +23,5 @@ export default (compiler, node) => {
     delimiter: compiler.options.spacedTable ? ' | ' : '|',
   })
 }
+
+export default visitor

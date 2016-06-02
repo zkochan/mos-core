@@ -1,7 +1,8 @@
+import {Visitor} from '../visitor'
 import encloseURI from './enclose-uri'
 import encloseTitle from './enclose-title'
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   let url = encloseURI(compiler.encode(node.url, node))
 
   if (node.title) {
@@ -12,3 +13,5 @@ export default (compiler, node) => {
 
   return value
 }
+
+export default visitor

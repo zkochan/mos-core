@@ -1,5 +1,6 @@
 import decode from 'parse-entities'
 import isWhiteSpace from '../is-white-space'
+import Tokenizer from '../tokenizer'
 
 /*
  * Protocols.

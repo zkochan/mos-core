@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Find a possible deletion.
@@ -27,7 +28,7 @@ function locateDeletion (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `delete` node.
  */
-const tokenizeDeletion: any = function (parser, value, silent) {
+const tokenizeDeletion: Tokenizer = function (parser, value, silent) {
   let character = ''
   let previous = ''
   let preceding = ''

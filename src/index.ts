@@ -7,6 +7,8 @@ import inlineTokenizers from './parse/inline-tokenizers'
 import stringify from './stringify'
 import visitors from './stringify/visitors'
 import escape from './escape'
+import Tokenizer from './parse/tokenizer';
+import {Node} from './node'
 
 export default {
   parser: parse,

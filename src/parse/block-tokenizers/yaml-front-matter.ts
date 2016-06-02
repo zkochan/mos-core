@@ -1,6 +1,7 @@
 import repeat from 'repeat-string'
 const YAML_FENCE = repeat('-', 3)
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Tokenise YAML front matter.
@@ -14,7 +15,7 @@ import nodeTypes from '../node-types'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `yaml` node.
  */
-const tokenizeYAMLFrontMatter: any = function (parser, value, silent) {
+const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
   let subvalue
   let content
   let index

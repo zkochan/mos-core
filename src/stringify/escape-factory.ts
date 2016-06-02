@@ -1,4 +1,5 @@
 export default escapeFactory
+import {Node} from '../node'
 import entityPrefixLength from './entity-prefix-length'
 import LIST_BULLETS from './list-bullets'
 
@@ -8,7 +9,7 @@ import LIST_BULLETS from './list-bullets'
  * @param {string} character - Single character to check.
  * @return {boolean} - Whether `character` is alphanumeric.
  */
-function isAlphanumeric (character) {
+function isAlphanumeric (character: string): boolean {
   return /\w/.test(character) && character !== '_'
 }
 
@@ -30,7 +31,7 @@ const ENTITY_COLON = '&#x3A;'
  * @param {string} value - Value to check.
  * @return {number} - Whether `value` starts an entity.
  */
-function startsWithEntity (value) {
+function startsWithEntity (value: string): boolean {
   return entityPrefixLength(value) > 0
 }
 
@@ -45,7 +46,7 @@ function startsWithEntity (value) {
  * @return {boolean} - Whether `character` is a valid
  *   alignment row character.
  */
-function isAlignmentRowCharacter (character) {
+function isAlignmentRowCharacter (character: string): boolean {
   return character === ':' ||
         character === '-' ||
         character === ' ' ||
@@ -64,7 +65,7 @@ function isAlignmentRowCharacter (character) {
  * @return {boolean} - Whether `index` in `value` is in
  *   an alignment row.
  */
-function isInAlignmentRow (value, index) {
+function isInAlignmentRow (value: string, index: number): boolean {
   const length = value.length
   const start = index
   let character
@@ -119,7 +120,7 @@ function escapeFactory (options) {
      * @param {Object} [parent] - Parent of `node`.
      * @return {string} - Escaped `value`.
      */
-  return function escape (value, node, parent) {
+  return function escape (value: string, node: Node, parent?: Node): string {
     const self = this
     const gfm = options.gfm
     const commonmark = options.commonmark

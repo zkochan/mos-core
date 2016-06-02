@@ -1,4 +1,5 @@
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Tokenise an escape sequence.
@@ -12,7 +13,7 @@ import nodeTypes from '../node-types'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `text` or `break` node.
  */
-const tokenizeEscape: any = function (parser, value, silent) {
+const tokenizeEscape: Tokenizer = function (parser, value, silent) {
   if (value.charAt(0) === '\\') {
     const character = value.charAt(1)
 

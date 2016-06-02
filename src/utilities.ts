@@ -220,43 +220,6 @@ export function mergeable (node) {
         end.column - start.column === node.value.length
 }
 
-/*
- * Define nodes of a type which can be merged.
- */
-
-export const MERGEABLE_NODES = {
-  /**
-   * Merge two text nodes: `node` into `prev`.
-   *
-   * @param {Object} prev - Preceding sibling.
-   * @param {Object} node - Following sibling.
-   * @return {Object} - `prev`.
-   */
-  text: (prev, node) => {
-    prev.value += node.value
-
-    return prev
-  },
-
-  /**
-   * Merge two blockquotes: `node` into `prev`, unless in
-   * CommonMark mode.
-   *
-   * @param {Object} prev - Preceding sibling.
-   * @param {Object} node - Following sibling.
-   * @return {Object} - `prev`, or `node` in CommonMark mode.
-   */
-  blockquote: function (prev, node) {
-    if (this.options.commonmark) {
-      return node
-    }
-
-    prev.children = prev.children.concat(node.children)
-
-    return prev
-  },
-}
-
 export const validate = {
   boolean: validateBoolean,
   string: validateString,

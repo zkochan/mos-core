@@ -12,6 +12,7 @@ import footnoteDefinition from './footnote'
 import definition from './definition'
 import table from './table'
 import paragraph from './paragraph'
+import Tokenizer from '../tokenizer';
 
 export default [
   {

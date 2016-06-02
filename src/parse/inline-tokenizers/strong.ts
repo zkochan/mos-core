@@ -1,6 +1,7 @@
 import trim from 'trim'
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Find a possible strong emphasis.
@@ -40,7 +41,7 @@ function locateStrong (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `strong` node.
  */
-const tokenizeStrong: any = function (parser, value, silent) {
+const tokenizeStrong: Tokenizer = function (parser, value, silent) {
   let index = 0
   let character = value.charAt(index)
 

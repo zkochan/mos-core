@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import {normalizeIdentifier as normalize} from '../../utilities'
+import Tokenizer from '../tokenizer'
 
 const EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
 
@@ -16,7 +17,7 @@ const EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `footnoteDefinition` node.
  */
-const tokenizeFootnoteDefinition: any = function (parser, value, silent) {
+const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
   let index
   let length
   let subvalue

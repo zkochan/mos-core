@@ -1,5 +1,6 @@
 import nodeTypes from '../../node-types'
 import trimTrailingLines from 'trim-trailing-lines'
+import {Node} from '../../../node'
 
 /**
  * Create a code-block node.
@@ -12,7 +13,7 @@ import trimTrailingLines from 'trim-trailing-lines'
  * @param {Function} eat - Eater.
  * @return {Object} - `code` node.
  */
-export default function renderCodeBlock (value, language?) {
+export default function renderCodeBlock (value, language?): Node {
   return {
     type: nodeTypes.CODE,
     lang: language || null,

@@ -6,7 +6,7 @@ import ccount from 'ccount'
 
 const EXPRESSIONS_WHITE_SPACE = /\s/
 
-export default function encloseURI (uri, always?) {
+export default function encloseURI (uri: string, always?: boolean): string {
   if (
     always ||
     !uri.length ||

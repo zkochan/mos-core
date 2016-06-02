@@ -3,6 +3,7 @@ import isAlphabetic from '../is-alphabetic'
 import isNumeric from '../is-numeric'
 import trim from 'trim'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Check whether `character` is a word character.
@@ -55,7 +56,7 @@ function locateEmphasis (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `emphasis` node.
  */
-const tokenizeEmphasis: any = function (parser, value, silent) {
+const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
   let index = 0
   let character = value.charAt(index)
 

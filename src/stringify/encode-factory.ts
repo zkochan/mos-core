@@ -12,7 +12,7 @@ import encode from 'stringify-entities'
  * @param {string} value - Content.
  * @return {string} - Content, without any modifications.
  */
-function encodeNoop (value) {
+function encodeNoop (value: string): string {
   return value
 }
 

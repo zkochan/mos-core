@@ -1,5 +1,6 @@
 import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
+import Tokenizer from '../tokenizer'
 
 /**
  * Tokenise a blockquote.
@@ -12,7 +13,7 @@ import tryBlockTokenize from '../try-block-tokenize'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `blockquote` node.
  */
-export default function tokenizeBlockquote (parser, value, silent) {
+const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
   const now = parser.eat.now()
   const indent = parser.indent(now.line)
   const values = []
@@ -170,3 +171,5 @@ export default function tokenizeBlockquote (parser, value, silent) {
     }
   }
 }
+
+export default tokenizeBlockquote

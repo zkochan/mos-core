@@ -40,7 +40,7 @@ describe('parse(file, options?)', () => {
   it('should accept a `string`', done => {
     return parse('Alfred', {})
       .then(node => {
-        assert(node.children.length === 1)
+        expect(node.children.length).to.eq(1)
         done()
       })
       .catch(done)

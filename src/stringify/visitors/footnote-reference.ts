@@ -1,1 +1,5 @@
-export default (compiler, node) => `[^${node.identifier}]`
+import {Visitor} from '../visitor'
+
+const visitor: Visitor = (compiler, node) => `[^${node.identifier}]`
+
+export default visitor

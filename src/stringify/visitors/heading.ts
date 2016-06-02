@@ -1,6 +1,7 @@
+import {Visitor} from '../visitor'
 import repeat from 'repeat-string'
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   const setext = compiler.options.setext
   const closeAtx = compiler.options.closeAtx
   let content = compiler.all(node).join('')
@@ -18,3 +19,5 @@ export default (compiler, node) => {
 
   return content
 }
+
+export default visitor

@@ -2,6 +2,7 @@ import isNumeric from '../is-numeric'
 import nodeTypes from '../node-types'
 import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
+import Tokenizer from '../tokenizer'
 
 import {TAB_SIZE, RULE_MARKERS} from '../shared-constants'
 
@@ -46,15 +47,15 @@ const LIST_ORDERED_COMMONMARK_MARKERS = {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `list` node.
  */
-export default function tokenizeList (parser, value, silent) {
+const tokenizeList: Tokenizer = function (parser, value, silent) {
   const commonmark = parser.options.commonmark
   const pedantic = parser.options.pedantic
   let markers
   let index = 0
   let length = value.length
-  let start = null
+  let start: number = null
   let queue
-  let ordered
+  let ordered: boolean
   let character
   let marker
   let nextIndex
@@ -66,7 +67,7 @@ export default function tokenizeList (parser, value, silent) {
   let prevEmpty
   let empty
   let items
-  let allLines
+  let allLines: string[]
   let emptyLines
   let item
   let enterTop
@@ -175,13 +176,13 @@ export default function tokenizeList (parser, value, silent) {
               isLoose = true
             }
 
-            item = rawItem.trail.join('\n')
+            let joinedTrail = rawItem.trail.join('\n')
 
             if (items.length) {
-              item += '\n'
+              joinedTrail += '\n'
             }
 
-            parser.eat(item)
+            parser.eat(joinedTrail)
 
             return tokenizeEach(items)
           })
@@ -414,3 +415,5 @@ export default function tokenizeList (parser, value, silent) {
     }
   }
 }
+
+export default tokenizeList

@@ -1,6 +1,7 @@
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
 import {normalizeIdentifier as normalize} from '../../utilities'
+import Tokenizer from '../tokenizer'
 
 /**
  * Check whether `character` can be inside an enclosed
@@ -47,7 +48,7 @@ function isUnclosedURLCharacter (character) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `definition` node.
  */
-const tokenizeDefinition: any = function (parser, value, silent) {
+const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   const commonmark = parser.options.commonmark
   let index = 0
   const length = value.length

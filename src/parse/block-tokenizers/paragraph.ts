@@ -2,6 +2,7 @@ import trim from 'trim'
 import trimTrailingLines from 'trim-trailing-lines'
 import nodeTypes from '../node-types'
 import tryBlockTokenize from '../try-block-tokenize'
+import Tokenizer from '../tokenizer'
 
 import {TAB_SIZE} from '../shared-constants'
 
@@ -16,7 +17,7 @@ import {TAB_SIZE} from '../shared-constants'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `paragraph` node.
  */
-export default function tokenizeParagraph (parser, value, silent) {
+const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
   const settings = parser.options
   const commonmark = settings.commonmark
   const gfm = settings.gfm
@@ -35,18 +36,19 @@ export default function tokenizeParagraph (parser, value, silent) {
       if (trim(subvalue) === '') {
         parser.eat(subvalue)
 
-        return null
+        return
       }
 
       /* istanbul ignore if - never used (yet) */
       if (silent) {
-        return true
+        return Promise.resolve(true)
       }
 
       now = parser.eat.now()
       subvalue = trimTrailingLines(subvalue)
 
       return parser.eat(subvalue)(parser.renderInline(nodeTypes.PARAGRAPH, subvalue, now))
+        .then(() => null)
     })
 
   function tokenizeEach (index) {
@@ -166,3 +168,5 @@ export default function tokenizeParagraph (parser, value, silent) {
     }
   }
 }
+
+export default tokenizeParagraph

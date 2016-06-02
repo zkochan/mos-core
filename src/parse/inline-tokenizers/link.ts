@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import locateLink from './locators/link'
+import Tokenizer from '../tokenizer'
 const has = {}.hasOwnProperty
 
 /*
@@ -35,7 +36,7 @@ const LINK_TITLE_MARKERS = {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `link` or `image` node.
  */
-const tokenizeLink: any = function (parser, value, silent) {
+const tokenizeLink: Tokenizer = function (parser, value, silent) {
   let subvalue = ''
   let index = 0
   let character = value.charAt(0)
@@ -370,7 +371,7 @@ const tokenizeLink: any = function (parser, value, silent) {
   }
 
   return parser.eat(subvalue)(
-    parser.renderLink(!isImage, url, content, title, now, parser.eat)
+    parser.renderLink(!isImage, url, content, title, now)
   )
 }
 

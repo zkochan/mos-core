@@ -1,3 +1,4 @@
+import {Visitor} from '../visitor'
 import pad from './pad'
 import repeat from 'repeat-string'
 import longestStreak from 'longest-streak'
@@ -11,7 +12,7 @@ const LIST_ITEM_TAB = 'tab'
 
 const FENCE = /([`~])\1{2}/
 
-export default (compiler, node, parent) => {
+const visitor: Visitor = (compiler, node, parent) => {
   let value = node.value
   const options = compiler.options
   const marker = options.fence
@@ -57,3 +58,5 @@ export default (compiler, node, parent) => {
 
   return `${fenceMarkdown + language}\n${value}\n${fenceMarkdown}`
 }
+
+export default visitor

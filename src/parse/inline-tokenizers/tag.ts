@@ -5,6 +5,7 @@ import eatHTMLDeclaration from '../eat/html-declaration'
 import eatHTMLClosingTag from '../eat/html-closing-tag'
 import eatHTMLOpeningTag from '../eat/html-opening-tag'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 const EXPRESSION_HTML_LINK_OPEN = /^<a /i
 const EXPRESSION_HTML_LINK_CLOSE = /^<\/a>/i
@@ -35,7 +36,7 @@ function locateTag (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `html` node.
  */
-const tokenizeTag: any = function (parser, value, silent) {
+const tokenizeTag: Tokenizer = function (parser, value, silent) {
   const subvalue = eatHTMLComment(value, parser.options) ||
     eatHTMLCDATA(value) ||
     eatHTMLProcessingInstruction(value) ||

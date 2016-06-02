@@ -1,4 +1,5 @@
 import renderCodeBlock from './renderers/code-block'
+import Tokenizer from '../tokenizer'
 
 const MIN_FENCE_COUNT = 3
 const CODE_INDENT_LENGTH = 4
@@ -14,7 +15,7 @@ const CODE_INDENT_LENGTH = 4
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `code` node.
  */
-export default function tokenizeFences (parser, value, silent) {
+const tokenizeFences: Tokenizer = function (parser, value, silent) {
   const settings = parser.options
   const length = value.length + 1
   let index = 0
@@ -242,3 +243,5 @@ export default function tokenizeFences (parser, value, silent) {
 
   return parser.eat(subvalue)(renderCodeBlock(exdentedContent, flag))
 }
+
+export default tokenizeFences

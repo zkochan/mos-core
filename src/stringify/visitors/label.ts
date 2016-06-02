@@ -1,4 +1,6 @@
-export default function label (node) {
+import {Node} from '../../node';
+
+export default function label (node: Node): string {
   let value = ''
 
   if (node.referenceType === 'full') {

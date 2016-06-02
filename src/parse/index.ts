@@ -1,3 +1,4 @@
+import {Node, Location, Position} from '../node'
 import decode from 'parse-entities'
 import repeat from 'repeat-string'
 import trim from 'trim'
@@ -7,6 +8,7 @@ import removePosition from 'unist-util-remove-position'
 import {raise, clean, validate, stateToggler} from '../utilities'
 import {parse as defaultOptions} from '../defaults'
 import tokenizeFactory from './tokenize-factory'
+import {Decoder, SimpleParser, Parser} from './parser'
 
 /*
  * Numeric constants.
@@ -44,7 +46,7 @@ const INDENTATION_CHARACTERS = {
  *   a parser.
  * @return {Function} - See `decode`.
  */
-function decodeFactory (context) {
+function decodeFactory (context): Decoder {
   /**
    * Normalize `position` to add an `indent`.
    *
@@ -66,7 +68,7 @@ function decodeFactory (context) {
    * @param {Position} position - Place of warning.
    * @param {number} code - Code for warning.
    */
-  function handleWarning (reason, position, code) {
+  function handleWarning (reason: string, position, code: number) {
     if (code === 3) {
       return
     }
@@ -81,7 +83,7 @@ function decodeFactory (context) {
    * @param {Position} position - Position to start parsing at.
    * @param {Function} handler - Node handler.
    */
-  const decoder: any = function (value, position, handler) {
+  const decoder: Decoder = Object.assign(function (value: string, position, handler) {
     decode(value, {
       position: normalize(position),
       warning: handleWarning,
@@ -90,24 +92,22 @@ function decodeFactory (context) {
       textContext: context,
       referenceContext: context,
     })
-  }
-
-  /**
-   * Decode `value` (at `position`) into a string.
-   *
-   * @param {string} value - Value to parse.
-   * @param {Position} position - Position to start
-   *   parsing at.
-   * @return {string} - Plain-text.
-   */
-  function decodeRaw (value, position) {
-    return decode(value, {
-      position: normalize(position),
-      warning: handleWarning,
-    })
-  }
-
-  decoder.raw = decodeRaw
+  }, {
+    /**
+     * Decode `value` (at `position`) into a string.
+     *
+     * @param {string} value - Value to parse.
+     * @param {Position} position - Position to start
+     *   parsing at.
+     * @return {string} - Plain-text.
+     */
+    raw: function (value: string, position): string {
+      return decode(value, {
+        position: normalize(position),
+        warning: handleWarning,
+      })
+    }
+  })
 
   return decoder
 }
@@ -139,11 +139,11 @@ function descapeFactory (scope, key) {
    * @param {string} value - Escaped string.
    * @return {string} - Unescaped string.
    */
-  function descape (value) {
+  function descape (value: string): string {
     let prev = 0
     let index = value.indexOf('\\')
     const escape = scope[key]
-    const queue = []
+    const queue: string[] = []
     let character
 
     while (index !== -1) {
@@ -190,7 +190,7 @@ function descapeFactory (scope, key) {
  * @param {string} value - Indented line.
  * @return {Object} - Indetation information.
  */
-function getIndent (value) {
+function getIndent (value: string) {
   let index = 0
   let indent = 0
   let character = value.charAt(index)
@@ -430,7 +430,18 @@ function parserFactory (processor) {
     return trimmedLines.join('\n')
   }
 
-  var parser: any = {
+  /*
+   * Enter and exit helpers.
+   */
+
+  const state = {
+    inLink: false,
+    atTop: true,
+    atStart: true,
+    inBlockquote: false,
+  }
+
+  var parser: SimpleParser = {
     /**
      * Set options.  Does not overwrite previously set
      * options.
@@ -481,7 +492,7 @@ function parserFactory (processor) {
      * @param {number} start - Starting line.
      * @return {function(offset)} - Indenter.
      */
-    indent (start) {
+    indent (start: number) {
       let line = start
 
       /**
@@ -495,7 +506,7 @@ function parserFactory (processor) {
        * @param {number} offset - Number to increment the
        *   offset.
        */
-      function indenter (offset) {
+      function indenter (offset: number) {
         parser.offset[line] = (parser.offset[line] || 0) + offset
 
         line++
@@ -510,7 +521,7 @@ function parserFactory (processor) {
      * @param {number} start - Starting line.
      * @return {Array.<number>} - Offsets starting at `start`.
      */
-    getIndent (start) {
+    getIndent (start: number): number[] {
       const offset = parser.offset
       const result = []
 
@@ -525,6 +536,36 @@ function parserFactory (processor) {
       return result
     },
 
+    /*
+     * Expose tokenizers for block-level nodes.
+     */
+
+    blockTokenizers: processor.blockTokenizers,
+
+    /*
+     * Expose tokenizers for inline-level nodes.
+     */
+
+    inlineTokenizers: processor.inlineTokenizers,
+
+    data: processor.data,
+
+    /*
+     * Expose `defaults`.
+     */
+    options: Object.assign({}, defaultOptions),
+
+    state: Object.assign(state, {
+      enterLink: stateToggler(state, 'inLink', false),
+      exitTop: stateToggler(state, 'atTop', true),
+      exitStart: stateToggler(state, 'atStart', true),
+      enterBlockquote: stateToggler(state, 'inBlockquote', false),
+    }),
+  }
+
+  var normalParser: Parser = Object.assign(parser, {
+    descape: descapeFactory(parser, 'escape'),
+    decode: decodeFactory(parser),
     /**
      * Parse the bound file.
      *
@@ -549,21 +590,21 @@ function parserFactory (processor) {
 
       parser.offset = {}
 
-      return parser.tokenizeBlock(value)
+      return normalParser.tokenizeBlock(value)
         .then(children => {
-          const node: any = {
+          const start: Location = {
+            line: 1,
+            column: 1,
+            offset: 0,
+          }
+          const node: Node = {
             type: nodeTypes.ROOT,
             children,
             position: {
-              start: {
-                line: 1,
-                column: 1,
-                offset: 0,
-              },
+              start,
+              end: parser.eof || Object.assign({}, start),
             },
           }
-
-          node.position.end = parser.eof || Object.assign({}, node.position.start)
 
           if (!parser.options.position) {
             removePosition(node)
@@ -583,10 +624,10 @@ function parserFactory (processor) {
      * @param {Object} now - Position.
      * @return {Object} - `blockquote` node.
      */
-    renderBlockquote (value, now) {
+    renderBlockquote (value: string, now: Location): Promise<Node> {
       const exitBlockquote = parser.state.enterBlockquote()
 
-      return parser.tokenizeBlock(value, now)
+      return normalParser.tokenizeBlock(value, now)
         .then(children => {
           exitBlockquote()
           return {
@@ -611,18 +652,16 @@ function parserFactory (processor) {
      * @param {Object} position - Location of link.
      * @return {Object} - `link` or `image` node.
      */
-    renderLink (isLink, url, text, title, position) {
+    renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location) {
       const exitLink = parser.state.enterLink()
-      let node
-
-      node = {
+      const node: any = {
         type: isLink ? nodeTypes.LINK : nodeTypes.IMAGE,
         title: title || null,
       }
 
       if (isLink) {
         node.url = url
-        return parser.tokenizeInline(text, position)
+        return normalParser.tokenizeInline(text, position)
           .then(children => {
             exitLink()
             node.children = children
@@ -631,7 +670,7 @@ function parserFactory (processor) {
       }
       node.url = url
       node.alt = text
-        ? parser.decode.raw(parser.descape(text), position)
+        ? normalParser.decode.raw(normalParser.descape(text), position)
         : null
       exitLink()
       return Promise.resolve(node)
@@ -648,7 +687,7 @@ function parserFactory (processor) {
      * @return {Object} - `footnote` node.
      */
     renderFootnote (value, position) {
-      return parser.renderInline(nodeTypes.FOOTNOTE, value, position)
+      return normalParser.renderInline(nodeTypes.FOOTNOTE, value, position)
     },
 
     /**
@@ -663,7 +702,7 @@ function parserFactory (processor) {
      * @return {Object} - Node of type `type`.
      */
     renderInline (type, value, position) {
-      return parser.tokenizeInline(value, position)
+      return normalParser.tokenizeInline(value, position)
         .then(children => ({
           type,
           children,
@@ -697,7 +736,7 @@ function parserFactory (processor) {
         }
       }
 
-      return parser.tokenizeBlock(value, position)
+      return normalParser.tokenizeBlock(value, position)
         .then(children => ({
           type: nodeTypes.LIST_ITEM,
           loose: EXPRESSION_LOOSE_LIST_ITEM.test(value) ||
@@ -721,7 +760,7 @@ function parserFactory (processor) {
     renderFootnoteDefinition (identifier, value, position) {
       const exitBlockquote = parser.state.enterBlockquote()
 
-      return parser.tokenizeBlock(value, position)
+      return normalParser.tokenizeBlock(value, position)
         .then(children => {
           exitBlockquote()
           return {
@@ -744,56 +783,20 @@ function parserFactory (processor) {
      * @return {Object} - `heading` node
      */
     renderHeading (value, depth, position) {
-      return parser.tokenizeInline(value, position)
+      return normalParser.tokenizeInline(value, position)
         .then(children => ({
           type: nodeTypes.HEADING,
           depth,
           children,
         }))
     },
-
-    /*
-     * Expose tokenizers for block-level nodes.
-     */
-
-    blockTokenizers: processor.blockTokenizers,
-
-    /*
-     * Expose tokenizers for inline-level nodes.
-     */
-
-    inlineTokenizers: processor.inlineTokenizers,
-
-    data: processor.data,
-
-    /*
-     * Expose `defaults`.
-     */
-    options: Object.assign({}, defaultOptions),
-  }
-
-  /*
-   * Enter and exit helpers.
-   */
-
-  parser.state = {
-    inLink: false,
-    atTop: true,
-    atStart: true,
-    inBlockquote: false,
-  }
-
-  parser.state.enterLink = stateToggler(parser.state, 'inLink', false)
-  parser.state.exitTop = stateToggler(parser.state, 'atTop', true)
-  parser.state.exitStart = stateToggler(parser.state, 'atStart', true)
-  parser.state.enterBlockquote = stateToggler(parser.state, 'inBlockquote', false)
-
+  })
   /*
    * Expose `tokenizeFactory` so dependencies could create
    * their own tokenizers.
    */
 
-  parser.tokenizeFactory = type => tokenizeFactory(parser, type)
+  normalParser.tokenizeFactory = (type: string) => tokenizeFactory(normalParser, type)
 
   /**
    * Block tokenizer.
@@ -805,7 +808,7 @@ function parserFactory (processor) {
    * @param {string} value - Content.
    * @return {Array.<Object>} - Nodes.
    */
-  parser.tokenizeBlock = parser.tokenizeFactory('block')
+  normalParser.tokenizeBlock = normalParser.tokenizeFactory('block')
 
   /**
    * Inline tokenizer.
@@ -818,12 +821,9 @@ function parserFactory (processor) {
    * @return {Array.<Object>} - Nodes.
    */
 
-  parser.tokenizeInline = parser.tokenizeFactory('inline')
+  normalParser.tokenizeInline = normalParser.tokenizeFactory('inline')
 
-  parser.descape = descapeFactory(parser, 'escape')
-  parser.decode = decodeFactory(parser)
-
-  return parser.parse
+  return normalParser.parse
 }
 
 export default parserFactory

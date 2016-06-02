@@ -1,3 +1,4 @@
+import {Visitor} from '../visitor'
 import label from './label'
 import entityPrefixLength from '../entity-prefix-length'
 
@@ -85,7 +86,7 @@ function copyIdentifierEncoding (value, identifier) {
   return result.join('')
 }
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   const exitLinkReference = compiler.enterLinkReference(compiler, node)
   let value = compiler.all(node).join('')
 
@@ -100,3 +101,5 @@ export default (compiler, node) => {
 
   return `[${value}]` + label(node)
 }
+
+export default visitor

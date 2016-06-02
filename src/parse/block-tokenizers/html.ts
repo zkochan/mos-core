@@ -5,6 +5,7 @@ import eatHTMLDeclaration from '../eat/html-declaration'
 import eatHTMLClosingTag from '../eat/html-closing-tag'
 import eatHTMLOpeningTag from '../eat/html-opening-tag'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 const MIN_CLOSING_HTML_NEWLINE_COUNT = 2
 
@@ -19,7 +20,7 @@ const MIN_CLOSING_HTML_NEWLINE_COUNT = 2
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `html` node.
  */
-export default function tokenizeHTML (parser, value, silent) {
+const tokenizeHTML: Tokenizer = function (parser, value, silent) {
   let index = 0
   const length = value.length
   let subvalue = ''
@@ -90,3 +91,5 @@ export default function tokenizeHTML (parser, value, silent) {
     value: subvalue,
   })
 }
+
+export default tokenizeHTML

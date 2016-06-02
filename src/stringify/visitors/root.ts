@@ -1,2 +1,6 @@
+import {Visitor} from '../visitor'
 import block from './block'
-export default (compiler, node) => `${block(compiler, node)}\n`
+
+const visitor: Visitor = (compiler, node) => `${block(compiler, node)}\n`
+
+export default visitor

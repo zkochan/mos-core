@@ -1,17 +1,17 @@
 import repeat from 'repeat-string'
 const INDENT = 4
 
-export default function pad (value, level) {
-  value = value.split('\n')
+export default function pad (value: string, level: number): string {
+  const lines = value.split('\n')
 
-  let index = value.length
+  let index = lines.length
   const padding = repeat(' ', level * INDENT)
 
   while (index--) {
-    if (value[index].length !== 0) {
-      value[index] = padding + value[index]
+    if (lines[index].length !== 0) {
+      lines[index] = padding + lines[index]
     }
   }
 
-  return value.join('\n')
+  return lines.join('\n')
 };

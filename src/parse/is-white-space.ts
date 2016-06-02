@@ -30,7 +30,7 @@ const C_ZERO_WIDTH_NO_BREAK_SPACE = '\ufeff'
  * @param {string} character - Single character to check.
  * @return {boolean} - Whether `character` is white-space.
  */
-function isWhiteSpace (character) {
+function isWhiteSpace (character: string): boolean {
   return character === ' ' ||
         character === C_FORM_FEED ||
         character === '\n' ||

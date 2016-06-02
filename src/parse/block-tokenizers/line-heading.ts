@@ -1,3 +1,5 @@
+import Tokenizer from '../tokenizer'
+
 const MAX_LINE_HEADING_INDENT = 3
 
 /*
@@ -21,7 +23,7 @@ const SETEXT_MARKERS = {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `heading` node.
  */
-export default function tokenizeLineHeading (parser, value, silent) {
+ const tokenizeLineHeading: Tokenizer = function (parser, value, silent) {
   const now = parser.eat.now()
   const length = value.length
   let index = -1
@@ -118,3 +120,5 @@ export default function tokenizeLineHeading (parser, value, silent) {
 
   return parser.eat(subvalue + queue)(parser.renderHeading(content, depth, now))
 }
+
+export default tokenizeLineHeading

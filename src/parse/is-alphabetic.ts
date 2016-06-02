@@ -11,7 +11,7 @@ const CC_Z_UPPER = 'Z'.charCodeAt(0)
  * @param {string} character - Single character to check.
  * @return {boolean} - Whether `character` is alphabetic.
  */
-function isAlphabetic (character) {
+function isAlphabetic (character: string): boolean {
   const code = character.charCodeAt(0)
 
   return (code >= CC_A_LOWER && code <= CC_Z_LOWER) ||

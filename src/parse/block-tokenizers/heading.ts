@@ -1,3 +1,4 @@
+import Tokenizer from '../tokenizer'
 const MAX_ATX_COUNT = 6
 
 /**
@@ -11,7 +12,7 @@ const MAX_ATX_COUNT = 6
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `heading` node.
  */
-export default function tokenizeHeading (parser, value, silent) {
+const tokenizeHeading: Tokenizer = function (parser, value, silent) {
   const settings = parser.options
   let length = value.length + 1
   let index = -1
@@ -147,3 +148,5 @@ export default function tokenizeHeading (parser, value, silent) {
 
   return parser.eat(subvalue)(parser.renderHeading(content, depth, now))
 }
+
+export default tokenizeHeading

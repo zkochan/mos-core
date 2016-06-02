@@ -1,8 +1,11 @@
-import {raise, validate, mergeable, MERGEABLE_NODES} from '../utilities'
+import * as MERGEABLE_NODES from '../mergeable-nodes'
+import {raise, validate, mergeable} from '../utilities'
 import {stringify as defaultOptions} from '../defaults'
 import encodeFactory from './encode-factory'
 import escapeFactory from './escape-factory'
 import LIST_BULLETS from './list-bullets'
+
+import {Compiler} from './compiler'
 
 /**
  * Construct a state `toggler`: a function which inverses
@@ -130,7 +133,7 @@ const LIST_ITEM_INDENTS = {
  *   `Compiler#setOptions()`.
  */
 function compilerFactory (visitors) {
-  const compiler: any = {
+  const compiler: Compiler = {
     options: Object.assign({}, defaultOptions),
 
     /**

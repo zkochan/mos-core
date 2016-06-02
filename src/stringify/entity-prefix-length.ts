@@ -1,4 +1,3 @@
-export default entityPrefixLength
 import decode from 'parse-entities'
 
 /**
@@ -13,17 +12,15 @@ import decode from 'parse-entities'
  * @param {string} value - Input string.
  * @return {number} - Length of an entity.
  */
-function entityPrefixLength (value) {
-  let prefix
-
-    /* istanbul ignore if - Currently also tested for at
-     * implemention, but we keep it here because that’s
-     * proper. */
+export default function entityPrefixLength (value: string): number {
+  /* istanbul ignore if - Currently also tested for at
+   * implemention, but we keep it here because that’s
+   * proper. */
   if (value.charAt(0) !== '&') {
     return 0
   }
 
-  prefix = value.split('&', 2).join('&')
+  const prefix = value.split('&', 2).join('&')
 
   return prefix.length - decode(prefix).length
 }

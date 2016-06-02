@@ -1,6 +1,30 @@
-export default tokenizeFactory
-import {mergeable, MERGEABLE_NODES} from '../utilities'
+import {Node, Position, Location} from '../node'
+import {Parser} from './parser'
+import * as MERGEABLE_NODES from '../mergeable-nodes';
+import {mergeable} from '../utilities'
 import runAsync from 'babel-run-async'
+
+export interface Resetter {
+  (node: Node, parent?: Node): Promise<Node>
+  test: () => Position
+}
+
+export interface Applier {
+  (node: Promise<Node>, parent?: Node): Promise<Node>
+  (node: Node, parent?: Node): Promise<Node>
+  reset: Resetter
+  test: () => Position
+}
+
+export interface Eater {
+  (value: string): Applier
+  now: () => Location
+  file: any,
+}
+
+export type ParserAndEater = Parser & {
+  eat: Eater
+}
 
 /*
  * Error messages.
@@ -22,7 +46,7 @@ const ERR_INCORRECTLY_EATEN = 'Incorrectly eaten value: please report this ' +
  *   (`%Tokenizers`).
  * @return {Function} - Tokenizer.
  */
-function tokenizeFactory (parser, type) {
+export default function tokenizeFactory (parser: Parser, type: string): (value: string, location: Location) => Promise<Node[]> {
   return tokenize
 
   /**
@@ -37,7 +61,7 @@ function tokenizeFactory (parser, type) {
    *   starts.
    * @return {Array.<Object>} - Nodes.
    */
-  function tokenize (value, location) {
+  function tokenize (value: string, location: Location): Promise<Node[]> {
     const offset = parser.offset
     const tokens = []
     const tokenizers = parser[`${type}Tokenizers`]
@@ -61,7 +85,7 @@ function tokenizeFactory (parser, type) {
      *
      * @param {string} subvalue - Subvalue to eat.
      */
-    function updatePosition (subvalue) {
+    function updatePosition (subvalue: string) {
       let lastIndex = -1
       let index = subvalue.indexOf('\n')
 
@@ -103,7 +127,7 @@ function tokenizeFactory (parser, type) {
        *
        * @return {Array.<number>} - Offset.
        */
-      function done () {
+      function done (): number[] {
         const last = line + 1
 
         while (pos < last) {
@@ -126,31 +150,12 @@ function tokenizeFactory (parser, type) {
      *
      * @return {Object} - Current Position.
      */
-    function now () {
+    function now (): Location {
       const pos = { line, column }
 
       return Object.assign({}, pos, {
         offset: parser.toOffset(pos),
       })
-    }
-
-    /**
-     * Store position information for a node.
-     *
-     * @example
-     *   start = now()
-     *   updatePosition('foo')
-     *   location = new Position(start)
-     *   // {
-     *   //   start: {line: 1, column: 1, offset: 0},
-     *   //   end: {line: 1, column: 3, offset: 2}
-     *   // }
-     *
-     * @param {Object} start - Starting position.
-     */
-    function Position (start) {
-      this.start = start
-      this.end = now()
     }
 
     /**
@@ -169,7 +174,7 @@ function tokenizeFactory (parser, type) {
      * @param {string} subvalue - Value to be eaten.
      * @throws {Error} - When `subvalue` cannot be eaten.
      */
-    function validateEat (subvalue) {
+    function validateEat (subvalue: string) {
       /* istanbul ignore if */
       if (value.substring(0, subvalue.length) !== subvalue) {
         parser.file.fail(ERR_INCORRECTLY_EATEN, now())
@@ -207,14 +212,11 @@ function tokenizeFactory (parser, type) {
        *   `node`.
        * @return {Node} - `node`.
        */
-      function update (node, indent?) {
-        const prev = node.position
+      function update (prev?: Position, indent?): Position {
         const start = prev ? prev.start : before
         let combined = []
         let n = prev && prev.end.line
         const l = before.line
-
-        node.position = new Position(start)
 
         /*
          * If there was already a `position`, this
@@ -241,9 +243,11 @@ function tokenizeFactory (parser, type) {
           indent = combined.concat(indent)
         }
 
-        node.position.indent = indent || []
-
-        return node
+        return {
+          start,
+          end: now(),
+          indent: indent || [],
+        }
       }
 
       return update
@@ -262,8 +266,8 @@ function tokenizeFactory (parser, type) {
      * @param {Object} [parent] - Parent to insert into.
      * @return {Object} - Added or merged into node.
      */
-    function add (node, parent) {
-      const children = !parent ? tokens : parent.children
+    function add (node: Node, parent: Node): Node {
+      const children: Node[] = !parent ? tokens : parent.children
 
       const prev = children[children.length - 1]
 
@@ -303,94 +307,94 @@ function tokenizeFactory (parser, type) {
      * @return {Function} - Wrapper around `add`, which
      *   also adds `position` to node.
      */
-    const eat: any = function (subvalue) {
-      let indent: any = getOffset()
-      const pos = position()
-      const current = now()
+    const eat: Eater = Object.assign(function (subvalue: string) {
+        let indent: any = getOffset()
+        const pos = position()
+        const current = now()
 
-      validateEat(subvalue)
+        validateEat(subvalue)
 
-      /**
-       * Add the given arguments, add `position` to
-       * the returned node, and return the node.
-       *
-       * @param {Object} node - Node to add.
-       * @param {Object} [parent] - Node to insert into.
-       * @return {Node} - Added node.
-       */
-      const apply: any = function (node, parent) {
-        return (node instanceof Promise)
-          ? node.then(updatePos)
-          : Promise.resolve(updatePos(node))
+        /**
+         * Functions just like apply, but resets the
+         * content:  the line and column are reversed,
+         * and the eaten value is re-added.
+         *
+         * This is useful for nodes with a single
+         * type of content, such as lists and tables.
+         *
+         * See `apply` above for what parameters are
+         * expected.
+         *
+         * @return {Node} - Added node.
+         */
+        const reset: Resetter = Object.assign(
+          function (node: Node, parent?: Node): Promise<Node> {
+            return apply(node, parent)
+              .then(node => {
+                line = current.line
+                column = current.column
+                value = subvalue + value
 
-        function updatePos (node) {
-          return pos(add(pos(node), parent), indent)
-        }
-      }
-
-      /**
-       * Functions just like apply, but resets the
-       * content:  the line and column are reversed,
-       * and the eaten value is re-added.
-       *
-       * This is useful for nodes with a single
-       * type of content, such as lists and tables.
-       *
-       * See `apply` above for what parameters are
-       * expected.
-       *
-       * @return {Node} - Added node.
-       */
-      const reset: any = function (node, parent) {
-        return apply(node, parent)
-          .then(node => {
-            line = current.line
-            column = current.column
-            value = subvalue + value
-
-            return node
+                return node
+              })
+          }, {
+            test,
           })
+
+        /**
+         * Add the given arguments, add `position` to
+         * the returned node, and return the node.
+         *
+         * @param {Object} node - Node to add.
+         * @param {Object} [parent] - Node to insert into.
+         * @return {Node} - Added node.
+         */
+        const apply: Applier = Object.assign(
+          function (node, parent?): Promise<Node> {
+            return (node instanceof Promise)
+              ? node.then(updatePos)
+              : Promise.resolve(updatePos(node))
+
+            function updatePos (node: Node): Node {
+              node.position = pos(node.position)
+              node = add(node, parent)
+              node.position = pos(node.position, indent)
+              return node
+            }
+          }, {
+            reset,
+            test,
+          })
+
+        /**
+         * Test the position, after eating, and reverse
+         * to a not-eaten state.
+         *
+         * @return {Position} - Position after eating `subvalue`.
+         */
+        function test (): Position {
+          const position = pos()
+
+          line = current.line
+          column = current.column
+          value = subvalue + value
+
+          return position
+        }
+
+        value = value.substring(subvalue.length)
+
+        updatePosition(subvalue)
+
+        indent = indent()
+
+        return apply
+      },
+      {
+        now,
+        file: parser.file,
       }
-
-      /**
-       * Test the position, after eating, and reverse
-       * to a not-eaten state.
-       *
-       * @return {Position} - Position after eating `subvalue`.
-       */
-      function test () {
-        const result = pos({})
-
-        line = current.line
-        column = current.column
-        value = subvalue + value
-
-        return result.position
-      }
-
-      apply.reset = reset
-      apply.test = reset.test = test
-
-      value = value.substring(subvalue.length)
-
-      updatePosition(subvalue)
-
-      indent = indent()
-
-      return apply
-    }
-
-    /*
-     * Expose `now` on `eat`.
-     */
-
-    eat.now = now
-
-    /*
-     * Expose `file` on `eat`.
-     */
-
-    eat.file = parser.file
+    )
 
     /*
      * Sync initial offset.

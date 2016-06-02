@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Find possible inline code.
@@ -27,7 +28,7 @@ function locateInlineCode (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `inlineCode` node.
  */
-const tokenizeInlineCode: any = function (parser, value, silent) {
+const tokenizeInlineCode: Tokenizer = function (parser, value, silent) {
   let index = 0
   let queue = ''
   let tickQueue = ''

@@ -1,7 +1,8 @@
+import {Visitor} from '../visitor'
 const BREAK = '\n\n'
 const GAP = `${BREAK}\n`
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   const values = []
   const children = node.children
   let index = -1
@@ -41,3 +42,5 @@ export default (compiler, node) => {
 
   return values.join('')
 }
+
+export default visitor

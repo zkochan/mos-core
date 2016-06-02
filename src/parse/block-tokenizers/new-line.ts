@@ -1,4 +1,5 @@
 import isWhiteSpace from '../is-white-space'
+import Tokenizer from '../tokenizer'
 
 /**
  * Tokenise a line.
@@ -11,7 +12,7 @@ import isWhiteSpace from '../is-white-space'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {boolean?} - `true` when matching.
  */
-export default function tokenizeNewline (parser, value, silent) {
+const tokenizeNewline: Tokenizer = function (parser, value, silent) {
   let character = value.charAt(0)
   let length
   let subvalue
@@ -51,3 +52,5 @@ export default function tokenizeNewline (parser, value, silent) {
 
   parser.eat(subvalue)
 }
+
+export default tokenizeNewline

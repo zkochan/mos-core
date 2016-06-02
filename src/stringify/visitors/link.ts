@@ -1,3 +1,4 @@
+import {Visitor} from '../visitor'
 import encloseURI from './enclose-uri'
 import encloseTitle from './enclose-title'
 
@@ -10,7 +11,7 @@ import encloseTitle from './enclose-title'
 const PROTOCOL = /^[a-z][a-z+.-]+:\/?/i
 const MAILTO = 'mailto:'
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   let url = compiler.encode(node.url, node)
   const exit = compiler.enterLink()
   const escapedURL = compiler.encode(compiler.escape(node.url, node))
@@ -43,3 +44,5 @@ export default (compiler, node) => {
 
   return value
 }
+
+export default visitor

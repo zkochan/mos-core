@@ -1,6 +1,7 @@
+import {Visitor} from '../visitor'
 import block from './block'
 
-export default (compiler, node) => {
+const visitor: Visitor = (compiler, node) => {
   const values = block(compiler, node).split('\n')
   const result = []
   let index = -1
@@ -12,3 +13,5 @@ export default (compiler, node) => {
 
   return `>${result.join('\n>')}`
 }
+
+export default visitor

@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 const MIN_TABLE_COLUMNS = 2
 const MIN_TABLE_ROWS = 2
@@ -25,7 +26,7 @@ const TABLE_ALIGN_NONE = null
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `table` node.
  */
-const tokenizeTable: any = function (parser, value, silent) {
+const tokenizeTable: Tokenizer = function (parser, value, silent) {
   /*
    * Exit when not in gfm-mode.
    */

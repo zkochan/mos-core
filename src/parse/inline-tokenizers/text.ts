@@ -1,7 +1,6 @@
-export default tokenizeText
-
 const ERR_MISSING_LOCATOR = 'Missing locator: '
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 /**
  * Tokenise a text node.
@@ -14,7 +13,7 @@ import nodeTypes from '../node-types'
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `text` node.
  */
-function tokenizeText (parser, value, silent) {
+const tokenizeText: Tokenizer = function (parser, value, silent) {
   /* istanbul ignore if - never used (yet) */
   if (silent) {
     return true
@@ -49,3 +48,5 @@ function tokenizeText (parser, value, silent) {
     })
   })
 }
+
+export default tokenizeText

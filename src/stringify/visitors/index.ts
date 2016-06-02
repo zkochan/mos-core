@@ -24,6 +24,7 @@ import footnote from './footnote'
 import footnoteDefinition from './footnote-definition'
 import table from './table'
 import tableCell from './table-cell'
+import {Node} from '../../node';
 
 const visitors = {
   block,

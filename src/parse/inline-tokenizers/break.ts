@@ -1,4 +1,5 @@
 import nodeTypes from '../node-types'
+import Tokenizer from '../tokenizer'
 
 const MIN_BREAK_LENGTH = 2
 
@@ -38,7 +39,7 @@ function locateBreak (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `break` node.
  */
-const tokenizeBreak: any = function (parser, value, silent) {
+const tokenizeBreak: Tokenizer = function (parser, value, silent) {
   const breaks = parser.options.breaks
   let index = -1
   let queue = ''
