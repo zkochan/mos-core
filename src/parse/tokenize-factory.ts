@@ -5,13 +5,13 @@ import {mergeable} from '../utilities'
 import runAsync from 'babel-run-async'
 
 export interface Resetter {
-  (node: Node, parent?: Node): Promise<Node>
+  <T extends Node>(node: T, parent?: Node): Promise<Node>
   test: () => Position
 }
 
 export interface Applier {
-  (node: Promise<Node>, parent?: Node): Promise<Node>
-  (node: Node, parent?: Node): Promise<Node>
+  <T extends Node>(node: Promise<T>, parent?: Node): Promise<Node>
+  <T extends Node>(node: T, parent?: Node): Promise<Node>
   reset: Resetter
   test: () => Position
 }

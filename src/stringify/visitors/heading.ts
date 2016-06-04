@@ -1,7 +1,8 @@
-import {Visitor} from '../visitor'
+import {SpecificVisitor} from '../visitor'
+import {HeadingNode} from '../../node'
 import repeat from 'repeat-string'
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<HeadingNode> = (compiler, node) => {
   const setext = compiler.options.setext
   const closeAtx = compiler.options.closeAtx
   let content = compiler.all(node).join('')

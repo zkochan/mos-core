@@ -1,4 +1,5 @@
-import {Visitor} from '../visitor'
+import {SpecificVisitor} from '../visitor'
+import {ListNode} from '../../node'
 import repeat from 'repeat-string'
 import pad from './pad'
 
@@ -16,7 +17,7 @@ const ORDERED_MAP = {
   false: visitUnorderedItems,
 }
 
-const visitor: Visitor = (compiler, node) => ORDERED_MAP[node.ordered ? 'true' : 'false'](compiler, node)
+const visitor: SpecificVisitor<ListNode> = (compiler, node) => ORDERED_MAP[node.ordered ? 'true' : 'false'](compiler, node)
 
 export default visitor
 

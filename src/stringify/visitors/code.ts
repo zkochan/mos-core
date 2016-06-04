@@ -1,4 +1,5 @@
-import {Visitor} from '../visitor'
+import {SpecificVisitor} from '../visitor'
+import {CodeNode} from '../../node'
 import pad from './pad'
 import repeat from 'repeat-string'
 import longestStreak from 'longest-streak'
@@ -12,7 +13,7 @@ const LIST_ITEM_TAB = 'tab'
 
 const FENCE = /([`~])\1{2}/
 
-const visitor: Visitor = (compiler, node, parent) => {
+const visitor: SpecificVisitor<CodeNode> = (compiler, node, parent) => {
   let value = node.value
   const options = compiler.options
   const marker = options.fence

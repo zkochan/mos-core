@@ -1,7 +1,8 @@
-import {Visitor} from '../visitor'
+import {TableNode} from '../../node'
+import {SpecificVisitor} from '../visitor'
 import table from 'markdown-table'
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<TableNode> = (compiler, node) => {
   let index = node.children.length
   const exit = compiler.enterTable()
   const result = []

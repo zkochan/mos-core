@@ -1,4 +1,5 @@
-import {Visitor} from '../visitor'
+import {LinkNode} from '../../node'
+import {SpecificVisitor} from '../visitor'
 import label from './label'
 import entityPrefixLength from '../entity-prefix-length'
 
@@ -86,7 +87,7 @@ function copyIdentifierEncoding (value, identifier) {
   return result.join('')
 }
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<LinkNode> = (compiler, node) => {
   const exitLinkReference = compiler.enterLinkReference(compiler, node)
   let value = compiler.all(node).join('')
 

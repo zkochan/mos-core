@@ -1,8 +1,9 @@
-import {Visitor} from '../visitor'
+import {DefinitionNode} from '../../node'
+import {SpecificVisitor} from '../visitor'
 import encloseURI from './enclose-uri'
 import encloseTitle from './enclose-title'
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<DefinitionNode> = (compiler, node) => {
   const value = `[${node.identifier}]`
   let url = encloseURI(node.url)
 

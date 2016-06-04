@@ -1,4 +1,5 @@
-import {Visitor} from '../visitor'
+import {SpecificVisitor} from '../visitor'
+import {LinkNode} from '../../node'
 import encloseURI from './enclose-uri'
 import encloseTitle from './enclose-title'
 
@@ -11,7 +12,7 @@ import encloseTitle from './enclose-title'
 const PROTOCOL = /^[a-z][a-z+.-]+:\/?/i
 const MAILTO = 'mailto:'
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<LinkNode> = (compiler, node) => {
   let url = compiler.encode(node.url, node)
   const exit = compiler.enterLink()
   const escapedURL = compiler.encode(compiler.escape(node.url, node))

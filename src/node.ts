@@ -40,15 +40,44 @@ export type Node = {
   position?: Position,
   value?: string,
   children?: Node[],
+}
+
+export type TableAlign = 'left' | 'center' | 'right'
+
+export type TableNode = Node & {
+  align: Array<TableAlign>,
+}
+
+export type DefinitionNode = Node & {
+  url: string,
+  identifier: string,
   title?: string,
-  url?: string,
-  alt?: string,
-  lang?: string,
+}
+
+export type ReferenceNode = Node & {
+  referenceType?: 'shortcut' | 'collapsed' | 'full',
   identifier?: string,
-  ordered?: boolean,
-  loose?: boolean,
+}
+
+export type LinkNode = ReferenceNode & {
+  title?: string,
+  url: string,
+}
+
+export type ImageNode = LinkNode & {
+  alt?: string,
+}
+
+export type CodeNode = Node & {
+  lang?: string,
+}
+
+export type HeadingNode = Node & {
+  depth: number,
+}
+
+export type ListNode = Node & {
+  ordered: boolean,
   start?: number,
-  align?: any,
-  depth?: number,
-  referenceType?: string,
+  loose: boolean,
 }

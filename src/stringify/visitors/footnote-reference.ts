@@ -1,5 +1,6 @@
-import {Visitor} from '../visitor'
+import {DefinitionNode} from '../../node'
+import {SpecificVisitor} from '../visitor'
 
-const visitor: Visitor = (compiler, node) => `[^${node.identifier}]`
+const visitor: SpecificVisitor<DefinitionNode> = (compiler, node) => `[^${node.identifier}]`
 
 export default visitor

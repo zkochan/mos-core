@@ -1,3 +1,4 @@
+import {DefinitionNode} from '../../node'
 import isWhiteSpace from '../is-white-space'
 import {normalizeIdentifier as normalize} from '../../utilities'
 import Tokenizer from '../tokenizer'
@@ -59,7 +60,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   let test
   let identifier
   let url
-  let title
+  let title: string
 
   while (index < length) {
     character = value.charAt(index)
@@ -277,7 +278,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
       title = parser.decode.raw(parser.descape(title), beforeTitle)
     }
 
-    return parser.eat(subvalue)({
+    return parser.eat(subvalue)(<DefinitionNode>{
       type: 'definition',
       identifier: normalize(identifier),
       title: title || null,

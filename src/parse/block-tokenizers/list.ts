@@ -1,3 +1,4 @@
+import {ListNode} from '../../node'
 import isNumeric from '../is-numeric'
 import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
@@ -171,7 +172,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
 
         return parser.eat(item)(parser.renderListItem(item, now), parent)
           .then(item => {
-            if (item.loose) {
+            if ((item as ListNode).loose) {
               isLoose = true
             }
 

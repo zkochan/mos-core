@@ -1,4 +1,5 @@
 import {Compiler} from './compiler'
 import {Node} from '../node'
 
-export type Visitor = (compiler: Compiler, node: Node, parent?: Node) => string
+export type SpecificVisitor<T extends Node> = (compiler: Compiler, node: T, parent?: Node) => string
+export type Visitor = SpecificVisitor<Node>

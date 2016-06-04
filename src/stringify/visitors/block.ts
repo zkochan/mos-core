@@ -1,4 +1,5 @@
 import {Visitor} from '../visitor'
+import {CodeNode, ListNode, Node} from '../../node'
 const BREAK = '\n\n'
 const GAP = `${BREAK}\n`
 
@@ -23,11 +24,11 @@ const visitor: Visitor = (compiler, node) => {
        */
 
       if (child.type === prev.type && prev.type === 'list') {
-        values.push(prev.ordered === child.ordered ? GAP : BREAK)
+        values.push((prev as ListNode).ordered === (child as ListNode).ordered ? GAP : BREAK)
       } else if (
         prev.type === 'list' &&
         child.type === 'code' &&
-        !child.lang
+        !(child as CodeNode).lang
       ) {
         values.push(GAP)
       } else {

@@ -1,8 +1,9 @@
-import {Visitor} from '../visitor'
+import {SpecificVisitor} from '../visitor'
+import {ImageNode} from '../../node'
 import encloseURI from './enclose-uri'
 import encloseTitle from './enclose-title'
 
-const visitor: Visitor = (compiler, node) => {
+const visitor: SpecificVisitor<ImageNode> = (compiler, node) => {
   let url = encloseURI(compiler.encode(node.url, node))
 
   if (node.title) {

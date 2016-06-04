@@ -1,5 +1,5 @@
 export default escapeFactory
-import {Node} from '../node'
+import {Node, ReferenceNode} from '../node'
 import entityPrefixLength from './entity-prefix-length'
 import LIST_BULLETS from './list-bullets'
 
@@ -265,7 +265,7 @@ function escapeFactory (options) {
 
       if (
           prev &&
-          prev.referenceType === 'shortcut'
+          (prev as ReferenceNode).referenceType === 'shortcut'
       ) {
         position = -1
         length = escaped.length
