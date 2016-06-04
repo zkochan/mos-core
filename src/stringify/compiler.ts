@@ -8,7 +8,7 @@ export type Compiler = {
   enterLinkReference: Function,
   visit(node: Node, parent?: Node): string,
   all(parent: Node): string[],
-  compile(tree, opts): string,
+  compile(tree: any, opts: any): string,
   encode?: Function,
   escape?: Function,
   file?: any,

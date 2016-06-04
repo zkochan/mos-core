@@ -1,4 +1,4 @@
-export default locateLink
+import {ParserAndEater} from '../../tokenize-factory';
 
 /**
  * Find a possible link.
@@ -10,7 +10,7 @@ export default locateLink
  * @param {number} fromIndex - Index to start searching at.
  * @return {number} - Location of possible link.
  */
-function locateLink (parser, value, fromIndex) {
+export default function locateLink (parser: ParserAndEater, value: string, fromIndex: number): number {
   const link = value.indexOf('[', fromIndex)
   const image = value.indexOf('![', fromIndex)
 

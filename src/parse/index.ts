@@ -1,4 +1,4 @@
-import {Node, Location, Position} from '../node'
+import {Node, Location, Position, NodeType, ListItemNode, HeadingNode} from '../node'
 import decode from 'parse-entities'
 import repeat from 'repeat-string'
 import trim from 'trim'
@@ -8,6 +8,7 @@ import removePosition from 'unist-util-remove-position'
 import {raise, clean, validate, stateToggler} from '../utilities'
 import {parse as defaultOptions} from '../defaults'
 import tokenizeFactory from './tokenize-factory'
+import {Tokenize} from './tokenize-factory'
 import {Decoder, SimpleParser, Parser} from './parser'
 
 /*
@@ -44,14 +45,14 @@ const INDENTATION_CHARACTERS = {
  *   a parser.
  * @return {Function} - See `decode`.
  */
-function decodeFactory (context): Decoder {
+function decodeFactory (context: any): Decoder {
   /**
    * Normalize `position` to add an `indent`.
    *
    * @param {Position} position - Reference
    * @return {Position} - Augmented with `indent`.
    */
-  function normalize (position) {
+  function normalize (position: Location) {
     return {
       start: position,
       indent: context.getIndent(position.line),
@@ -66,7 +67,7 @@ function decodeFactory (context): Decoder {
    * @param {Position} position - Place of warning.
    * @param {number} code - Code for warning.
    */
-  function handleWarning (reason: string, position, code: number) {
+  function handleWarning (reason: string, position: any, code: number): void {
     if (code === 3) {
       return
     }
@@ -81,7 +82,7 @@ function decodeFactory (context): Decoder {
    * @param {Position} position - Position to start parsing at.
    * @param {Function} handler - Node handler.
    */
-  const decoder: Decoder = Object.assign(function (value: string, position, handler) {
+  const decoder: Decoder = Object.assign(function (value: string, position: any, handler: any): void {
     decode(value, {
       position: normalize(position),
       warning: handleWarning,
@@ -99,7 +100,7 @@ function decodeFactory (context): Decoder {
      *   parsing at.
      * @return {string} - Plain-text.
      */
-    raw: function (value: string, position): string {
+    raw: function (value: string, position: any): string {
       return decode(value, {
         position: normalize(position),
         warning: handleWarning,
@@ -124,7 +125,7 @@ function decodeFactory (context): Decoder {
  * @return {function(string): string} - Function which
  *   takes a value and returns its unescaped version.
  */
-function descapeFactory (scope, key) {
+function descapeFactory (scope: any, key: string): Function {
   /**
    * De-escape a string using the expression at `key`
    * in `scope`.
@@ -142,12 +143,11 @@ function descapeFactory (scope, key) {
     let index = value.indexOf('\\')
     const escape = scope[key]
     const queue: string[] = []
-    let character
 
     while (index !== -1) {
       queue.push(value.slice(prev, index))
       prev = index + 1
-      character = value.charAt(prev)
+      const character = value.charAt(prev)
 
       /*
        * If the following character is not a valid escape,
@@ -168,6 +168,8 @@ function descapeFactory (scope, key) {
 
   return descape
 }
+
+type Stops = { [stop: number]: number }
 
 /**
  * Gets indentation information for a line.
@@ -192,11 +194,10 @@ function getIndent (value: string) {
   let index = 0
   let indent = 0
   let character = value.charAt(index)
-  const stops = {}
-  let size
+  const stops: Stops = {}
 
   while (character in INDENTATION_CHARACTERS) {
-    size = INDENTATION_CHARACTERS[character]
+    const size = INDENTATION_CHARACTERS[character]
 
     indent += size
 
@@ -228,15 +229,15 @@ function getIndent (value: string) {
  *   to remove.
  * @return {string} - Unindented `value`.
  */
-function removeIndentation (value, maximum) {
+function removeIndentation (value: string, maximum?: number): string {
   const values = value.split('\n')
   let position = values.length + 1
   let minIndent = Infinity
-  const matrix = []
-  let index
-  let indentation
-  let stops
-  let padding
+  const matrix: any[] = []
+  let index: number
+  let indentation: any
+  let stops: Stops
+  let padding: string
 
   values.unshift(`${repeat(' ', maximum)}!`)
 
@@ -304,7 +305,7 @@ function removeIndentation (value, maximum) {
  * @param {Object?} [options] - Passed to
  *   `Parser#setOptions()`.
  */
-function parserFactory (processor) {
+function parserFactory (processor: any) {
   /*
    * A map of two functions which can create list items.
    */
@@ -324,7 +325,7 @@ function parserFactory (processor) {
    * @param {Object} position - List-item location.
    * @return {string} - Cleaned `value`.
    */
-  function renderPedanticListItem (value, position) {
+  function renderPedanticListItem (value: string, position: Location): string {
     let indent = parser.indent(position.line)
 
     /**
@@ -334,7 +335,7 @@ function parserFactory (processor) {
      * @param {string} $0 - Indentation to subtract.
      * @return {string} - An empty string.
      */
-    function replacer ($0) {
+    function replacer ($0: string): string {
       indent($0.length)
 
       return ''
@@ -366,21 +367,21 @@ function parserFactory (processor) {
    * @param {Object} position - List-item location.
    * @return {string} - Cleaned `value`.
    */
-  function renderNormalListItem (value, position) {
+  function renderNormalListItem (value: string, position: Location): string {
     const indent = parser.indent(position.line)
-    let max
-    let bullet
-    let rest
-    let lines
-    let trimmedLines
-    let index
-    let length
+    let max: string
+    let bullet: string
+    let rest: string
+    let lines: string[]
+    let trimmedLines: string[]
+    let index: number
+    let length: number
 
     /*
      * Remove the list-item’s bullet.
      */
 
-    value = value.replace(EXPRESSION_BULLET, ($0, $1, $2, $3, $4) => {
+    value = value.replace(EXPRESSION_BULLET, ($0: string, $1: string, $2: string, $3: string, $4: string): string => {
       bullet = $1 + $2 + $3
       rest = $4
 
@@ -456,7 +457,7 @@ function parserFactory (processor) {
     setOptions (options) {
       const escape = parser.data.escape
       const current = parser.options
-      let key
+      let key: string
 
       if (options === null || options === undefined) {
         options = {}
@@ -521,7 +522,7 @@ function parserFactory (processor) {
      */
     getIndent (start: number): number[] {
       const offset = parser.offset
-      const result = []
+      const result: number[] = []
 
       while (++start) {
         if (!(start in offset)) {
@@ -573,7 +574,7 @@ function parserFactory (processor) {
      * @this {Parser}
      * @return {Object} - `root` node.
      */
-    parse (contents, opts) {
+    parse (contents: any, opts: any): Promise<Node> {
       parser.setOptions(opts)
 
       const file = contents instanceof VFile ? contents : new VFile(contents)
@@ -626,9 +627,9 @@ function parserFactory (processor) {
       const exitBlockquote = parser.state.enterBlockquote()
 
       return normalParser.tokenizeBlock(value, now)
-        .then(children => {
+        .then((children: Node[]) => {
           exitBlockquote()
-          return {
+          return <Node>{
             type: 'blockquote',
             children,
           }
@@ -650,7 +651,7 @@ function parserFactory (processor) {
      * @param {Object} position - Location of link.
      * @return {Object} - `link` or `image` node.
      */
-    renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location) {
+    renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location): Promise<Node> {
       const exitLink = parser.state.enterLink()
       const node: any = {
         type: isLink ? 'link' : 'image',
@@ -684,7 +685,7 @@ function parserFactory (processor) {
      * @param {Object} position - Location of footnote.
      * @return {Object} - `footnote` node.
      */
-    renderFootnote (value, position) {
+    renderFootnote (value: string, position: Location): Promise<Node> {
       return normalParser.renderInline('footnote', value, position)
     },
 
@@ -699,7 +700,7 @@ function parserFactory (processor) {
      * @param {Object} position - Location of node.
      * @return {Object} - Node of type `type`.
      */
-    renderInline (type, value, position) {
+    renderInline (type: NodeType, value: string, position: Location): Promise<Node> {
       return normalParser.tokenizeInline(value, position)
         .then(children => ({
           type,
@@ -717,8 +718,8 @@ function parserFactory (processor) {
      * @param {Object} position - List-item location.
      * @return {Object} - `listItem` node.
      */
-    renderListItem (value, position) {
-      let checked = null
+    renderListItem (value: string, position: Location): Promise<ListItemNode> {
+      let checked: boolean = null
 
       value = LIST_ITEM_MAP[parser.options.pedantic].apply(parser, arguments)
 
@@ -735,7 +736,7 @@ function parserFactory (processor) {
       }
 
       return normalParser.tokenizeBlock(value, position)
-        .then(children => ({
+        .then(children => (<ListItemNode>{
           type: 'listItem',
           loose: EXPRESSION_LOOSE_LIST_ITEM.test(value) ||
             value.charAt(value.length - 1) === '\n',
@@ -755,7 +756,7 @@ function parserFactory (processor) {
      * @param {Object} position - Definition location.
      * @return {Object} - `footnoteDefinition` node.
      */
-    renderFootnoteDefinition (identifier, value, position) {
+     renderFootnoteDefinition (identifier: string, value: string, position: Location): Promise<any> {
       const exitBlockquote = parser.state.enterBlockquote()
 
       return normalParser.tokenizeBlock(value, position)
@@ -780,9 +781,9 @@ function parserFactory (processor) {
      * @param {Object} position - Heading content location.
      * @return {Object} - `heading` node
      */
-    renderHeading (value, depth, position) {
+    renderHeading (value: string, depth: number, position: Location): Promise<HeadingNode> {
       return normalParser.tokenizeInline(value, position)
-        .then(children => ({
+        .then(children => (<HeadingNode>{
           type: 'heading',
           depth,
           children,

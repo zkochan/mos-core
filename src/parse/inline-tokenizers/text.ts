@@ -40,7 +40,7 @@ const tokenizeText: Tokenizer = function (parser, value, silent) {
   const subvalue = value.slice(0, min)
   const now = parser.eat.now()
 
-  parser.decode(subvalue, now, (content, position, source) => {
+  parser.decode(subvalue, now, (content: string, position: any, source: any) => {
     parser.eat(source || content)({
       type: 'text',
       value: content,

@@ -14,10 +14,6 @@ import Tokenizer from '../tokenizer'
  */
 const tokenizeNewline: Tokenizer = function (parser, value, silent) {
   let character = value.charAt(0)
-  let length
-  let subvalue
-  let queue
-  let index
 
   if (character !== '\n') {
     return
@@ -28,12 +24,11 @@ const tokenizeNewline: Tokenizer = function (parser, value, silent) {
     return true
   }
 
-  index = 1
-  length = value.length
-  subvalue = '\n'
-  queue = ''
+  let index = 1
+  let subvalue = '\n'
+  let queue = ''
 
-  while (index < length) {
+  while (index < value.length) {
     character = value.charAt(index)
 
     if (!isWhiteSpace(character)) {

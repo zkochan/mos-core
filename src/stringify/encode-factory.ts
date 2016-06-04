@@ -1,4 +1,3 @@
-export default encodeFactory
 import encode from 'stringify-entities'
 
 /**
@@ -34,7 +33,7 @@ function encodeNoop (value: string): string {
  * @return {function(string): string} - Function which
  *   takes a value and returns its encoded version.
  */
-function encodeFactory (type): any {
+export default function encodeFactory (type: string): any {
   const options: {
     useNamedReferences?: boolean,
     escapeOnly?: boolean,
@@ -66,7 +65,7 @@ function encodeFactory (type): any {
      * @param {Object} [node] - Node which is compiled.
      * @return {string} - Encoded content.
      */
-  function encoder (value) {
+  function encoder (value: string): string {
     return encode(value, options)
   }
 

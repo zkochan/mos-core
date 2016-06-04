@@ -5,7 +5,7 @@ import table from 'markdown-table'
 const visitor: SpecificVisitor<TableNode> = (compiler, node) => {
   let index = node.children.length
   const exit = compiler.enterTable()
-  const result = []
+  const result: string[][] = []
 
   while (index--) {
     result[index] = compiler.all(node.children[index])

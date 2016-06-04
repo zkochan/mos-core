@@ -11,35 +11,10 @@ import Tokenizer from '../tokenizer'
  * @return {boolean} - Whether `character` is a word
  *   character.
  */
-function isWordCharacter (character) {
+function isWordCharacter (character: string): boolean {
   return character === '_' ||
     isAlphabetic(character) ||
     isNumeric(character)
-}
-
-/**
- * Find possible slight emphasis.
- *
- * @example
- *   locateEmphasis('foo *bar'); // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible slight emphasis.
- */
-function locateEmphasis (parser, value, fromIndex) {
-  const asterisk = value.indexOf('*', fromIndex)
-  const underscore = value.indexOf('_', fromIndex)
-
-  if (underscore === -1) {
-    return asterisk
-  }
-
-  if (asterisk === -1) {
-    return underscore
-  }
-
-  return Math.min(underscore, asterisk)
 }
 
 /**
@@ -121,6 +96,29 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
   }
 }
 
-tokenizeEmphasis.locator = locateEmphasis
+/**
+ * Find possible slight emphasis.
+ *
+ * @example
+ *   locateEmphasis('foo *bar'); // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible slight emphasis.
+ */
+tokenizeEmphasis.locator = function (parser, value, fromIndex) {
+  const asterisk = value.indexOf('*', fromIndex)
+  const underscore = value.indexOf('_', fromIndex)
+
+  if (underscore === -1) {
+    return asterisk
+  }
+
+  if (asterisk === -1) {
+    return underscore
+  }
+
+  return Math.min(underscore, asterisk)
+}
 
 export default tokenizeEmphasis

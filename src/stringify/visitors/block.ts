@@ -4,10 +4,10 @@ const BREAK = '\n\n'
 const GAP = `${BREAK}\n`
 
 const visitor: Visitor = (compiler, node) => {
-  const values = []
+  const values: string[] = []
   const children = node.children
   let index = -1
-  let prev
+  let prev: Node
 
   while (++index < children.length) {
     const child = children[index]

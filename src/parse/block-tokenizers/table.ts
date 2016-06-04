@@ -12,7 +12,7 @@ const MIN_TABLE_ROWS = 2
 const TABLE_ALIGN_LEFT = 'left'
 const TABLE_ALIGN_CENTER = 'center'
 const TABLE_ALIGN_RIGHT = 'right'
-const TABLE_ALIGN_NONE = null
+const TABLE_ALIGN_NONE: string = null
 
 /**
  * Tokenise a table.
@@ -45,7 +45,7 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
 
   let lineCount = 0
   let index = 0
-  const lines = []
+  const lines: string[] = []
 
   while (index <= value.length) {
     let lineIndex = value.indexOf('\n', index)
@@ -76,15 +76,15 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
    */
 
   let subvalue = lines.join('\n')
-  const alignments = lines.splice(1, 1)[0] || []
+  const alignments = lines.splice(1, 1)[0]
   index = 0
   lineCount--
   let alignment: any = false
-  const align = []
-  let hasDash
-  let first
+  const align: string[] = []
+  let hasDash: boolean
+  let first: boolean
 
-  while (index < alignments.length) {
+  while (alignments && index < alignments.length) {
     const character = alignments.charAt(index)
 
     if (character === '|') {
@@ -143,7 +143,7 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
   .then(table => {
     return eachRow(lines, 0)
 
-    function eachRow (lines, position) {
+    function eachRow (lines: string[], position: number): Promise<void> {
       if (!lines.length) return
       const line = lines.shift()
       const row: Node = {
@@ -170,11 +170,11 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
           let queue = ''
           let cell = ''
           let preamble = true
-          let opening = null
+          let opening: number = null
 
           return eachCharacter(line.split('').concat(''))
 
-          function eachCharacter (line) {
+          function eachCharacter (line: string[]): Promise<void> {
             if (!line.length) {
               /*
                * Eat the alignment row.

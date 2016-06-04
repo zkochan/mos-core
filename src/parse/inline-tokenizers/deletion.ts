@@ -2,20 +2,6 @@ import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
 
 /**
- * Find a possible deletion.
- *
- * @example
- *   locateDeletion('foo ~~bar') // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible deletion.
- */
-function locateDeletion (parser, value, fromIndex) {
-  return value.indexOf('~~', fromIndex)
-}
-
-/**
  * Tokenise a deletion.
  *
  * @example
@@ -71,6 +57,18 @@ const tokenizeDeletion: Tokenizer = function (parser, value, silent) {
   }
 }
 
-tokenizeDeletion.locator = locateDeletion
+/**
+ * Find a possible deletion.
+ *
+ * @example
+ *   locateDeletion('foo ~~bar') // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible deletion.
+ */
+tokenizeDeletion.locator = function (parser, value, fromIndex) {
+  return value.indexOf('~~', fromIndex)
+}
 
 export default tokenizeDeletion

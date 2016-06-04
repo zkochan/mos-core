@@ -40,22 +40,22 @@ const tokenizeLink: Tokenizer = function (parser, value, silent) {
   let subvalue = ''
   let index = 0
   let character = value.charAt(0)
-  let beforeURL
-  let beforeTitle
-  let whiteSpaceQueue
-  let commonmark
-  let openCount
-  let hasMarker
-  let markers
-  let isImage
-  let content
-  let marker
-  let length
-  let title
-  let depth
-  let queue
-  let url
-  let now
+  let beforeURL: string
+  let beforeTitle: string
+  let whiteSpaceQueue: string
+  let commonmark: string
+  let openCount: number
+  let hasMarker: boolean
+  let markers: any
+  let isImage: boolean
+  let content: string
+  let marker: any
+  let length: number
+  let title: string
+  let depth: number
+  let queue: string
+  let url: string
+  let now: any
 
   /*
    * Detect whether this is an image.
@@ -366,8 +366,8 @@ const tokenizeLink: Tokenizer = function (parser, value, silent) {
   url = parser.decode.raw(parser.descape(url), parser.eat(beforeURL).test().end)
 
   if (title) {
-    beforeTitle = parser.eat(beforeTitle).test().end
-    title = parser.decode.raw(parser.descape(title), beforeTitle)
+    const beforeTitleNode = parser.eat(beforeTitle).test().end
+    title = parser.decode.raw(parser.descape(title), beforeTitleNode)
   }
 
   return parser.eat(subvalue)(

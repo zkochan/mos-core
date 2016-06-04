@@ -2,20 +2,6 @@ import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
 
 /**
- * Find possible inline code.
- *
- * @example
- *   locateInlineCode('foo `bar') // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible inline code.
- */
-function locateInlineCode (parser, value, fromIndex) {
-  return value.indexOf('`', fromIndex)
-}
-
-/**
  * Tokenise inline code.
  *
  * @example
@@ -50,7 +36,7 @@ const tokenizeInlineCode: Tokenizer = function (parser, value, silent) {
   queue = ''
   let next = value.charAt(index)
   let count = 0
-  let found
+  let found: boolean
 
   while (index < value.length) {
     var character = next
@@ -91,7 +77,7 @@ const tokenizeInlineCode: Tokenizer = function (parser, value, silent) {
     return true
   }
 
-  let whiteSpaceQueue
+  let whiteSpaceQueue: string
   let contentQueue = whiteSpaceQueue = ''
   index = -1
 
@@ -120,6 +106,18 @@ const tokenizeInlineCode: Tokenizer = function (parser, value, silent) {
   })
 }
 
-tokenizeInlineCode.locator = locateInlineCode
+/**
+ * Find possible inline code.
+ *
+ * @example
+ *   locateInlineCode('foo `bar') // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible inline code.
+ */
+tokenizeInlineCode.locator = function (parser, value, fromIndex) {
+  return value.indexOf('`', fromIndex)
+}
 
 export default tokenizeInlineCode

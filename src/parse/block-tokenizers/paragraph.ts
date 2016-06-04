@@ -22,11 +22,8 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
   const gfm = settings.gfm
   const index = value.indexOf('\n')
   const length = value.length
-  let position
-  let subvalue
-  let character
-  let size
-  let now
+  let subvalue: string
+  let character: string
 
   return tokenizeEach(index)
     .then(index => {
@@ -43,14 +40,14 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
         return Promise.resolve(true)
       }
 
-      now = parser.eat.now()
+      const now = parser.eat.now()
       subvalue = trimTrailingLines(subvalue)
 
       return parser.eat(subvalue)(parser.renderInline('paragraph', subvalue, now))
         .then(() => null)
     })
 
-  function tokenizeEach (index) {
+  function tokenizeEach (index: number): Promise<number> {
     /*
      * Eat everything if there’s no following newline.
      */
@@ -71,8 +68,8 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
      */
 
     if (commonmark) {
-      size = 0
-      position = index + 1
+      let size = 0
+      let position = index + 1
 
       while (position < length) {
         character = value.charAt(position)

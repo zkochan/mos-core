@@ -31,8 +31,6 @@ const tokenizeEscape: Tokenizer = function (parser, value, silent) {
   }
 }
 
-tokenizeEscape.locator = locateEscape
-
 /**
  * Find a possible escape sequence.
  *
@@ -43,7 +41,7 @@ tokenizeEscape.locator = locateEscape
  * @param {number} fromIndex - Index to start searching at.
  * @return {number} - Location of possible escape sequence.
  */
-function locateEscape (parser, value, fromIndex) {
+tokenizeEscape.locator = function locateEscape (parser, value, fromIndex) {
   return value.indexOf('\\', fromIndex)
 }
 

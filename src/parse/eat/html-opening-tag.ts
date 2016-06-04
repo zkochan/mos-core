@@ -11,7 +11,7 @@ import blockElements from '../block-elements'
  * @return {boolean} - Whether `character` can be inside
  *   an unquoted attribute value.
  */
-function isUnquotedAttributeCharacter (character) {
+function isUnquotedAttributeCharacter (character: string): boolean {
   return character !== '"' &&
     character !== '\'' &&
     character !== '=' &&
@@ -29,7 +29,7 @@ function isUnquotedAttributeCharacter (character) {
  * @return {boolean} - Whether `character` can be inside
  *   a double-quoted attribute value.
  */
-const isDoubleQuotedAttributeCharacter: any = function (character) {
+const isDoubleQuotedAttributeCharacter: any = function (character: string): boolean {
   return character !== '"'
 }
 
@@ -44,7 +44,7 @@ isDoubleQuotedAttributeCharacter.delimiter = '"'
  * @return {boolean} - Whether `character` can be inside
  *   a single-quoted attribute value.
  */
-const isSingleQuotedAttributeCharacter: any = function (character) {
+const isSingleQuotedAttributeCharacter: any = function (character: string): boolean {
   return character !== '\''
 }
 
@@ -59,14 +59,17 @@ isSingleQuotedAttributeCharacter.delimiter = '\''
  * @return {string?} - When applicable, the opening tag at
  *   the start of `value`.
  */
-export default function eatHTMLOpeningTag (value, isBlock?) {
+export default function eatHTMLOpeningTag (value: string, isBlock?: boolean): string {
   let index = 0
   const length = value.length
   let queue = ''
   let subqueue = ''
   let character = value.charAt(index)
-  let hasEquals
-  let test
+  let hasEquals: boolean
+  let test: {
+    (character: string): boolean;
+    delimiter?: string;
+  }
 
   if (character === '<') {
     queue = character

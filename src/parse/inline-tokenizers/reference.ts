@@ -73,7 +73,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
    */
 
   let depth = 0
-  let bracketed
+  let bracketed: boolean
 
   while (index < length) {
     character = value.charAt(index)
@@ -98,7 +98,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
     index++
   }
 
-  let text
+  let text: string
   subvalue = text = queue
   character = value.charAt(index)
 
@@ -123,7 +123,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
 
   character = value.charAt(index)
 
-  let identifier
+  let identifier: string
   if (character !== '[') {
     if (!text) {
       return

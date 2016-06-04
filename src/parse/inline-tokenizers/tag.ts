@@ -10,20 +10,6 @@ const EXPRESSION_HTML_LINK_OPEN = /^<a /i
 const EXPRESSION_HTML_LINK_CLOSE = /^<\/a>/i
 
 /**
- * Find a possible tag.
- *
- * @example
- *   locateTag('foo <bar') // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible tag.
- */
-function locateTag (parser, value, fromIndex) {
-  return value.indexOf('<', fromIndex)
-}
-
-/**
  * Tokenise an HTML tag.
  *
  * @example
@@ -64,6 +50,18 @@ const tokenizeTag: Tokenizer = function (parser, value, silent) {
   })
 }
 
-tokenizeTag.locator = locateTag
+/**
+ * Find a possible tag.
+ *
+ * @example
+ *   locateTag('foo <bar') // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible tag.
+ */
+tokenizeTag.locator = function (parser, value, fromIndex) {
+  return value.indexOf('<', fromIndex)
+}
 
 export default tokenizeTag

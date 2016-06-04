@@ -28,11 +28,7 @@ const SETEXT_MARKERS = {
   const length = value.length
   let index = -1
   let subvalue = ''
-  let content
-  let queue
-  let character
-  let marker
-  let depth
+  let character: string
 
   /*
    * Eat initial indentation.
@@ -53,6 +49,8 @@ const SETEXT_MARKERS = {
    * Eat content.
    */
 
+  let content: string
+  let queue: string
   content = queue = ''
 
   while (++index < length) {
@@ -81,7 +79,7 @@ const SETEXT_MARKERS = {
    */
 
   character = value.charAt(++index)
-  marker = value.charAt(++index)
+  const marker = value.charAt(++index)
 
   if (
     character !== '\n' ||
@@ -101,7 +99,7 @@ const SETEXT_MARKERS = {
      */
 
   queue = marker
-  depth = SETEXT_MARKERS[marker]
+  const depth = SETEXT_MARKERS[marker]
 
   while (++index < length) {
     character = value.charAt(index)

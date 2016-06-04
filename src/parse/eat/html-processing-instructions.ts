@@ -7,11 +7,11 @@ export default eatHTMLProcessingInstruction
  * @return {string?} - When applicable, the processing
  *   instruction at the start of `value`.
  */
-function eatHTMLProcessingInstruction (value) {
+function eatHTMLProcessingInstruction (value: string): string {
   let index = 0
   let queue = ''
   const length = value.length
-  let character
+  let character: string
 
   if (
       value.charAt(index) === '<' &&

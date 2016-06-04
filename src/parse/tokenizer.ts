@@ -6,7 +6,7 @@ interface Tokenizer {
   onlyAtTop?: boolean,
   notInBlockquote?: boolean,
   onlyAtStart?: boolean,
-  locator?: (parser: any, value: string, fromIndex: number) => number,
+  locator?: (parser: ParserAndEater, value: string, fromIndex: number) => number,
 }
 
 export default Tokenizer

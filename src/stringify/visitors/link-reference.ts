@@ -28,10 +28,10 @@ const PUNCTUATION = /[-!"#$%&'()*+,.\/:;<=>?@\[\\\]^`{|}~_]/
  * @param {string} identifier - Link identifier.
  * @return {string} - Encoded link value.
  */
-function copyIdentifierEncoding (value, identifier) {
+function copyIdentifierEncoding (value: string, identifier: string): string {
   let index = 0
   let position = 0
-  const result = []
+  const result: string[] = []
 
   while (index < value.length) {
     /*

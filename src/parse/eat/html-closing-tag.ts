@@ -12,12 +12,12 @@ import blockElements from '../block-elements'
  * @return {string?} - When applicable, the closing tag at
  *   the start of `value`.
  */
-export default function eatHTMLClosingTag (value, isBlock?) {
+export default function eatHTMLClosingTag (value: string, isBlock?: boolean): string {
   let index = 0
   const length = value.length
   let queue = ''
   let subqueue = ''
-  let character
+  let character: string
 
   if (
     value.charAt(index) === '<' &&

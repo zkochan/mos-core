@@ -3,20 +3,6 @@ import Tokenizer from '../tokenizer'
 const MAILTO_PROTOCOL = 'mailto:'
 
 /**
- * Find a possible auto-link.
- *
- * @example
- *   locateAutoLink('foo <bar') // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible auto-link.
- */
-function locateAutoLink (parser, value, fromIndex) {
-  return value.indexOf('<', fromIndex)
-}
-
-/**
  * Tokenise a URL in carets.
  *
  * @example
@@ -144,6 +130,19 @@ const tokenizeAutoLink: Tokenizer = function (parser, value, silent) {
 }
 
 tokenizeAutoLink.notInLink = true
-tokenizeAutoLink.locator = locateAutoLink
+
+/**
+ * Find a possible auto-link.
+ *
+ * @example
+ *   locateAutoLink('foo <bar') // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible auto-link.
+ */
+tokenizeAutoLink.locator = function (parser, value, fromIndex) {
+  return value.indexOf('<', fromIndex)
+}
 
 export default tokenizeAutoLink

@@ -3,30 +3,6 @@ import Tokenizer from '../tokenizer'
 const MIN_BREAK_LENGTH = 2
 
 /**
- * Find a possible break.
- *
- * @example
- *   locateBreak('foo   \nbar') // 3
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible break.
- */
-function locateBreak (parser, value, fromIndex) {
-  let index = value.indexOf('\n', fromIndex)
-
-  while (index > fromIndex) {
-    if (value.charAt(index - 1) !== ' ') {
-      break
-    }
-
-    index--
-  }
-
-  return index
-}
-
-/**
  * Tokenise a break.
  *
  * @example
@@ -70,6 +46,28 @@ const tokenizeBreak: Tokenizer = function (parser, value, silent) {
   }
 }
 
-tokenizeBreak.locator = locateBreak
+/**
+ * Find a possible break.
+ *
+ * @example
+ *   locateBreak('foo   \nbar') // 3
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible break.
+ */
+tokenizeBreak.locator = function (parser, value, fromIndex) {
+  let index = value.indexOf('\n', fromIndex)
+
+  while (index > fromIndex) {
+    if (value.charAt(index - 1) !== ' ') {
+      break
+    }
+
+    index--
+  }
+
+  return index
+}
 
 export default tokenizeBreak

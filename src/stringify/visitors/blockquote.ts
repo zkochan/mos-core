@@ -3,7 +3,7 @@ import block from './block'
 
 const visitor: Visitor = (compiler, node) => {
   const values = block(compiler, node).split('\n')
-  const result = []
+  const result: string[] = []
   let index = -1
 
   while (++index < values.length) {

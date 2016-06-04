@@ -15,12 +15,8 @@ import Tokenizer from '../tokenizer'
  * @return {Node?|boolean} - `yaml` node.
  */
 const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
-  let subvalue
-  let content
-  let index
-  let length
-  let character
-  let queue
+  let content: string
+  let queue: string
 
   if (
     !parser.options.yaml ||
@@ -32,13 +28,13 @@ const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
     return
   }
 
-  subvalue = `${YAML_FENCE}\n`
+  let subvalue = `${YAML_FENCE}\n`
   content = queue = ''
-  index = 3
-  length = value.length
+  let index = 3
+  const length = value.length
 
   while (++index < length) {
-    character = value.charAt(index)
+    const character = value.charAt(index)
 
     if (
       character === '-' &&

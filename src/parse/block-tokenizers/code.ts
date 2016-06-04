@@ -22,7 +22,7 @@ const tokenizeCode: Tokenizer = function (parser, value, silent) {
   let content = ''
   let subvalueQueue = ''
   let contentQueue = ''
-  let indent
+  let indent: boolean
 
   while (++index < value.length) {
     let character = value.charAt(index)

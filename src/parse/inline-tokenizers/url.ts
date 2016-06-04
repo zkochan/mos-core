@@ -12,28 +12,6 @@ const protocolPattern = /https?:\/\/|mailto:/gi
 const beginsWithProtocol = new RegExp(`^(${protocolPattern.source})`, 'i')
 
 /**
- * Find a possible URL.
- *
- * @example
- *   locateURL('foo http://bar'); // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible URL.
- */
-function locateURL (parser, value, fromIndex) {
-  if (!parser.options.gfm) {
-    return -1
-  }
-
-  protocolPattern.lastIndex = fromIndex
-
-  const match = protocolPattern.exec(value)
-
-  return !match ? -1 : match.index
-}
-
-/**
  * Tokenise a URL in text.
  *
  * @example
@@ -46,7 +24,7 @@ function locateURL (parser, value, fromIndex) {
  * @param {boolean?} [silent] - Whether this is a dry run.
  * @return {Node?|boolean} - `link` node.
  */
-const tokenizeURL: any = function (parser, value, silent) {
+const tokenizeURL: Tokenizer = function (parser, value, silent) {
   if (!parser.options.gfm) {
     return
   }
@@ -129,11 +107,32 @@ const tokenizeURL: any = function (parser, value, silent) {
   const now = parser.eat.now()
 
   return parser.eat(subvalue)(
-    parser.renderLink(true, decode(subvalue), content, null, now, parser.eat)
+    parser.renderLink(true, decode(subvalue), content, null, now)
   )
 }
 
 tokenizeURL.notInLink = true
-tokenizeURL.locator = locateURL
+
+/**
+ * Find a possible URL.
+ *
+ * @example
+ *   locateURL('foo http://bar'); // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible URL.
+ */
+tokenizeURL.locator = function locateURL (parser, value, fromIndex) {
+  if (!parser.options.gfm) {
+    return -1
+  }
+
+  protocolPattern.lastIndex = fromIndex
+
+  const match = protocolPattern.exec(value)
+
+  return !match ? -1 : match.index
+}
 
 export default tokenizeURL

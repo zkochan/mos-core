@@ -1,4 +1,4 @@
-import {ListNode} from '../../node'
+import {ListNode, Node} from '../../node'
 import isNumeric from '../is-numeric'
 import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
@@ -50,33 +50,19 @@ const LIST_ORDERED_COMMONMARK_MARKERS = {
 const tokenizeList: Tokenizer = function (parser, value, silent) {
   const commonmark = parser.options.commonmark
   const pedantic = parser.options.pedantic
-  let markers
   let index = 0
   let length = value.length
   let start: number = null
-  let queue
+  let queue: string
   let ordered: boolean
-  let character
-  let marker
-  let nextIndex
-  let startIndex
-  let prefixed
-  let currentMarker
-  let content
-  let line
-  let prevEmpty
-  let empty
-  let items
-  let allLines: string[]
-  let emptyLines
-  let item
-  let enterTop
-  let exitBlockquote
-  let isLoose
-  let now
-  let end
-  let indented
-  let size
+  let character: string
+  let marker: string
+  let nextIndex: number
+  let startIndex: number
+  let prefixed: boolean
+  let currentMarker: string
+  let empty: boolean
+  let allLines: any
 
   while (index < length) {
     character = value.charAt(index)
@@ -90,7 +76,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
 
   character = value.charAt(index)
 
-  markers = commonmark
+  const markers = commonmark
     ? LIST_ORDERED_COMMONMARK_MARKERS
     : LIST_ORDERED_MARKERS
 
@@ -133,9 +119,10 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
   }
 
   index = 0
-  items = []
+  const items: any = []
   allLines = []
-  emptyLines = []
+  let emptyLines: string[] = []
+  let item: any
 
   return tokenizeEach(index)
     .then(() => parser.eat(allLines.join('\n'))
@@ -147,10 +134,10 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
         children: [],
       })
     )
-    .then(node => {
-      enterTop = parser.state.exitTop()
-      exitBlockquote = parser.state.enterBlockquote()
-      isLoose = false
+    .then((node: ListNode) => {
+      const enterTop = parser.state.exitTop()
+      const exitBlockquote = parser.state.enterBlockquote()
+      let isLoose = false
       length = items.length
       const parent = node
 
@@ -164,11 +151,11 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
           return node
         })
 
-      function tokenizeEach (items) {
+      function tokenizeEach (items: any): any {
         const rawItem = items.shift()
         if (!rawItem) return
-        const item = rawItem.value.join('\n')
-        now = parser.eat.now()
+        item = rawItem.value.join('\n')
+        const now = parser.eat.now()
 
         return parser.eat(item)(parser.renderListItem(item, now), parent)
           .then(item => {
@@ -189,20 +176,20 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
       }
     })
 
-  function tokenizeEach (index) {
+  function tokenizeEach (index: number): any {
     if (index >= length) return Promise.resolve()
 
     nextIndex = value.indexOf('\n', index)
     startIndex = index
     prefixed = false
-    indented = false
+    let indented = false
 
     if (nextIndex === -1) {
       nextIndex = length
     }
 
-    end = index + TAB_SIZE
-    size = 0
+    let end = index + TAB_SIZE
+    let size = 0
 
     while (index < length) {
       character = value.charAt(index)
@@ -312,8 +299,8 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
       index = startIndex
     }
 
-    line = value.slice(startIndex, nextIndex)
-    content = startIndex === index ? line : value.slice(index, nextIndex)
+    let line = value.slice(startIndex, nextIndex)
+    let content = startIndex === index ? line : value.slice(index, nextIndex)
 
     if (currentMarker && RULE_MARKERS[currentMarker] === true) {
       return tryBlockTokenize(parser, 'thematicBreak', line, true)
@@ -359,7 +346,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
     }
 
     function notRuleMarker () {
-      prevEmpty = empty
+      const prevEmpty = empty
       empty = !trim(content).length
 
       if (indented && item) {

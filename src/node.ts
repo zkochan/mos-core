@@ -81,3 +81,8 @@ export type ListNode = Node & {
   start?: number,
   loose: boolean,
 }
+
+export type ListItemNode = Node & {
+  checked?: boolean,
+  loose: boolean,
+}

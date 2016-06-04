@@ -10,6 +10,7 @@ import deletion from './deletion'
 import inlineCode from './code'
 import breakTokenizer from './break'
 import text from './text'
+import Tokenizer from '../tokenizer'
 
 export default [
   {

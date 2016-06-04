@@ -15,7 +15,7 @@ const EXPRESSION_BOM = /^\ufeff/
  * @param {*} value - Invalid value.
  * @param {string} name - Setting name.
  */
-export function raise (value, name) {
+export function raise (value: any, name: string): void {
   throw new Error(
     `Invalid value \`${value}\` for setting \`${name}\``
   )
@@ -37,7 +37,7 @@ export function raise (value, name) {
  * @param {string} name - Setting name.
  * @param {boolean} def - Default value.
  */
-function validateBoolean (context, name, def) {
+function validateBoolean (context: any, name: string, def: boolean): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -67,7 +67,7 @@ function validateBoolean (context, name, def) {
  * @param {string} name - Setting name.
  * @param {number} def - Default value.
  */
-function validateNumber (context, name, def) {
+function validateNumber (context: any, name: string, def: number): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -99,7 +99,7 @@ function validateNumber (context, name, def) {
  * @param {string} def - Default value.
  * @param {Object} map - Enum.
  */
-function validateString (context, name, def, map) {
+function validateString (context: any, name: string, def: string, map: any): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -124,7 +124,7 @@ function validateString (context, name, def, map) {
  * @param {string} value - Content to clean.
  * @return {string} - Cleaned content.
  */
-export function clean (value) {
+export function clean (value: string): string {
   return String(value)
         .replace(EXPRESSION_BOM, '')
         .replace(EXPRESSION_LINE_BREAKS, '\n')
@@ -141,7 +141,7 @@ export function clean (value) {
  * @param {string} value - Content to normalize.
  * @return {string} - Normalized content.
  */
-export function normalizeIdentifier (value) {
+export function normalizeIdentifier (value: string): string {
   return collapseWhiteSpace(value).toLowerCase()
 }
 
@@ -170,7 +170,7 @@ export function normalizeIdentifier (value) {
  * @param {boolean} state - It's default state.
  * @return {function(): function()} - Enter.
  */
-export function stateToggler (target, key, state) {
+export function stateToggler (target: any, key: string, state: boolean): Function {
     /**
      * Construct a toggler for the bound `key`.
      *
@@ -200,21 +200,18 @@ export function stateToggler (target, key, state) {
  * @param {Object} node - Node to check.
  * @return {boolean} - Whether `node` is mergable.
  */
-export function mergeable (node) {
-  let start
-  let end
-
+export function mergeable (node: any): boolean {
   if (node.type !== 'text' || !node.position) {
     return true
   }
 
-  start = node.position.start
-  end = node.position.end
+  const start = node.position.start
+  const end = node.position.end
 
-    /*
-     * Only merge nodes which occupy the same size as their
-     * `value`.
-     */
+  /*
+   * Only merge nodes which occupy the same size as their
+   * `value`.
+   */
 
   return start.line !== end.line ||
         end.column - start.column === node.value.length

@@ -17,10 +17,7 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
   let index = -1
   const length = value.length + 1
   let subvalue = ''
-  let character
-  let marker
-  let markerCount
-  let queue
+  let character: string
 
   while (++index < length) {
     character = value.charAt(index)
@@ -36,10 +33,10 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
     return
   }
 
-  marker = character
+  const marker = character
   subvalue += character
-  markerCount = 1
-  queue = ''
+  let markerCount = 1
+  let queue = ''
 
   while (++index < length) {
     character = value.charAt(index)

@@ -13,13 +13,13 @@ const COMMENT_END_LENGTH = COMMENT_END.length
  * @return {string?} - When applicable, the comment at the
  *   start of `value`.
  */
-function eatHTMLComment (value, settings) {
+function eatHTMLComment (value: string, settings: any): string {
   let index = COMMENT_START_LENGTH
   let queue = COMMENT_START
   const length = value.length
   const commonmark = settings.commonmark
-  let character
-  let hasNonDash
+  let character: string
+  let hasNonDash: boolean
 
   if (value.slice(0, index) === queue) {
     while (index < length) {

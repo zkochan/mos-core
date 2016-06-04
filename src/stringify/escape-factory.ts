@@ -66,12 +66,10 @@ function isAlignmentRowCharacter (character: string): boolean {
  *   an alignment row.
  */
 function isInAlignmentRow (value: string, index: number): boolean {
-  const length = value.length
   const start = index
-  let character
 
-  while (++index < length) {
-    character = value.charAt(index)
+  while (++index < value.length) {
+    const character = value.charAt(index)
 
     if (character === '\n') {
       break
@@ -85,7 +83,7 @@ function isInAlignmentRow (value: string, index: number): boolean {
   index = start
 
   while (--index > -1) {
-    character = value.charAt(index)
+    const character = value.charAt(index)
 
     if (character === '\n') {
       break
@@ -111,7 +109,7 @@ function isInAlignmentRow (value: string, index: number): boolean {
  *   takes a value and a node and (optionally) its parent and returns
  *   its escaped value.
  */
-function escapeFactory (options) {
+function escapeFactory (options: any): Function {
     /**
      * Escape punctuation characters in a node's value.
      *
@@ -133,10 +131,8 @@ function escapeFactory (options) {
     let position = -1
     let queue: Array<string> = []
     const escaped = queue
-    let afterNewLine
-    let character
-    let wordCharBefore
-    let wordCharAfter
+    let afterNewLine: boolean
+    let character: string
 
     if (prev) {
       afterNewLine = prev.type === 'text' && /\n\s*$/.test(prev.value)
@@ -358,13 +354,13 @@ function escapeFactory (options) {
        * in pedantic mode).
        */
 
-      wordCharBefore = (
+      const wordCharBefore = (
           prev &&
           prev.type === 'text' &&
           isAlphanumeric(prev.value.slice(-1))
       )
 
-      wordCharAfter = (
+      const wordCharAfter = (
           next &&
           next.type === 'text' &&
           isAlphanumeric(next.value.charAt(0))

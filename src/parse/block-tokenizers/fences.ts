@@ -20,17 +20,7 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
   const length = value.length + 1
   let index = 0
   let subvalue = ''
-  let fenceCount
-  let marker
-  let character
-  let flag
-  let queue
-  let content
-  let exdentedContent
-  let closing
-  let exdentedClosing
-  let indent
-  let now
+  let character: string
 
   if (!settings.gfm) {
     return
@@ -51,7 +41,7 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
     index++
   }
 
-  indent = index // TODO: CHECK.
+  let indent = index // TODO: CHECK.
 
   /*
    * Eat the fence.
@@ -64,8 +54,8 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
   }
 
   index++
-  marker = character
-  fenceCount = 1
+  let marker = character
+  let fenceCount = 1
   subvalue += character
 
   while (index < length) {
@@ -103,7 +93,8 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
    * Eat flag.
    */
 
-  flag = queue = ''
+  let queue: string
+  let flag = queue = ''
 
   while (index < length) {
     character = value.charAt(index)
@@ -136,7 +127,7 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
     return true
   }
 
-  now = parser.eat.now()
+  const now = parser.eat.now()
   now.column += subvalue.length
   now.offset += subvalue.length
 
@@ -147,6 +138,10 @@ const tokenizeFences: Tokenizer = function (parser, value, silent) {
     subvalue += queue
   }
 
+  let content: string
+  let exdentedContent: string
+  let exdentedClosing: string
+  let closing: string
   queue = closing = exdentedClosing = content = exdentedContent = ''
 
   /*

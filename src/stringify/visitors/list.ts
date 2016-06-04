@@ -1,5 +1,6 @@
+import {Compiler} from '../compiler'
 import {SpecificVisitor} from '../visitor'
-import {ListNode} from '../../node'
+import {ListNode, ListItemNode, Node} from '../../node'
 import repeat from 'repeat-string'
 import pad from './pad'
 
@@ -60,13 +61,13 @@ export default visitor
  *   `ordered: true`.
  * @return {string} - Markdown list.
  */
-function visitOrderedItems (compiler, node) {
-  const values = []
+function visitOrderedItems (compiler: Compiler, node: ListNode): string {
+  const values: string[] = []
   let index = -1
 
   while (++index < node.children.length) {
     const bullet = `${compiler.options.incrementListMarker ? node.start + index : node.start}.`
-    values[index] = listItem(compiler, node.children[index], node, index, bullet)
+    values[index] = listItem(compiler, (node.children[index] as ListItemNode), node, index, bullet)
   }
 
   return values.join('\n')
@@ -100,12 +101,12 @@ function visitOrderedItems (compiler, node) {
  *   `ordered: false`.
  * @return {string} - Markdown list.
  */
-function visitUnorderedItems (compiler, node) {
-  const values = []
+function visitUnorderedItems (compiler: Compiler, node: ListNode): string {
+  const values: string[] = []
   let index = -1
 
   while (++index < node.children.length) {
-    values[index] = listItem(compiler, node.children[index], node, index, compiler.options.bullet)
+    values[index] = listItem(compiler, node.children[index] as ListItemNode, node, index, compiler.options.bullet)
   }
 
   return values.join('\n')
@@ -115,11 +116,10 @@ function visitUnorderedItems (compiler, node) {
  * Which checkbox to use.
  */
 
-const CHECKBOX_MAP = {
-  null: '',
-  undefined: '',
-  true: '[x] ',
-  false: '[ ] ',
+function toCheckbox(value?: boolean): string {
+  if (value === true) return '[x] '
+  if (value === false) return '[ ] '
+  return ''
 }
 
 /**
@@ -166,18 +166,18 @@ const CHECKBOX_MAP = {
  *   `listItemIndent` setting define the used indent.
  * @return {string} - Markdown list item.
  */
-function listItem (compiler, node, parent, position, bullet) {
-  const values = []
+function listItem (compiler: Compiler, node: ListItemNode, parent: ListNode, position: number, bullet: string): string {
+  const values: string[] = []
   let index = -1
 
   while (++index < node.children.length) {
     values[index] = compiler.visit(node.children[index], node)
   }
 
-  let value = CHECKBOX_MAP[node.checked] + values.join(node.loose ? BREAK : '\n')
+  let value = toCheckbox(node.checked) + values.join(node.loose ? BREAK : '\n')
 
-  let spacing
-  let indent
+  let spacing: string
+  let indent: number
   if (
     compiler.options.listItemIndent === LIST_ITEM_ONE ||
     (compiler.options.listItemIndent === LIST_ITEM_MIXED && value.indexOf('\n') === -1)

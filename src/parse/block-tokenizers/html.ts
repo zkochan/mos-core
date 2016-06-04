@@ -23,10 +23,7 @@ const tokenizeHTML: Tokenizer = function (parser, value, silent) {
   let index = 0
   const length = value.length
   let subvalue = ''
-  let offset
-  let lineCount
-  let character
-  let queue
+  let character: string
 
     /*
      * Eat initial spacing.
@@ -43,14 +40,14 @@ const tokenizeHTML: Tokenizer = function (parser, value, silent) {
     index++
   }
 
-  offset = index
+  const offset = index
   value = value.slice(offset)
 
     /*
      * Try to eat an HTML thing.
      */
 
-  queue = eatHTMLComment(value, parser.options) ||
+  let queue = eatHTMLComment(value, parser.options) ||
         eatHTMLCDATA(value) ||
         eatHTMLProcessingInstruction(value) ||
         eatHTMLDeclaration(value) ||
@@ -74,7 +71,6 @@ const tokenizeHTML: Tokenizer = function (parser, value, silent) {
 
     if (character === '\n') {
       queue += character
-      lineCount++
     } else if (queue.length < MIN_CLOSING_HTML_NEWLINE_COUNT) {
       subvalue += queue + character
       queue = ''

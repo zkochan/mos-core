@@ -12,7 +12,7 @@ import {CodeNode} from '../../../node'
  * @param {Function} eat - Eater.
  * @return {Object} - `code` node.
  */
-export default function renderCodeBlock (value, language?): CodeNode {
+export default function renderCodeBlock (value: string, language?: string): CodeNode {
   return {
     type: 'code',
     lang: language || null,

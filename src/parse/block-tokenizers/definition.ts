@@ -12,7 +12,7 @@ import Tokenizer from '../tokenizer'
  * @return {boolean} - Whether `character` can be inside
  *   an enclosed URI.
  */
-const isEnclosedURLCharacter: any = function (character) {
+const isEnclosedURLCharacter: any = function (character: string): boolean {
   return character !== '>' &&
     character !== '[' &&
     character !== ']'
@@ -28,7 +28,7 @@ isEnclosedURLCharacter.delimiter = '>'
  * @return {boolean} - Whether `character` can be inside
  *   an unclosed URI.
  */
-function isUnclosedURLCharacter (character) {
+function isUnclosedURLCharacter (character: string): boolean {
   return character !== '[' &&
     character !== ']' &&
     !isWhiteSpace(character)
@@ -53,13 +53,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   let index = 0
   const length = value.length
   let subvalue = ''
-  let beforeURL
-  let beforeTitle
-  let queue
-  let character
-  let test
-  let identifier
-  let url
+  let character: string
   let title: string
 
   while (index < length) {
@@ -81,7 +75,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
 
   index++
   subvalue += character
-  queue = ''
+  let queue = ''
 
   while (index < length) {
     character = value.charAt(index)
@@ -106,7 +100,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     return
   }
 
-  identifier = queue
+  const identifier = queue
   subvalue += `${queue}]:`
   index = subvalue.length
   queue = ''
@@ -128,7 +122,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
 
   character = value.charAt(index)
   queue = ''
-  beforeURL = subvalue
+  const beforeURL = subvalue
 
   if (character === '<') {
     index++
@@ -178,7 +172,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     return
   }
 
-  url = queue
+  let url = queue
   queue = ''
 
   while (index < length) {
@@ -197,7 +191,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   }
 
   character = value.charAt(index)
-  test = null
+  let test: string = null
 
   if (character === '"') {
     test = '"'
@@ -207,6 +201,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     test = ')'
   }
 
+  let beforeTitle: string
   if (!test) {
     queue = ''
     index = subvalue.length
@@ -270,12 +265,12 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
       return true
     }
 
-    beforeURL = parser.eat(beforeURL).test().end
-    url = parser.decode.raw(parser.descape(url), beforeURL)
+    const beforeURLNode = parser.eat(beforeURL).test().end
+    url = parser.decode.raw(parser.descape(url), beforeURLNode)
 
     if (title) {
-      beforeTitle = parser.eat(beforeTitle).test().end
-      title = parser.decode.raw(parser.descape(title), beforeTitle)
+      const beforeTitleNode = parser.eat(beforeTitle).test().end
+      title = parser.decode.raw(parser.descape(title), beforeTitleNode)
     }
 
     return parser.eat(subvalue)(<DefinitionNode>{

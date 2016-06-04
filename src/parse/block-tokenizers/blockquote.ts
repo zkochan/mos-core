@@ -16,9 +16,9 @@ import Tokenizer from '../tokenizer'
 const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
   const now = parser.eat.now()
   const indent = parser.indent(now.line)
-  const values = []
-  const contents = []
-  const indents = []
+  const values: string[] = []
+  const contents: string[] = []
+  const indents: number[] = []
   let index = 0
 
   while (index < value.length) {
@@ -53,7 +53,7 @@ const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
       return add(parser.renderBlockquote(contents.join('\n'), now))
     })
 
-  function tokenizeEach (index) {
+  function tokenizeEach (index: number): Promise<any> {
     if (index >= value.length) return Promise.resolve()
 
     let nextIndex = value.indexOf('\n', index)
@@ -97,31 +97,31 @@ const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
     if (!prefixed) {
       if (parser.options.commonmark) {
         return tryBlockTokenize(parser, 'code', rest, true)
-          .then(found => {
+          .then((found: boolean) => {
             if (found) return index
 
             return tryBlockTokenize(parser, 'fences', rest, true)
-              .then(found => {
+              .then((found: boolean) => {
                 if (found) return index
 
                 return tryBlockTokenize(parser, 'heading', rest, true)
-                  .then(found => {
+                  .then((found: boolean) => {
                     if (found) return index
 
                     return tryBlockTokenize(parser, 'lineHeading', rest, true)
-                      .then(found => {
+                      .then((found: boolean) => {
                         if (found) return index
 
                         return tryBlockTokenize(parser, 'thematicBreak', rest, true)
-                          .then(found => {
+                          .then((found: boolean) => {
                             if (found) return index
 
                             return tryBlockTokenize(parser, 'html', rest, true)
-                              .then(found => {
+                              .then((found: boolean) => {
                                 if (found) return index
 
                                 return tryBlockTokenize(parser, 'list', rest, true)
-                                  .then(found => {
+                                  .then((found: boolean) => {
                                     if (found) return index
 
                                     return nextNotCommonmark()
@@ -155,11 +155,11 @@ const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
     function nextNotCommonmark () {
       if (!parser.options.commonmark) {
         return tryBlockTokenize(parser, 'definition', rest, true)
-          .then(found => {
+          .then((found: boolean) => {
             if (found) return index
 
             return tryBlockTokenize(parser, 'footnoteDefinition', rest, true)
-              .then(found => {
+              .then((found: boolean): any => {
                 if (found) return index
 
                 return next()

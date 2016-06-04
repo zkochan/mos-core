@@ -8,12 +8,12 @@ import isAlphabetic from '../is-alphabetic'
  * @return {string?} - When applicable, the declaration at
  *   the start of `value`.
  */
-export default function eatHTMLDeclaration (value) {
+export default function eatHTMLDeclaration (value: string): string {
   let index = 0
   const length = value.length
   let queue = ''
   let subqueue = ''
-  let character
+  let character: string
 
   if (
       value.charAt(index) === '<' &&

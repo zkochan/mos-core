@@ -4,6 +4,7 @@ import {stringify as defaultOptions} from '../defaults'
 import encodeFactory from './encode-factory'
 import escapeFactory from './escape-factory'
 import LIST_BULLETS from './list-bullets'
+import {Node, ReferenceNode} from '../node'
 
 import {Compiler} from './compiler'
 
@@ -32,7 +33,7 @@ import {Compiler} from './compiler'
  * @param {boolean} state - It's default state.
  * @return {function(): function()} - Enter.
  */
-function stateToggler (key, state) {
+function stateToggler (key: string, state: boolean): Function {
   /**
    * Construct a toggler for the bound `key`.
    *
@@ -132,7 +133,7 @@ const LIST_ITEM_INDENTS = {
  * @param {Object?} [options] - Passed to
  *   `Compiler#setOptions()`.
  */
-function compilerFactory (visitors) {
+function compilerFactory (visitors: any) {
   const compiler: Compiler = {
     options: Object.assign({}, defaultOptions),
 
@@ -149,10 +150,8 @@ function compilerFactory (visitors) {
      * @param {Object?} [options] - Stringify settings.
      * @return {Compiler} - `self`.
      */
-    setOptions (options) {
+    setOptions (options: any): Compiler {
       const current = compiler.options
-      let ruleRepetition
-      let key
 
       if (options === null || options === undefined) {
         options = {}
@@ -162,13 +161,13 @@ function compilerFactory (visitors) {
         raise(options, 'options')
       }
 
-      for (key in defaultOptions) {
+      for (const key in defaultOptions) {
         validate[typeof current[key]](
           options, key, current[key], maps[key]
         )
       }
 
-      ruleRepetition = options.ruleRepetition
+      const ruleRepetition = options.ruleRepetition
 
       if (ruleRepetition && ruleRepetition < MINIMUM_RULE_LENGTH) {
         raise(ruleRepetition, 'options.ruleRepetition')
@@ -199,7 +198,7 @@ function compilerFactory (visitors) {
      * @param {LinkReference} node - LinkReference node.
      * @return {Function} - Exit state.
      */
-    enterLinkReference (compiler, node) {
+    enterLinkReference (compiler: Compiler, node: ReferenceNode): Function {
       const encode = compiler.encode
       const escape = compiler.escape
       const exitLink = compiler.enterLink()
@@ -208,7 +207,7 @@ function compilerFactory (visitors) {
           node.referenceType === 'shortcut' ||
           node.referenceType === 'collapsed'
       ) {
-        compiler.encode = compiler.escape = value => value
+        compiler.encode = compiler.escape = (value: any) => value
         return () => {
           compiler.encode = encode
           compiler.escape = escape
@@ -274,12 +273,12 @@ function compilerFactory (visitors) {
      */
     all (parent) {
       const children = parent.children
-      const values = []
+      const values: string[] = []
       let index = 0
       const length = children.length
       let mergedLength = 1
       let node = children[0]
-      let next
+      let next: Node
 
       if (length === 0) {
         return values

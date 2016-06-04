@@ -11,7 +11,7 @@ const CDATA_END_LENGTH = CDATA_END.length
  * @return {string?} - When applicable, the CDATA at the
  *   start of `value`.
  */
-export default function eatHTMLCDATA (value) {
+export default function eatHTMLCDATA (value: string): string {
   let index = CDATA_START_LENGTH
   let queue = value.slice(0, index)
 

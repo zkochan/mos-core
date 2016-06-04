@@ -3,31 +3,6 @@ import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
 
 /**
- * Find a possible strong emphasis.
- *
- * @example
- *   locateStrong('foo **bar') // 4
- *
- * @param {string} value - Value to search.
- * @param {number} fromIndex - Index to start searching at.
- * @return {number} - Location of possible strong emphasis.
- */
-function locateStrong (parser, value, fromIndex) {
-  const asterisk = value.indexOf('**', fromIndex)
-  const underscore = value.indexOf('__', fromIndex)
-
-  if (underscore === -1) {
-    return asterisk
-  }
-
-  if (asterisk === -1) {
-    return underscore
-  }
-
-  return underscore < asterisk ? underscore : asterisk
-}
-
-/**
  * Tokenise strong emphasis.
  *
  * @example
@@ -61,7 +36,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
     return
   }
 
-  let prev
+  let prev: string
   while (index < value.length) {
     prev = character
     character = value.charAt(index)
@@ -103,6 +78,29 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
   }
 }
 
-tokenizeStrong.locator = locateStrong
+/**
+ * Find a possible strong emphasis.
+ *
+ * @example
+ *   locateStrong('foo **bar') // 4
+ *
+ * @param {string} value - Value to search.
+ * @param {number} fromIndex - Index to start searching at.
+ * @return {number} - Location of possible strong emphasis.
+ */
+tokenizeStrong.locator = function (parser, value, fromIndex) {
+  const asterisk = value.indexOf('**', fromIndex)
+  const underscore = value.indexOf('__', fromIndex)
+
+  if (underscore === -1) {
+    return asterisk
+  }
+
+  if (asterisk === -1) {
+    return underscore
+  }
+
+  return underscore < asterisk ? underscore : asterisk
+}
 
 export default tokenizeStrong

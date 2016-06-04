@@ -3,6 +3,7 @@ import {Parser} from './parser'
 import * as MERGEABLE_NODES from '../mergeable-nodes';
 import {mergeable} from '../utilities'
 import runAsync from 'babel-run-async'
+import Tokenizer from './tokenizer';
 
 export interface Resetter {
   <T extends Node>(node: T, parent?: Node): Promise<Node>
@@ -34,6 +35,8 @@ const ERR_INFINITE_LOOP = 'Infinite loop'
 const ERR_INCORRECTLY_EATEN = 'Incorrectly eaten value: please report this ' +
     'warning on http://git.io/vg5Ft'
 
+export type Tokenize = (value: string, location?: Location) => Promise<Node[]>
+
 /**
  * Construct a tokenizer.  This creates both
  * `tokenizeInline` and `tokenizeBlock`.
@@ -46,7 +49,7 @@ const ERR_INCORRECTLY_EATEN = 'Incorrectly eaten value: please report this ' +
  *   (`%Tokenizers`).
  * @return {Function} - Tokenizer.
  */
-export default function tokenizeFactory (parser: Parser, type: string): (value: string, location: Location) => Promise<Node[]> {
+export default function tokenizeFactory (parser: Parser, type: string): Tokenize {
   return tokenize
 
   /**
@@ -63,7 +66,7 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
    */
   function tokenize (value: string, location: Location): Promise<Node[]> {
     const offset = parser.offset
-    const tokens = []
+    const tokens: Node[] = []
     const tokenizers = parser[`${type}Tokenizers`]
     let line = location ? location.line : 1
     let column = location ? location.column : 1
@@ -118,7 +121,7 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
      *   the last character is eaten.
      */
     function getOffset () {
-      const indentation = []
+      const indentation: number[] = []
       let pos = line + 1
 
       /**
@@ -212,9 +215,9 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
        *   `node`.
        * @return {Node} - `node`.
        */
-      function update (prev?: Position, indent?): Position {
+      function update (prev?: Position, indent?: number[]): Position {
         const start = prev ? prev.start : before
-        let combined = []
+        let combined: number[] = []
         let n = prev && prev.end.line
         const l = before.line
 
@@ -350,7 +353,7 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
          * @return {Node} - Added node.
          */
         const apply: Applier = Object.assign(
-          function (node, parent?): Promise<Node> {
+          function (node: Node | Promise<Node>, parent?: Node): Promise<Node> {
             return (node instanceof Promise)
               ? node.then(updatePos)
               : Promise.resolve(updatePos(node))
@@ -410,7 +413,7 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
      * exception is thrown.
      */
 
-    function process () {
+    function process (): Promise<Node[]> {
       if (value) {
         return matchMethods(tokenizers.slice())
           .then(() => process())
@@ -420,7 +423,7 @@ export default function tokenizeFactory (parser: Parser, type: string): (value: 
 
       return Promise.resolve(tokens)
 
-      function matchMethods (tokenizers) {
+      function matchMethods (tokenizers: { func: Tokenizer, name: string }[]): Promise<void> {
         const tokenizer = tokenizers.shift()
         if (!tokenizer) {
           parser.file.fail(ERR_INFINITE_LOOP, eat.now())

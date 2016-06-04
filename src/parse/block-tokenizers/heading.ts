@@ -19,9 +19,7 @@ const tokenizeHeading: Tokenizer = function (parser, value, silent) {
   const now = parser.eat.now()
   let subvalue = ''
   let content = ''
-  let character
-  let queue
-  let depth
+  let character: string
 
   /*
    * Eat initial spacing.
@@ -42,7 +40,7 @@ const tokenizeHeading: Tokenizer = function (parser, value, silent) {
      * Eat hashes.
      */
 
-  depth = 0
+  let depth = 0
   length = index + MAX_ATX_COUNT + 1
 
   while (++index <= length) {
@@ -70,7 +68,7 @@ const tokenizeHeading: Tokenizer = function (parser, value, silent) {
    * Eat intermediate white-space.
    */
 
-  queue = ''
+  let queue = ''
 
   while (++index < length) {
     character = value.charAt(index)

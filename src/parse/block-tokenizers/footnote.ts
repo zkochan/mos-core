@@ -18,26 +18,17 @@ const EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
  * @return {Node?|boolean} - `footnoteDefinition` node.
  */
 const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
-  let index
-  let length
-  let subvalue
-  let now
-  let indent
-  let content
-  let queue
-  let subqueue
-  let character
-  let identifier
+  let character: string
 
   if (!parser.options.footnotes) {
     return
   }
 
-  index = 0
-  length = value.length
-  subvalue = ''
-  now = parser.eat.now()
-  indent = parser.indent(now.line)
+  let index = 0
+  let length = value.length
+  let subvalue = ''
+  const now = parser.eat.now()
+  const indent = parser.indent(now.line)
 
   while (index < length) {
     character = value.charAt(index)
@@ -59,7 +50,7 @@ const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
 
   subvalue += '[^'
   index = subvalue.length
-  queue = ''
+  let queue = ''
 
   while (index < length) {
     character = value.charAt(index)
@@ -88,7 +79,7 @@ const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
     return true
   }
 
-  identifier = normalize(queue)
+  const identifier = normalize(queue)
   subvalue += `${queue}]:`
   index = subvalue.length
 
@@ -108,6 +99,8 @@ const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
 
   now.column += subvalue.length
   now.offset += subvalue.length
+  let content: string
+  let subqueue: string
   queue = content = subqueue = ''
 
   while (index < length) {
