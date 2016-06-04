@@ -1,3 +1,4 @@
+import {Node} from './node'
 import collapseWhiteSpace from 'collapse-white-space'
 
 /*
@@ -15,7 +16,7 @@ const EXPRESSION_BOM = /^\ufeff/
  * @param {*} value - Invalid value.
  * @param {string} name - Setting name.
  */
-export function raise (value: any, name: string): void {
+export function raise<T> (value: T, name: string): void {
   throw new Error(
     `Invalid value \`${value}\` for setting \`${name}\``
   )
@@ -37,7 +38,7 @@ export function raise (value: any, name: string): void {
  * @param {string} name - Setting name.
  * @param {boolean} def - Default value.
  */
-function validateBoolean (context: any, name: string, def: boolean): void {
+function validateBoolean (context: Object, name: string, def: boolean): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -67,7 +68,7 @@ function validateBoolean (context: any, name: string, def: boolean): void {
  * @param {string} name - Setting name.
  * @param {number} def - Default value.
  */
-function validateNumber (context: any, name: string, def: number): void {
+function validateNumber (context: Object, name: string, def: number): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -99,7 +100,7 @@ function validateNumber (context: any, name: string, def: number): void {
  * @param {string} def - Default value.
  * @param {Object} map - Enum.
  */
-function validateString (context: any, name: string, def: string, map: any): void {
+function validateString (context: Object, name: string, def: string, map: Object): void {
   let value = context[name]
 
   if (value === null || value === undefined) {
@@ -170,7 +171,7 @@ export function normalizeIdentifier (value: string): string {
  * @param {boolean} state - It's default state.
  * @return {function(): function()} - Enter.
  */
-export function stateToggler (target: any, key: string, state: boolean): Function {
+export function stateToggler (target: Object, key: string, state: boolean): Function {
     /**
      * Construct a toggler for the bound `key`.
      *
@@ -200,7 +201,7 @@ export function stateToggler (target: any, key: string, state: boolean): Functio
  * @param {Object} node - Node to check.
  * @return {boolean} - Whether `node` is mergable.
  */
-export function mergeable (node: any): boolean {
+export function mergeable (node: Node): boolean {
   if (node.type !== 'text' || !node.position) {
     return true
   }

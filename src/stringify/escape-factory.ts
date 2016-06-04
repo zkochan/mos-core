@@ -1,5 +1,6 @@
 export default escapeFactory
 import {Node, ReferenceNode} from '../node'
+import {CompilerOptions} from './compiler'
 import entityPrefixLength from './entity-prefix-length'
 import LIST_BULLETS from './list-bullets'
 
@@ -109,7 +110,7 @@ function isInAlignmentRow (value: string, index: number): boolean {
  *   takes a value and a node and (optionally) its parent and returns
  *   its escaped value.
  */
-function escapeFactory (options: any): Function {
+function escapeFactory (options: CompilerOptions): Function {
     /**
      * Escape punctuation characters in a node's value.
      *

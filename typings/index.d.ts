@@ -54,6 +54,8 @@ declare module 'unist-util-remove-position' {
 
 declare class VFile {
   constructor(m: any)
+  warn: Function
+  fail: Function
 }
 
 declare module 'vfile' {

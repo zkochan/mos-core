@@ -4,15 +4,19 @@ import * as MERGEABLE_NODES from '../mergeable-nodes';
 import {mergeable} from '../utilities'
 import runAsync from 'babel-run-async'
 import Tokenizer from './tokenizer';
+import VFile from 'vfile'
 
 export interface Resetter {
   <T extends Node>(node: T, parent?: Node): Promise<Node>
   test: () => Position
 }
 
-export interface Applier {
-  <T extends Node>(node: Promise<T>, parent?: Node): Promise<Node>
-  <T extends Node>(node: T, parent?: Node): Promise<Node>
+export type ApplyFunc = {
+  <T extends Node>(node: Promise<T>, parent?: Node): Promise<Node>,
+  <T extends Node>(node: T, parent?: Node): Promise<Node>,
+}
+
+export type Applier = ApplyFunc & {
   reset: Resetter
   test: () => Position
 }
@@ -20,7 +24,7 @@ export interface Applier {
 export interface Eater {
   (value: string): Applier
   now: () => Location
-  file: any,
+  file: VFile,
 }
 
 export type ParserAndEater = Parser & {
@@ -311,11 +315,25 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
      *   also adds `position` to node.
      */
     const eat: Eater = Object.assign(function (subvalue: string) {
-        let indent: any = getOffset()
+        let getIndent = getOffset()
+        let indent: number[]
         const pos = position()
         const current = now()
 
         validateEat(subvalue)
+
+        const applyFn: ApplyFunc = function (node: Node | Promise<Node>, parent?: Node): Promise<Node> {
+          return (node instanceof Promise)
+            ? node.then(updatePos)
+            : Promise.resolve(updatePos(node))
+
+          function updatePos (node: Node): Node {
+            node.position = pos(node.position)
+            node = add(node, parent)
+            node.position = pos(node.position, indent)
+            return node
+          }
+        }
 
         /**
          * Functions just like apply, but resets the
@@ -332,7 +350,7 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
          */
         const reset: Resetter = Object.assign(
           function (node: Node, parent?: Node): Promise<Node> {
-            return apply(node, parent)
+            return applyFn(node, parent)
               .then(node => {
                 line = current.line
                 column = current.column
@@ -353,18 +371,7 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
          * @return {Node} - Added node.
          */
         const apply: Applier = Object.assign(
-          function (node: Node | Promise<Node>, parent?: Node): Promise<Node> {
-            return (node instanceof Promise)
-              ? node.then(updatePos)
-              : Promise.resolve(updatePos(node))
-
-            function updatePos (node: Node): Node {
-              node.position = pos(node.position)
-              node = add(node, parent)
-              node.position = pos(node.position, indent)
-              return node
-            }
-          }, {
+          applyFn, {
             reset,
             test,
           })
@@ -389,7 +396,7 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
 
         updatePosition(subvalue)
 
-        indent = indent()
+        indent = getIndent()
 
         return apply
       },

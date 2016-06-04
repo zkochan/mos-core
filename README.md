@@ -68,6 +68,7 @@ const mosCore = require('mos-core')
 - [mos](https://github.com/mosjs/mos): A pluggable module that injects content into your markdown files via hidden JavaScript snippets
 - [mos-plugin-readme](https://github.com/mosjs/mos-plugin-readme): A mos plugin for generating README
 - [semantic-release](https://github.com/semantic-release/semantic-release): automated semver compliant package publishing
+- [tslint](https://github.com/palantir/tslint): An extensible static analysis linter for the TypeScript language
 - [typescript](https://github.com/Microsoft/TypeScript): TypeScript is a language for application scale JavaScript development
 - [validate-commit-msg](https://github.com/kentcdodds/validate-commit-msg): Script to validate a commit message follows the conventional changelog standard
 

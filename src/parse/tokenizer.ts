@@ -1,7 +1,8 @@
-import {ParserAndEater} from './tokenize-factory';
+import {ParserAndEater} from './tokenize-factory'
+import {Node} from '../node'
 
 interface Tokenizer {
-  (parser: ParserAndEater, value: string, silent: boolean): any,
+  (parser: ParserAndEater, value: string, silent: boolean): Promise<void | boolean | Node> | void | boolean | Node,
   notInLink?: boolean,
   onlyAtTop?: boolean,
   notInBlockquote?: boolean,

@@ -1,3 +1,5 @@
+import {CompilerOptions} from './stringify/compiler';
+
 export const parse = {
   position: true,
   gfm: true,
@@ -8,7 +10,7 @@ export const parse = {
   breaks: false,
 }
 
-export const stringify = {
+export const stringify: CompilerOptions = {
   gfm: true,
   commonmark: false,
   pedantic: false,

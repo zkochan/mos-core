@@ -33,7 +33,7 @@ function encodeNoop (value: string): string {
  * @return {function(string): string} - Function which
  *   takes a value and returns its encoded version.
  */
-export default function encodeFactory (type: string): any {
+export default function encodeFactory (type: string): Function {
   const options: {
     useNamedReferences?: boolean,
     escapeOnly?: boolean,

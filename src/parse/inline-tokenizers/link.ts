@@ -43,7 +43,7 @@ const tokenizeLink: Tokenizer = function (parser, value, silent) {
   let beforeURL: string
   let beforeTitle: string
   let whiteSpaceQueue: string
-  let commonmark: string
+  let commonmark: boolean
   let openCount: number
   let hasMarker: boolean
   let markers: any

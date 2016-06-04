@@ -5,8 +5,9 @@ import encodeFactory from './encode-factory'
 import escapeFactory from './escape-factory'
 import LIST_BULLETS from './list-bullets'
 import {Node, ReferenceNode} from '../node'
+import {Visitor} from './visitor'
 
-import {Compiler} from './compiler'
+import {Compiler, CompilerOptions} from './compiler'
 
 /**
  * Construct a state `toggler`: a function which inverses
@@ -121,6 +122,20 @@ const LIST_ITEM_INDENTS = {
   [LIST_ITEM_MIXED]: true,
 }
 
+/*
+ * Map of applicable enum's.
+ */
+
+const maps = {
+  entities: ENTITY_OPTIONS,
+  bullet: LIST_BULLETS,
+  rule: THEMATIC_BREAK_BULLETS,
+  listItemIndent: LIST_ITEM_INDENTS,
+  emphasis: EMPHASIS_MARKERS,
+  strong: EMPHASIS_MARKERS,
+  fence: FENCE_MARKERS,
+}
+
 /**
  * Construct a new compiler.
  *
@@ -133,7 +148,7 @@ const LIST_ITEM_INDENTS = {
  * @param {Object?} [options] - Passed to
  *   `Compiler#setOptions()`.
  */
-function compilerFactory (visitors: any) {
+function compilerFactory (visitors: {[type: string]: Visitor}) {
   const compiler: Compiler = {
     options: Object.assign({}, defaultOptions),
 
@@ -150,7 +165,7 @@ function compilerFactory (visitors: any) {
      * @param {Object?} [options] - Stringify settings.
      * @return {Compiler} - `self`.
      */
-    setOptions (options: any): Compiler {
+    setOptions (options: CompilerOptions): Compiler {
       const current = compiler.options
 
       if (options === null || options === undefined) {
@@ -207,7 +222,7 @@ function compilerFactory (visitors: any) {
           node.referenceType === 'shortcut' ||
           node.referenceType === 'collapsed'
       ) {
-        compiler.encode = compiler.escape = (value: any) => value
+        compiler.encode = compiler.escape = (value: string) => value
         return () => {
           compiler.encode = encode
           compiler.escape = escape
@@ -334,20 +349,6 @@ function compilerFactory (visitors: any) {
   }
 
   return compiler.compile
-}
-
-/*
- * Map of applicable enum's.
- */
-
-var maps = {
-  entities: ENTITY_OPTIONS,
-  bullet: LIST_BULLETS,
-  rule: THEMATIC_BREAK_BULLETS,
-  listItemIndent: LIST_ITEM_INDENTS,
-  emphasis: EMPHASIS_MARKERS,
-  strong: EMPHASIS_MARKERS,
-  fence: FENCE_MARKERS,
 }
 
 export default compilerFactory
