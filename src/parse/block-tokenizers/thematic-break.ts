@@ -1,5 +1,4 @@
 import {RULE_MARKERS} from '../shared-constants'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 const THEMATIC_BREAK_MARKER_COUNT = 3
 
@@ -62,7 +61,7 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
       }
 
       return parser.eat(subvalue)({
-        type: nodeTypes.THEMATIC_BREAK,
+        type: 'thematicBreak',
       })
     } else {
       return

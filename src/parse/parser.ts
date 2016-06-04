@@ -1,4 +1,4 @@
-import {Node, Position, Location} from '../node'
+import {Node, NodeType, Position, Location} from '../node'
 
 export interface Decoder {
   (value: string, position, handler);
@@ -39,7 +39,7 @@ export type Parser = SimpleParser & {
   renderBlockquote (value: string, now: Location): Promise<Node>,
   renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location): any
   renderFootnote (value: string, position: Location): any,
-  renderInline (type: string, value: string, position: Location): any,
+  renderInline (type: NodeType, value: string, position: Location): any,
   renderListItem (value: string, position: Location): any,
   renderFootnoteDefinition (identifier: string, value: string, position: Location): any,
   renderHeading (value: string, depth: number, position: Location): any,

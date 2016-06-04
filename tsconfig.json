@@ -62,7 +62,6 @@
     "src/parse/is-alphabetic.ts",
     "src/parse/is-numeric.ts",
     "src/parse/is-white-space.ts",
-    "src/parse/node-types.ts",
     "src/parse/parser.ts",
     "src/parse/shared-constants.ts",
     "src/parse/tokenize-factory.ts",

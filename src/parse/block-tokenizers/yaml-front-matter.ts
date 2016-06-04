@@ -1,6 +1,5 @@
 import repeat from 'repeat-string'
 const YAML_FENCE = repeat('-', 3)
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -55,7 +54,7 @@ const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
       subvalue += queue + YAML_FENCE
 
       return parser.eat(subvalue)({
-        type: nodeTypes.YAML,
+        type: 'yaml',
         value: content,
       })
     }

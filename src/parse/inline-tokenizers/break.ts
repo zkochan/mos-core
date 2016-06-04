@@ -1,4 +1,3 @@
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 const MIN_BREAK_LENGTH = 2
@@ -59,7 +58,7 @@ const tokenizeBreak: Tokenizer = function (parser, value, silent) {
 
       queue += character
       return parser.eat(queue)({
-        type: nodeTypes.BREAK,
+        type: 'break',
       })
     }
 

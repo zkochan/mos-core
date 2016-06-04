@@ -1,5 +1,4 @@
 import isWhiteSpace from '../is-white-space'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -116,7 +115,7 @@ const tokenizeInlineCode: Tokenizer = function (parser, value, silent) {
   }
 
   return parser.eat(subvalue)({
-    type: nodeTypes.INLINE_CODE,
+    type: 'inlineCode',
     value: contentQueue,
   })
 }

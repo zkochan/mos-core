@@ -4,7 +4,6 @@ import eatHTMLProcessingInstruction from '../eat/html-processing-instructions'
 import eatHTMLDeclaration from '../eat/html-declaration'
 import eatHTMLClosingTag from '../eat/html-closing-tag'
 import eatHTMLOpeningTag from '../eat/html-opening-tag'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 const MIN_CLOSING_HTML_NEWLINE_COUNT = 2
@@ -87,7 +86,7 @@ const tokenizeHTML: Tokenizer = function (parser, value, silent) {
   }
 
   return parser.eat(subvalue)({
-    type: nodeTypes.HTML,
+    type: 'html',
     value: subvalue,
   })
 }

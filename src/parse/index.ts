@@ -27,8 +27,6 @@ const EXPRESSION_INITIAL_INDENT = /^( {1,4}|\t)?/gm
 const EXPRESSION_LOOSE_LIST_ITEM = /\n\n(?!\s*$)/
 const EXPRESSION_TASK_ITEM = /^\[([ \t]|x|X)\][ \t]/
 
-import nodeTypes from './node-types'
-
 /*
  * A map of characters, and their column length,
  * which can be used as indentation.
@@ -598,7 +596,7 @@ function parserFactory (processor) {
             offset: 0,
           }
           const node: Node = {
-            type: nodeTypes.ROOT,
+            type: 'root',
             children,
             position: {
               start,
@@ -631,7 +629,7 @@ function parserFactory (processor) {
         .then(children => {
           exitBlockquote()
           return {
-            type: nodeTypes.BLOCKQUOTE,
+            type: 'blockquote',
             children,
           }
         })
@@ -655,7 +653,7 @@ function parserFactory (processor) {
     renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location) {
       const exitLink = parser.state.enterLink()
       const node: any = {
-        type: isLink ? nodeTypes.LINK : nodeTypes.IMAGE,
+        type: isLink ? 'link' : 'image',
         title: title || null,
       }
 
@@ -687,7 +685,7 @@ function parserFactory (processor) {
      * @return {Object} - `footnote` node.
      */
     renderFootnote (value, position) {
-      return normalParser.renderInline(nodeTypes.FOOTNOTE, value, position)
+      return normalParser.renderInline('footnote', value, position)
     },
 
     /**
@@ -738,7 +736,7 @@ function parserFactory (processor) {
 
       return normalParser.tokenizeBlock(value, position)
         .then(children => ({
-          type: nodeTypes.LIST_ITEM,
+          type: 'listItem',
           loose: EXPRESSION_LOOSE_LIST_ITEM.test(value) ||
             value.charAt(value.length - 1) === '\n',
           checked,
@@ -764,7 +762,7 @@ function parserFactory (processor) {
         .then(children => {
           exitBlockquote()
           return {
-            type: nodeTypes.FOOTNOTE_DEFINITION,
+            type: 'footnoteDefinition',
             identifier,
             children,
           }
@@ -785,7 +783,7 @@ function parserFactory (processor) {
     renderHeading (value, depth, position) {
       return normalParser.tokenizeInline(value, position)
         .then(children => ({
-          type: nodeTypes.HEADING,
+          type: 'heading',
           depth,
           children,
         }))

@@ -1,8 +1,8 @@
 import locateLink from './locators/link'
-import nodeTypes from '../node-types'
 import isWhiteSpace from '../is-white-space'
 import {normalizeIdentifier as normalize} from '../../utilities'
 import Tokenizer from '../tokenizer'
+import {NodeType} from '../../node'
 
 /*
  * Available reference types.
@@ -33,7 +33,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
   const length = value.length
   let subvalue = ''
   let intro = ''
-  let type = nodeTypes.LINK
+  let type: NodeType = 'link'
   let referenceType = REFERENCE_TYPE_SHORTCUT
 
   /*
@@ -41,7 +41,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
    */
 
   if (character === '!') {
-    type = nodeTypes.IMAGE
+    type = 'image'
     intro = character
     character = value.charAt(++index)
   }
@@ -60,12 +60,12 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
 
   if (
     parser.options.footnotes &&
-    type === nodeTypes.LINK &&
+    type === 'link' &&
     value.charAt(index) === '^'
   ) {
     intro += '^'
     index++
-    type = nodeTypes.FOOTNOTE
+    type = 'footnote'
   }
 
   /*
@@ -183,15 +183,15 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
    * Inline footnotes cannot have an identifier.
    */
 
-  if (type === nodeTypes.FOOTNOTE && referenceType !== REFERENCE_TYPE_SHORTCUT) {
-    type = nodeTypes.LINK
+  if (type === 'footnote' && referenceType !== REFERENCE_TYPE_SHORTCUT) {
+    type = 'link'
     intro = '[^'
     text = `^${text}`
   }
 
   subvalue = intro + subvalue
 
-  if (type === nodeTypes.LINK && parser.state.inLink) {
+  if (type === 'link' && parser.state.inLink) {
     return null
   }
 
@@ -200,7 +200,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
     return true
   }
 
-  if (type === nodeTypes.FOOTNOTE && text.indexOf(' ') !== -1) {
+  if (type === 'footnote' && text.indexOf(' ') !== -1) {
     return parser.eat(subvalue)(parser.renderFootnote(text, parser.eat.now()))
   }
 
@@ -214,11 +214,11 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
     identifier: normalize(identifier),
   }
 
-  if (type === nodeTypes.LINK || type === nodeTypes.IMAGE) {
+  if (type === 'link' || type === 'image') {
     node.referenceType = referenceType
   }
 
-  if (type === nodeTypes.LINK) {
+  if (type === 'link') {
     const exitLink = parser.state.enterLink()
     return parser.tokenizeInline(text, now)
       .then(children => {
@@ -228,7 +228,7 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
       })
   }
 
-  if (type === nodeTypes.IMAGE) {
+  if (type === 'image') {
     node.alt = parser.decode.raw(parser.descape(text), now) || null
     return parser.eat(subvalue)(node)
   }

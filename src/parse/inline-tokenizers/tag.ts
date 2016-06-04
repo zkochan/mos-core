@@ -4,7 +4,6 @@ import eatHTMLProcessingInstruction from '../eat/html-processing-instructions'
 import eatHTMLDeclaration from '../eat/html-declaration'
 import eatHTMLClosingTag from '../eat/html-closing-tag'
 import eatHTMLOpeningTag from '../eat/html-opening-tag'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 const EXPRESSION_HTML_LINK_OPEN = /^<a /i
@@ -60,7 +59,7 @@ const tokenizeTag: Tokenizer = function (parser, value, silent) {
   }
 
   return parser.eat(subvalue)({
-    type: nodeTypes.HTML,
+    type: 'html',
     value: subvalue,
   })
 }

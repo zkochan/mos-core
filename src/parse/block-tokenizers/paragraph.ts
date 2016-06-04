@@ -1,6 +1,5 @@
 import trim from 'trim'
 import trimTrailingLines from 'trim-trailing-lines'
-import nodeTypes from '../node-types'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 
@@ -47,7 +46,7 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
       now = parser.eat.now()
       subvalue = trimTrailingLines(subvalue)
 
-      return parser.eat(subvalue)(parser.renderInline(nodeTypes.PARAGRAPH, subvalue, now))
+      return parser.eat(subvalue)(parser.renderInline('paragraph', subvalue, now))
         .then(() => null)
     })
 

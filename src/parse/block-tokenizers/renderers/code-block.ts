@@ -1,4 +1,3 @@
-import nodeTypes from '../../node-types'
 import trimTrailingLines from 'trim-trailing-lines'
 import {Node} from '../../../node'
 
@@ -15,7 +14,7 @@ import {Node} from '../../../node'
  */
 export default function renderCodeBlock (value, language?): Node {
   return {
-    type: nodeTypes.CODE,
+    type: 'code',
     lang: language || null,
     value: trimTrailingLines(value || ''),
   }

@@ -2,7 +2,6 @@ import isWhiteSpace from '../is-white-space'
 import isAlphabetic from '../is-alphabetic'
 import isNumeric from '../is-numeric'
 import trim from 'trim'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -104,7 +103,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
           now.offset++
 
           return parser.eat(subvalue + queue + marker)(
-            parser.renderInline(nodeTypes.EMPHASIS, queue, now)
+            parser.renderInline('emphasis', queue, now)
           )
         }
       }

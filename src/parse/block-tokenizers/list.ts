@@ -1,5 +1,4 @@
 import isNumeric from '../is-numeric'
-import nodeTypes from '../node-types'
 import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
@@ -140,7 +139,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
   return tokenizeEach(index)
     .then(() => parser.eat(allLines.join('\n'))
       .reset({
-        type: nodeTypes.LIST,
+        type: 'list',
         ordered,
         start,
         loose: null,

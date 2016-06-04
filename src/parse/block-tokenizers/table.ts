@@ -1,6 +1,6 @@
 import isWhiteSpace from '../is-white-space'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
+import {Node} from '../../node'
 
 const MIN_TABLE_COLUMNS = 2
 const MIN_TABLE_ROWS = 2
@@ -136,7 +136,7 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
   }
 
   return parser.eat(subvalue).reset({
-    type: nodeTypes.TABLE,
+    type: 'table',
     align,
     children: [],
   })
@@ -146,8 +146,8 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
     function eachRow (lines, position) {
       if (!lines.length) return
       const line = lines.shift()
-      const row = {
-        type: position ? nodeTypes.TABLE_ROW : nodeTypes.TABLE_HEADER,
+      const row: Node = {
+        type: 'tableRow',
         children: [],
       }
 
@@ -224,7 +224,7 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
                   const now = parser.eat.now()
 
                   return parser.eat(subvalue)(
-                    parser.renderInline(nodeTypes.TABLE_CELL, cell, now), row
+                    parser.renderInline('tableCell', cell, now), row
                   )
                   .then(() => {
                     parser.eat(queue + character)

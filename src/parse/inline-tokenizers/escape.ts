@@ -1,4 +1,3 @@
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -25,8 +24,8 @@ const tokenizeEscape: Tokenizer = function (parser, value, silent) {
 
       return parser.eat(`\\${character}`)(
         character === '\n'
-          ? { type: nodeTypes.BREAK }
-          : { type: nodeTypes.TEXT, value: character }
+          ? { type: 'break' }
+          : { type: 'text', value: character }
       )
     }
   }

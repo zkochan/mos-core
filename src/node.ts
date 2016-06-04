@@ -10,8 +10,33 @@ export type Position = {
   indent?: number[],
 }
 
+export type NodeType = 'thematicBreak'
+  | 'html'
+  | 'yaml'
+  | 'table'
+  | 'tableCell'
+  | 'tableRow'
+  | 'paragraph'
+  | 'text'
+  | 'code'
+  | 'list'
+  | 'listItem'
+  | 'definition'
+  | 'footnoteDefinition'
+  | 'heading'
+  | 'blockquote'
+  | 'link'
+  | 'image'
+  | 'footnote'
+  | 'strong'
+  | 'emphasis'
+  | 'delete'
+  | 'inlineCode'
+  | 'break'
+  | 'root'
+
 export type Node = {
-  type: string,
+  type: NodeType,
   position?: Position,
   value?: string,
   children?: Node[],

@@ -1,5 +1,4 @@
 const ERR_MISSING_LOCATOR = 'Missing locator: '
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -43,7 +42,7 @@ const tokenizeText: Tokenizer = function (parser, value, silent) {
 
   parser.decode(subvalue, now, (content, position, source) => {
     parser.eat(source || content)({
-      type: nodeTypes.TEXT,
+      type: 'text',
       value: content,
     })
   })

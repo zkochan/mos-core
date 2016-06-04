@@ -1,5 +1,4 @@
 import isWhiteSpace from '../is-white-space'
-import nodeTypes from '../node-types'
 import {normalizeIdentifier as normalize} from '../../utilities'
 import Tokenizer from '../tokenizer'
 
@@ -279,7 +278,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     }
 
     return parser.eat(subvalue)({
-      type: nodeTypes.DEFINITION,
+      type: 'definition',
       identifier: normalize(identifier),
       title: title || null,
       url,

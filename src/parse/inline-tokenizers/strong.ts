@@ -1,6 +1,5 @@
 import trim from 'trim'
 import isWhiteSpace from '../is-white-space'
-import nodeTypes from '../node-types'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -89,7 +88,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
         now.offset += 2
 
         return parser.eat(subvalue + queue + subvalue)(
-          parser.renderInline(nodeTypes.STRONG, queue, now)
+          parser.renderInline('strong', queue, now)
         )
       }
     }
