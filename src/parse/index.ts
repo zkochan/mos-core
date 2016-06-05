@@ -17,6 +17,27 @@ import {Decoder, SimpleParser, Parser, Processor, ParserOptions} from './parser'
  */
 function decodeFactory (context: SimpleParser): Decoder {
   /**
+   * Get found offsets starting at `start`.
+   *
+   * @param {number} start - Starting line.
+   * @return {Array.<number>} - Offsets starting at `start`.
+   */
+  function getIndent (start: number): number[] {
+    const offset = context.offset
+    const result: number[] = []
+
+    while (++start) {
+      if (!(start in offset)) {
+        break
+      }
+
+      result.push((offset[start] || 0) + 1)
+    }
+
+    return result
+  }
+
+  /**
    * Normalize `position` to add an `indent`.
    *
    * @param {Position} position - Reference
@@ -25,7 +46,7 @@ function decodeFactory (context: SimpleParser): Decoder {
   function normalize (position: Location) {
     return {
       start: position,
-      indent: context.getIndent(position.line),
+      indent: getIndent(position.line),
     }
   }
 
@@ -182,7 +203,7 @@ function parserFactory (processor: Processor) {
      * @return {Parser} - `parser`.
      */
     setOptions (options?: ParserOptions) {
-      const escape = parser.data.escape
+      const escape = processor.data.escape
       const current = parser.options
       let key: string
 
@@ -241,27 +262,6 @@ function parserFactory (processor: Processor) {
       return indenter
     },
 
-    /**
-     * Get found offsets starting at `start`.
-     *
-     * @param {number} start - Starting line.
-     * @return {Array.<number>} - Offsets starting at `start`.
-     */
-    getIndent (start: number): number[] {
-      const offset = parser.offset
-      const result: number[] = []
-
-      while (++start) {
-        if (!(start in offset)) {
-          break
-        }
-
-        result.push((offset[start] || 0) + 1)
-      }
-
-      return result
-    },
-
     /*
      * Expose tokenizers for block-level nodes.
      */
@@ -273,8 +273,6 @@ function parserFactory (processor: Processor) {
      */
 
     inlineTokenizers: processor.inlineTokenizers,
-
-    data: processor.data,
 
     /*
      * Expose `defaults`.
@@ -340,13 +338,6 @@ function parserFactory (processor: Processor) {
         })
     },
   })
-  /*
-   * Expose `tokenizeFactory` so dependencies could create
-   * their own tokenizers.
-   */
-
-  normalParser.tokenizeFactory = (type: string) => tokenizeFactory(normalParser, type)
-
   /**
    * Block tokenizer.
    *
@@ -357,7 +348,7 @@ function parserFactory (processor: Processor) {
    * @param {string} value - Content.
    * @return {Array.<Object>} - Nodes.
    */
-  normalParser.tokenizeBlock = normalParser.tokenizeFactory('block')
+  normalParser.tokenizeBlock = tokenizeFactory(normalParser, 'block')
 
   /**
    * Inline tokenizer.
@@ -370,7 +361,7 @@ function parserFactory (processor: Processor) {
    * @return {Array.<Object>} - Nodes.
    */
 
-  normalParser.tokenizeInline = normalParser.tokenizeFactory('inline')
+  normalParser.tokenizeInline = tokenizeFactory(normalParser, 'inline')
 
   return normalParser.parse
 }

@@ -6,7 +6,7 @@ import VFile from 'vfile'
 export type Processor = {
   blockTokenizers:  Tokenizers,
   inlineTokenizers: Tokenizers,
-  data: Object,
+  data: ParserData,
 }
 
 export interface Decoder {
@@ -41,7 +41,6 @@ export type ParserOptions = {
 export type SimpleParser = {
   setOptions(options: ParserOptions): SimpleParser,
   indent(start: number): (offset: number) => void,
-  getIndent(start: number): number[],
   file?: VFile,
   toOffset?: Function,
   offset?: {[line: number]: number},
@@ -55,7 +54,6 @@ export type SimpleParser = {
     exitStart: Function,
     enterBlockquote: Function,
   },
-  data: ParserData,
   options: ParserOptions,
   escape?: string[],
   blockTokenizers:  Tokenizers,
@@ -67,7 +65,6 @@ export type Parser = SimpleParser & {
   decode: Decoder,
   descape: Function,
   tokenizeBlock?: Tokenize,
-  tokenizeFactory?: (type: string) => Tokenize,
   tokenizeInline?: Tokenize,
   parse(contents: VFile | string, opts?: ParserOptions): Promise<Node>,
 }
