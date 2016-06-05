@@ -1,6 +1,7 @@
 import decode from 'parse-entities'
 import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
+import renderLink from './renderers/link'
 
 /*
  * Protocols.
@@ -107,7 +108,7 @@ const tokenizeURL: Tokenizer = function (parser, value, silent) {
   const now = parser.eat.now()
 
   return parser.eat(subvalue)(
-    parser.renderLink(true, decode(subvalue), content, null, now)
+    renderLink(parser, decode(subvalue), content, null, now)
   )
 }
 

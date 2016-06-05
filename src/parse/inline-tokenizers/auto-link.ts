@@ -1,5 +1,6 @@
 import decode from 'parse-entities'
 import Tokenizer from '../tokenizer'
+import renderLink from './renderers/link'
 const MAILTO_PROTOCOL = 'mailto:'
 
 /**
@@ -122,7 +123,7 @@ const tokenizeAutoLink: Tokenizer = function (parser, value, silent) {
   })
 
   const eater = parserWithNoEscape.eat(subvalue)
-  return parserWithNoEscape.renderLink(true, decode(link), content, null, now)
+  return renderLink(parserWithNoEscape, decode(link), content, null, now)
     .then(node => {
       const addedNode = eater(node)
       return addedNode

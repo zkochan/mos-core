@@ -1,6 +1,7 @@
 import trimTrailingLines from 'trim-trailing-lines'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
+import {Node} from '../../node'
 
 import {TAB_SIZE} from '../shared-constants'
 
@@ -42,8 +43,11 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
       const now = parser.eat.now()
       subvalue = trimTrailingLines(subvalue)
 
-      return parser.eat(subvalue)(parser.renderInline('paragraph', subvalue, now))
-        .then(() => null)
+      return parser.eat(subvalue)(
+        parser.tokenizeInline(subvalue, now)
+          .then(children => (<Node>{ type: 'paragraph', children }))
+      )
+      .then(() => null)
     })
 
   function tokenizeEach (index: number): Promise<number> {

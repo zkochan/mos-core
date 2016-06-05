@@ -2,7 +2,7 @@ import locateLink from './locators/link'
 import isWhiteSpace from '../is-white-space'
 import {normalizeIdentifier as normalize} from '../../utilities'
 import Tokenizer from '../tokenizer'
-import {NodeType} from '../../node'
+import {NodeType, Node} from '../../node'
 
 /*
  * Available reference types.
@@ -201,7 +201,10 @@ const tokenizeReference: Tokenizer = function (parser, value, silent) {
   }
 
   if (type === 'footnote' && text.indexOf(' ') !== -1) {
-    return parser.eat(subvalue)(parser.renderFootnote(text, parser.eat.now()))
+    return parser.eat(subvalue)(
+      parser.tokenizeInline(text, parser.eat.now())
+        .then(children => (<Node>{ type: 'footnote', children }))
+    )
   }
 
   const now = parser.eat.now()

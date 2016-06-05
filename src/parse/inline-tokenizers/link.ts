@@ -1,6 +1,7 @@
 import isWhiteSpace from '../is-white-space'
 import locateLink from './locators/link'
 import Tokenizer from '../tokenizer'
+import renderLink from './renderers/link'
 const has = {}.hasOwnProperty
 
 /*
@@ -370,8 +371,19 @@ const tokenizeLink: Tokenizer = function (parser, value, silent) {
     title = parser.decode.raw(parser.descape(title), beforeTitleNode)
   }
 
+  if (isImage) {
+    return parser.eat(subvalue)({
+      type: 'image',
+      title: title || null,
+      url,
+      alt: content
+        ? parser.decode.raw(parser.descape(content), now)
+        : null
+    })
+  }
+
   return parser.eat(subvalue)(
-    parser.renderLink(!isImage, url, content, title, now)
+    renderLink(parser, url, content, title, now)
   )
 }
 

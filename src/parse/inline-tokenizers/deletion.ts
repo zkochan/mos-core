@@ -1,5 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
+import {Node} from '../../node'
 
 /**
  * Tokenise a deletion.
@@ -47,7 +48,8 @@ const tokenizeDeletion: Tokenizer = function (parser, value, silent) {
       }
 
       return parser.eat(`~~${subvalue}~~`)(
-        parser.renderInline('delete', subvalue, now)
+        parser.tokenizeInline(subvalue, now)
+          .then(children => (<Node>{ type: 'delete', children }))
       )
     }
 

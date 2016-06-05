@@ -55,6 +55,7 @@
     "src/parse/inline-tokenizers/link.ts",
     "src/parse/inline-tokenizers/locators/link.ts",
     "src/parse/inline-tokenizers/reference.ts",
+    "src/parse/inline-tokenizers/renderers/link.ts",
     "src/parse/inline-tokenizers/strong.ts",
     "src/parse/inline-tokenizers/tag.ts",
     "src/parse/inline-tokenizers/text.ts",

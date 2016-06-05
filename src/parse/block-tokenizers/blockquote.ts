@@ -1,3 +1,4 @@
+import {Node} from '../../node'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 
@@ -49,7 +50,16 @@ const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
         indent(indents[index])
       }
 
-      return add(parser.renderBlockquote(contents.join('\n'), now))
+      const exitBlockquote = parser.state.enterBlockquote()
+
+      return add(parser.tokenizeBlock(contents.join('\n'), now)
+        .then(children => {
+          exitBlockquote()
+          return <Node>{
+            type: 'blockquote',
+            children,
+          }
+        }))
     })
 
   function tokenizeEach (index: number): Promise<any> {

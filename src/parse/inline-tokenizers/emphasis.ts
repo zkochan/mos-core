@@ -2,6 +2,7 @@ import isWhiteSpace from '../is-white-space'
 import isAlphabetic from '../is-alphabetic'
 import isNumeric from '../is-numeric'
 import Tokenizer from '../tokenizer'
+import {Node} from '../../node'
 
 /**
  * Check whether `character` is a word character.
@@ -77,7 +78,8 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
           now.offset++
 
           return parser.eat(subvalue + queue + marker)(
-            parser.renderInline('emphasis', queue, now)
+            parser.tokenizeInline(queue, now)
+              .then(children => (<Node>{ type: 'emphasis', children }))
           )
         }
       }

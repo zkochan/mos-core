@@ -1,6 +1,7 @@
 import isWhiteSpace from '../is-white-space'
 import {normalizeIdentifier as normalize} from '../../utilities'
 import Tokenizer from '../tokenizer'
+import {Node} from '../../node'
 
 const EXPRESSION_INITIAL_TAB = /^( {4}|\t)?/gm
 
@@ -159,9 +160,18 @@ const tokenizeFootnoteDefinition: Tokenizer = function (parser, value, silent) {
     return ''
   })
 
+  const exitBlockquote = parser.state.enterBlockquote()
+
   return parser.eat(subvalue)(
-    parser.renderFootnoteDefinition(identifier, content, now)
-  )
+    parser.tokenizeBlock(content, now)
+    .then(children => {
+      exitBlockquote()
+      return <Node>{
+        type: 'footnoteDefinition',
+        identifier,
+        children,
+      }
+    }))
 }
 
 tokenizeFootnoteDefinition.onlyAtTop = true

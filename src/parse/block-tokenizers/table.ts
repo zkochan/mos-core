@@ -224,7 +224,8 @@ const tokenizeTable: Tokenizer = function (parser, value, silent) {
                   const now = parser.eat.now()
 
                   return parser.eat(subvalue)(
-                    parser.renderInline('tableCell', cell, now), row
+                    parser.tokenizeInline(cell, now)
+                      .then(children => (<Node>{ type: 'tableCell', children })), row
                   )
                   .then(() => {
                     parser.eat(queue + character)

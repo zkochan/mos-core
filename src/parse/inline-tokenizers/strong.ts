@@ -1,6 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
-
+import {Node} from '../../node'
 /**
  * Tokenise strong emphasis.
  *
@@ -62,7 +62,8 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
         now.offset += 2
 
         return parser.eat(subvalue + queue + subvalue)(
-          parser.renderInline('strong', queue, now)
+          parser.tokenizeInline(queue, now)
+            .then(children => (<Node>{ type: 'strong', children }))
         )
       }
     }
