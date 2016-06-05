@@ -1,6 +1,6 @@
 import {Tokenize} from './tokenize-factory'
 import Tokenizer from './tokenizer'
-import {Node, NodeType, Location, HeadingNode, ListItemNode} from '../node'
+import {Node, NodeType, Location} from '../node'
 import VFile from 'vfile'
 
 export type Processor = {
@@ -73,8 +73,6 @@ export type Parser = SimpleParser & {
   renderLink (isLink: boolean, url: string, text: string, title?: string, position?: Location): Promise<Node>,
   renderFootnote (value: string, position: Location): Promise<Node>,
   renderInline (type: NodeType, value: string, position: Location): Promise<Node>,
-  renderListItem (value: string, position: Location): Promise<ListItemNode>,
   renderFootnoteDefinition (identifier: string, value: string, position: Location): Promise<Node>,
-  renderHeading (value: string, depth: number, position: Location): Promise<HeadingNode>,
   parse(contents: VFile | string, opts?: ParserOptions): Promise<Node>,
 }

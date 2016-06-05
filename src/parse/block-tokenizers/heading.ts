@@ -1,3 +1,4 @@
+import {HeadingNode} from '../../node'
 import Tokenizer from '../tokenizer'
 const MAX_ATX_COUNT = 6
 
@@ -144,7 +145,15 @@ const tokenizeHeading: Tokenizer = function (parser, value, silent) {
   now.offset += subvalue.length
   subvalue += content + queue
 
-  return parser.eat(subvalue)(parser.renderHeading(content, depth, now))
+  return parser.eat(subvalue)(
+    parser
+      .tokenizeInline(content, now)
+      .then(children => (<HeadingNode>{
+        type: 'heading',
+        depth,
+        children,
+      }))
+    )
 }
 
 export default tokenizeHeading

@@ -1,3 +1,4 @@
+import {HeadingNode} from '../../node'
 import Tokenizer from '../tokenizer'
 
 const MAX_LINE_HEADING_INDENT = 3
@@ -116,7 +117,14 @@ const SETEXT_MARKERS = {
     queue += character
   }
 
-  return parser.eat(subvalue + queue)(parser.renderHeading(content, depth, now))
+  return parser.eat(subvalue + queue)(
+    parser.tokenizeInline(content, now)
+      .then(children => (<HeadingNode>{
+        type: 'heading',
+        depth,
+        children,
+      }))
+  )
 }
 
 export default tokenizeLineHeading

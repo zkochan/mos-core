@@ -1,7 +1,5 @@
-import {Node, Location, NodeType, ListItemNode, HeadingNode} from '../node'
+import {Node, Location, NodeType} from '../node'
 import decode from 'parse-entities'
-import repeat from 'repeat-string'
-import trim from 'trim'
 import VFile from 'vfile'
 import vfileLocation from 'vfile-location'
 import removePosition from 'unist-util-remove-position'
@@ -9,33 +7,6 @@ import {raise, clean, validate, stateToggler} from '../utilities'
 import {parse as defaultOptions} from '../defaults'
 import tokenizeFactory from './tokenize-factory'
 import {Decoder, SimpleParser, Parser, Processor, ParserOptions} from './parser'
-
-/*
- * Numeric constants.
- */
-
-const SPACE_SIZE = 1
-const TAB_SIZE = 4
-
-/*
- * Expressions.
- */
-
-const EXPRESSION_BULLET = /^([ \t]*)([*+-]|\d+[.)])( {1,4}(?! )| |\t|$|(?=\n))([^\n]*)/
-const EXPRESSION_PEDANTIC_BULLET = /^([ \t]*)([*+-]|\d+[.)])([ \t]+)/
-const EXPRESSION_INITIAL_INDENT = /^( {1,4}|\t)?/gm
-const EXPRESSION_LOOSE_LIST_ITEM = /\n\n(?!\s*$)/
-const EXPRESSION_TASK_ITEM = /^\[([ \t]|x|X)\][ \t]/
-
-/*
- * A map of characters, and their column length,
- * which can be used as indentation.
- */
-
-const INDENTATION_CHARACTERS = {
-  ' ': SPACE_SIZE,
-  '\t': TAB_SIZE,
-}
 
 /**
  * Factory to create an entity decoder.
@@ -171,130 +142,6 @@ function descapeFactory (parser: SimpleParser): Function {
   return descape
 }
 
-type Stops = { [stop: number]: number }
-type IndentInfo = { indent: number, stops: Stops }
-
-/**
- * Gets indentation information for a line.
- *
- * @example
- *   getIndent('  foo')
- *   // {indent: 2, stops: {1: 0, 2: 1}}
- *
- *   getIndent('\tfoo')
- *   // {indent: 4, stops: {4: 0}}
- *
- *   getIndent('  \tfoo')
- *   // {indent: 4, stops: {1: 0, 2: 1, 4: 2}}
- *
- *   getIndent('\t  foo')
- *   // {indent: 6, stops: {4: 0, 5: 1, 6: 2}}
- *
- * @param {string} value - Indented line.
- * @return {Object} - Indetation information.
- */
-function getIndent (value: string): IndentInfo {
-  let index = 0
-  let indent = 0
-  let character = value.charAt(index)
-  const stops: Stops = {}
-
-  while (character in INDENTATION_CHARACTERS) {
-    const size = INDENTATION_CHARACTERS[character]
-
-    indent += size
-
-    if (size > 1) {
-      indent = Math.floor(indent / size) * size
-    }
-
-    stops[indent] = index
-
-    character = value.charAt(++index)
-  }
-
-  return { indent, stops }
-}
-
-/**
- * Remove the minimum indent from every line in `value`.
- * Supports both tab, spaced, and mixed indentation (as
- * well as possible).
- *
- * @example
- *   removeIndentation('  foo') // 'foo'
- *   removeIndentation('    foo', 2) // '  foo'
- *   removeIndentation('\tfoo', 2) // '  foo'
- *   removeIndentation('  foo\n bar') // ' foo\n bar'
- *
- * @param {string} value - Value to trim.
- * @param {number?} [maximum] - Maximum indentation
- *   to remove.
- * @return {string} - Unindented `value`.
- */
-function removeIndentation (value: string, maximum?: number): string {
-  const values = value.split('\n')
-  let position = values.length + 1
-  let minIndent = Infinity
-  const matrix: { [position: number]: Stops } = []
-  let index: number
-  let stops: Stops
-  let padding: string
-
-  values.unshift(`${repeat(' ', maximum)}!`)
-
-  while (position--) {
-    const indentation = getIndent(values[position])
-
-    matrix[position] = indentation.stops
-
-    if (trim(values[position]).length === 0) {
-      continue
-    }
-
-    if (indentation.indent) {
-      if (indentation.indent > 0 && indentation.indent < minIndent) {
-        minIndent = indentation.indent
-      }
-    } else {
-      minIndent = Infinity
-
-      break
-    }
-  }
-
-  if (minIndent !== Infinity) {
-    position = values.length
-
-    while (position--) {
-      stops = matrix[position]
-      index = minIndent
-
-      while (index && !(index in stops)) {
-        index--
-      }
-
-      if (
-        trim(values[position]).length !== 0 &&
-        minIndent &&
-        index !== minIndent
-      ) {
-        padding = '\t'
-      } else {
-        padding = ''
-      }
-
-      values[position] = padding + values[position].slice(
-        index in stops ? stops[index] + 1 : 0
-      )
-    }
-  }
-
-  values.shift()
-
-  return values.join('\n')
-}
-
 /**
  * Construct a new parser.
  *
@@ -308,14 +155,6 @@ function removeIndentation (value: string, maximum?: number): string {
  *   `Parser#setOptions()`.
  */
 function parserFactory (processor: Processor) {
-  /*
-   * A map of two functions which can create list items.
-   */
-
-  const LIST_ITEM_MAP = {
-    true: renderPedanticListItem,
-    false: renderNormalListItem,
-  }
 
   /*
    * Enter and exit helpers.
@@ -595,47 +434,7 @@ function parserFactory (processor: Processor) {
      */
     renderInline (type: NodeType, value: string, position: Location): Promise<Node> {
       return normalParser.tokenizeInline(value, position)
-        .then(children => ({
-          type,
-          children,
-        }))
-    },
-
-    /**
-     * Create a list-item node.
-     *
-     * @example
-     *   renderListItem('- _foo_', now())
-     *
-     * @param {Object} value - List-item.
-     * @param {Object} position - List-item location.
-     * @return {Object} - `listItem` node.
-     */
-    renderListItem (value: string, position: Location): Promise<ListItemNode> {
-      let checked: boolean = null
-
-      value = LIST_ITEM_MAP[parser.options.pedantic ? 'true' : 'false'].apply(parser, arguments)
-
-      if (parser.options.gfm) {
-        const task = value.match(EXPRESSION_TASK_ITEM)
-
-        if (task) {
-          const indent = task[0].length
-          checked = task[1].toLowerCase() === 'x'
-
-          parser.indent(position.line)(indent)
-          value = value.slice(indent)
-        }
-      }
-
-      return normalParser.tokenizeBlock(value, position)
-        .then(children => (<ListItemNode>{
-          type: 'listItem',
-          loose: EXPRESSION_LOOSE_LIST_ITEM.test(value) ||
-            value.charAt(value.length - 1) === '\n',
-          checked,
-          children,
-        }))
+        .then(children => ({ type, children }))
     },
 
     /**
@@ -661,26 +460,6 @@ function parserFactory (processor: Processor) {
             children,
           }
         })
-    },
-
-    /**
-     * Create a heading node.
-     *
-     * @example
-     *   renderHeading('_foo_', 1, now())
-     *
-     * @param {string} value - Content.
-     * @param {number} depth - Heading depth.
-     * @param {Object} position - Heading content location.
-     * @return {Object} - `heading` node
-     */
-    renderHeading (value: string, depth: number, position: Location): Promise<HeadingNode> {
-      return normalParser.tokenizeInline(value, position)
-        .then(children => (<HeadingNode>{
-          type: 'heading',
-          depth,
-          children,
-        }))
     },
   })
   /*
@@ -716,120 +495,6 @@ function parserFactory (processor: Processor) {
   normalParser.tokenizeInline = normalParser.tokenizeFactory('inline')
 
   return normalParser.parse
-
-  /**
-   * Create a list-item using overly simple mechanics.
-   *
-   * @example
-   *   renderPedanticListItem('- _foo_', now())
-   *
-   * @param {string} value - List-item.
-   * @param {Object} position - List-item location.
-   * @return {string} - Cleaned `value`.
-   */
-  function renderPedanticListItem (value: string, position: Location): string {
-    let indent = parser.indent(position.line)
-
-    /**
-     * A simple replacer which removed all matches,
-     * and adds their length to `offset`.
-     *
-     * @param {string} $0 - Indentation to subtract.
-     * @return {string} - An empty string.
-     */
-    function replacer ($0: string): string {
-      indent($0.length)
-
-      return ''
-    }
-
-    /*
-     * Remove the list-item’s bullet.
-     */
-
-    value = value.replace(EXPRESSION_PEDANTIC_BULLET, replacer)
-
-    /*
-     * The initial line was also matched by the below, so
-     * we reset the `line`.
-     */
-
-    indent = parser.indent(position.line)
-
-    return value.replace(EXPRESSION_INITIAL_INDENT, replacer)
-  }
-
-  /**
-   * Create a list-item using sane mechanics.
-   *
-   * @example
-   *   renderNormalListItem('- _foo_', now())
-   *
-   * @param {string} value - List-item.
-   * @param {Object} position - List-item location.
-   * @return {string} - Cleaned `value`.
-   */
-  function renderNormalListItem (value: string, position: Location): string {
-    const indent = parser.indent(position.line)
-    let max: string
-    let bullet: string
-    let rest: string
-    let lines: string[]
-    let trimmedLines: string[]
-    let index: number
-    let length: number
-
-    /*
-     * Remove the list-item’s bullet.
-     */
-
-    value = value.replace(EXPRESSION_BULLET, ($0: string, $1: string, $2: string, $3: string, $4: string): string => {
-      bullet = $1 + $2 + $3
-      rest = $4
-
-      /*
-       * Make sure that the first nine numbered list items
-       * can indent with an extra space.  That is, when
-       * the bullet did not receive an extra final space.
-       */
-
-      if (Number($2) < 10 && bullet.length % 2 === 1) {
-        $2 = ` ${$2}`
-      }
-
-      max = $1 + repeat(' ', $2.length) + $3
-
-      return max + rest
-    })
-
-    lines = value.split('\n')
-
-    trimmedLines = removeIndentation(
-      value, getIndent(max).indent
-    ).split('\n')
-
-    /*
-     * We replaced the initial bullet with something
-     * else above, which was used to trick
-     * `removeIndentation` into removing some more
-     * characters when possible. However, that could
-     * result in the initial line to be stripped more
-     * than it should be.
-     */
-
-    trimmedLines[0] = rest
-
-    indent(bullet.length)
-
-    index = 0
-    length = lines.length
-
-    while (++index < length) {
-      indent(lines[index].length - trimmedLines[index].length)
-    }
-
-    return trimmedLines.join('\n')
-  }
 }
 
 export default parserFactory
