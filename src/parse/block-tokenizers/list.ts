@@ -4,37 +4,28 @@ import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 import {Parser} from '../parser'
 
-import {TAB_SIZE, RULE_MARKERS} from '../shared-constants'
+import {TAB_SIZE, ruleMarkers} from '../shared-constants'
 
 /*
- * A map of characters which can be used to mark
+ * A set of characters which can be used to mark
  * list-items.
  */
 
-const LIST_UNORDERED_MARKERS = {
-  '*': true,
-  '+': true,
-  '-': true,
-}
+const listUnorderedMarkers = new Set(['*', '+', '-'])
 
 /*
- * A map of characters which can be used to mark
+ * A set of characters which can be used to mark
  * list-items after a digit.
  */
 
-const LIST_ORDERED_MARKERS = {
-  '.': true,
-}
+const listOrderedMarkers = new Set(['.'])
 
 /*
- * A map of characters which can be used to mark
+ * A set of characters which can be used to mark
  * list-items after a digit.
  */
 
-const LIST_ORDERED_COMMONMARK_MARKERS = {
-  '.': true,
-  ')': true,
-}
+const listOrderedCommonmarkMarkers = new Set(['.', ')'])
 
 /**
  * Tokenise a list.
@@ -77,10 +68,10 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
   character = value.charAt(index)
 
   const markers = commonmark
-    ? LIST_ORDERED_COMMONMARK_MARKERS
-    : LIST_ORDERED_MARKERS
+    ? listOrderedCommonmarkMarkers
+    : listOrderedMarkers
 
-  if (LIST_UNORDERED_MARKERS[character] === true) {
+  if (listUnorderedMarkers.has(character)) {
     marker = character
     ordered = false
   } else {
@@ -100,7 +91,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
 
     character = value.charAt(index)
 
-    if (!queue || markers[character] !== true) {
+    if (!queue || !markers.has(character)) {
       return
     }
 
@@ -217,7 +208,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
     currentMarker = null
 
     if (!indented) {
-      if (LIST_UNORDERED_MARKERS[character] === true) {
+      if (listUnorderedMarkers.has(character)) {
         currentMarker = character
         index++
         size++
@@ -238,7 +229,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
         character = value.charAt(index)
         index++
 
-        if (queue && markers[character] === true) {
+        if (queue && markers.has(character)) {
           currentMarker = character
           size += queue.length + 1
         }
@@ -302,7 +293,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
     let line = value.slice(startIndex, nextIndex)
     let content = startIndex === index ? line : value.slice(index, nextIndex)
 
-    if (currentMarker && RULE_MARKERS[currentMarker] === true) {
+    if (currentMarker && ruleMarkers.has(currentMarker)) {
       return tryBlockTokenize(parser, 'thematicBreak', line, true)
         .then(found => {
           if (found) {

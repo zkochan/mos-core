@@ -1,4 +1,4 @@
-import {RULE_MARKERS} from '../shared-constants'
+import {ruleMarkers} from '../shared-constants'
 import Tokenizer from '../tokenizer'
 const THEMATIC_BREAK_MARKER_COUNT = 3
 
@@ -29,7 +29,7 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
     subvalue += character
   }
 
-  if (RULE_MARKERS[character] !== true) {
+  if (!ruleMarkers.has(character)) {
     return
   }
 
