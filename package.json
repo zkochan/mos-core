@@ -4,10 +4,12 @@
   "description": "Markdown parser",
   "files": [
     "lib-esnext/",
+    "lib/",
     "src/"
   ],
   "main": "lib/index.js",
   "jsnext:main": "lib-esnext/index.js",
+  "typings": "./lib/index.d.ts",
   "scripts": {
     "test:code": "tsc && mocha --compilers js:babel-register",
     "test": "npm run test:code && npm run lint && mos test",
