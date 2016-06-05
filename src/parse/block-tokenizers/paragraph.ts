@@ -1,4 +1,3 @@
-import trim from 'trim'
 import trimTrailingLines from 'trim-trailing-lines'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
@@ -29,7 +28,7 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
     .then(index => {
       subvalue = value.slice(0, index)
 
-      if (trim(subvalue) === '') {
+      if (subvalue.trim() === '') {
         parser.eat(subvalue)
 
         return

@@ -1,4 +1,3 @@
-import trim from 'trim'
 import isWhiteSpace from '../is-white-space'
 import Tokenizer from '../tokenizer'
 
@@ -49,7 +48,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
       character = value.charAt(index + 2)
 
       if (character !== marker) {
-        if (!trim(queue)) {
+        if (!queue.trim()) {
           return
         }
 

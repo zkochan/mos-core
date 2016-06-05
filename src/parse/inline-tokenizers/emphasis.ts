@@ -1,7 +1,6 @@
 import isWhiteSpace from '../is-white-space'
 import isAlphabetic from '../is-alphabetic'
 import isNumeric from '../is-numeric'
-import trim from 'trim'
 import Tokenizer from '../tokenizer'
 
 /**
@@ -59,7 +58,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
       character = value.charAt(++index)
 
       if (character !== marker) {
-        if (!trim(queue) || prev === marker) {
+        if (!queue.trim() || prev === marker) {
           return
         }
 

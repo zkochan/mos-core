@@ -1,6 +1,5 @@
 import {ListNode, Location, ListItemNode} from '../../node'
 import isNumeric from '../is-numeric'
-import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 import {Parser} from '../parser'
@@ -348,7 +347,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
 
     function notRuleMarker () {
       const prevEmpty = empty
-      empty = !trim(content).length
+      empty = !content.trim().length
 
       if (indented && item) {
         item.value = item.value.concat(emptyLines, line)
@@ -555,7 +554,7 @@ function removeIndentation (value: string, maximum?: number): string {
 
     matrix[position] = indentation.stops
 
-    if (trim(values[position]).length === 0) {
+    if (values[position].trim().length === 0) {
       continue
     }
 
@@ -582,7 +581,7 @@ function removeIndentation (value: string, maximum?: number): string {
       }
 
       if (
-        trim(values[position]).length !== 0 &&
+        values[position].trim().length !== 0 &&
         minIndent &&
         index !== minIndent
       ) {

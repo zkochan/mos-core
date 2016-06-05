@@ -36,7 +36,6 @@ const mosCore = require('mos-core')
 - [markdown-table](https://github.com/wooorm/markdown-table): Markdown/ASCII tables
 - [parse-entities](https://github.com/wooorm/parse-entities): Parse HTML character references: fast, spec-compliant, positional information
 - [stringify-entities](https://github.com/wooorm/stringify-entities): Encode HTML character references and character entities
-- [trim](https://npmjs.org/package/trim): Trim string whitespace
 - [trim-trailing-lines](https://github.com/wooorm/trim-trailing-lines): Remove final newline characters from a string
 - [unist-util-remove-position](https://github.com/wooorm/unist-util-remove-position): Remove `position`s from a unist tree
 - [vfile](https://github.com/wooorm/vfile): Virtual file format for text processing

@@ -1,4 +1,3 @@
-import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 
@@ -87,7 +86,7 @@ const tokenizeBlockquote: Tokenizer = function (parser, value, silent) {
 
     const content = value.slice(index, nextIndex)
 
-    if (!prefixed && !trim(content)) {
+    if (!prefixed && !content.trim()) {
       index = startIndex
       return Promise.resolve()
     }
