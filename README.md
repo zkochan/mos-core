@@ -35,7 +35,6 @@ const mosCore = require('mos-core')
 - [longest-streak](https://github.com/wooorm/longest-streak): Count the longest repeating streak of a character
 - [markdown-table](https://github.com/wooorm/markdown-table): Markdown/ASCII tables
 - [parse-entities](https://github.com/wooorm/parse-entities): Parse HTML character references: fast, spec-compliant, positional information
-- [repeat-string](https://github.com/jonschlinkert/repeat-string): Repeat the given string n times. Fastest implementation for repeating a string.
 - [stringify-entities](https://github.com/wooorm/stringify-entities): Encode HTML character references and character entities
 - [trim](https://npmjs.org/package/trim): Trim string whitespace
 - [trim-trailing-lines](https://github.com/wooorm/trim-trailing-lines): Remove final newline characters from a string

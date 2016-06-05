@@ -1,7 +1,6 @@
 import {SpecificVisitor} from '../visitor'
 import {CodeNode} from '../../node'
 import pad from './pad'
-import repeat from 'repeat-string'
 import longestStreak from 'longest-streak'
 const MINIMUM_CODE_FENCE_LENGTH = 3
 const ERROR_LIST_ITEM_INDENT = 'Cannot indent code properly. See ' +
@@ -55,7 +54,7 @@ const visitor: SpecificVisitor<CodeNode> = (compiler, node, parent) => {
     value = pad(value, 1)
   }
 
-  const fenceMarkdown = repeat(marker, Math.max(fence, MINIMUM_CODE_FENCE_LENGTH))
+  const fenceMarkdown = marker.repeat(Math.max(fence, MINIMUM_CODE_FENCE_LENGTH))
 
   return `${fenceMarkdown + language}\n${value}\n${fenceMarkdown}`
 }

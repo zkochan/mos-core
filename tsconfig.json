@@ -107,7 +107,6 @@
     "src/stringify/visitors/yaml.ts",
     "src/utilities.ts",
     "typings/index.d.ts",
-    "typings/repeat.d.ts",
     "typings/trim-trailing-lines.d.ts",
     "typings/trim.d.ts"
   ],

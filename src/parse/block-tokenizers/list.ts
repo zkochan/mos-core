@@ -4,7 +4,6 @@ import trim from 'trim'
 import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 import {Parser} from '../parser'
-import repeat from 'repeat-string'
 
 import {TAB_SIZE, RULE_MARKERS} from '../shared-constants'
 
@@ -549,7 +548,7 @@ function removeIndentation (value: string, maximum?: number): string {
   let stops: Stops
   let padding: string
 
-  values.unshift(`${repeat(' ', maximum)}!`)
+  values.unshift(`${' '.repeat(maximum)}!`)
 
   while (position--) {
     const indentation = getIndent(values[position])
@@ -641,7 +640,7 @@ function renderNormalListItem (parser: Parser, value: string, position: Location
       $2 = ` ${$2}`
     }
 
-    max = $1 + repeat(' ', $2.length) + $3
+    max = $1 + ' '.repeat($2.length) + $3
 
     return max + rest
   })

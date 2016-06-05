@@ -1,9 +1,8 @@
-import repeat from 'repeat-string'
 import renderCodeBlock from './renderers/code-block'
 import Tokenizer from '../tokenizer'
 
 const CODE_INDENT_LENGTH = 4
-const CODE_INDENT = repeat(' ', CODE_INDENT_LENGTH)
+const CODE_INDENT = ' '.repeat(CODE_INDENT_LENGTH)
 
 /**
  * Tokenise an indented code block.

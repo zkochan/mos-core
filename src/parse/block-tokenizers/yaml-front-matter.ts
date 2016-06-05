@@ -1,5 +1,4 @@
-import repeat from 'repeat-string'
-const YAML_FENCE = repeat('-', 3)
+const YAML_FENCE = '-'.repeat(3)
 import Tokenizer from '../tokenizer'
 
 /**

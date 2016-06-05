@@ -1,7 +1,6 @@
 import {Compiler} from '../compiler'
 import {SpecificVisitor} from '../visitor'
 import {ListNode, ListItemNode, Node} from '../../node'
-import repeat from 'repeat-string'
 import pad from './pad'
 
 const BREAK = '\n\n'
@@ -186,7 +185,7 @@ function listItem (compiler: Compiler, node: ListItemNode, parent: ListNode, pos
     spacing = ' '
   } else {
     indent = Math.ceil((bullet.length + 1) / INDENT) * INDENT
-    spacing = repeat(' ', indent - bullet.length)
+    spacing = ' '.repeat(indent - bullet.length)
   }
 
   value = bullet + spacing + pad(value, indent / INDENT).slice(indent)

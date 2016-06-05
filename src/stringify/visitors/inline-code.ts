@@ -1,9 +1,8 @@
 import {Visitor} from '../visitor'
-import repeat from 'repeat-string'
 import longestStreak from 'longest-streak'
 
 const visitor: Visitor = (compiler, node) => {
-  const ticks = repeat('`', longestStreak(node.value, '`') + 1)
+  const ticks = '`'.repeat(longestStreak(node.value, '`') + 1)
   let start = ticks
   let end = ticks
 
