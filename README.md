@@ -64,6 +64,7 @@ const mosCore = require('mos-core')
 - [mocha](https://github.com/mochajs/mocha): simple, flexible, fun test framework
 - [mos](https://github.com/mosjs/mos): A pluggable module that injects content into your markdown files via hidden JavaScript snippets
 - [mos-plugin-readme](https://github.com/mosjs/mos-plugin-readme): A mos plugin for generating README
+- [remap-istanbul](https://github.com/SitePen/remap-istanbul): A tool for remapping Istanbul coverage via Source Maps
 - [semantic-release](https://github.com/semantic-release/semantic-release): automated semver compliant package publishing
 - [tslint](https://github.com/palantir/tslint): An extensible static analysis linter for the TypeScript language
 - [typescript](https://github.com/Microsoft/TypeScript): TypeScript is a language for application scale JavaScript development
