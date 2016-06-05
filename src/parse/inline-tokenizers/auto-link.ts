@@ -114,17 +114,11 @@ const tokenizeAutoLink: Tokenizer = function (parser, value, silent) {
     }
   }
 
-  /*
-   * Temporarily remove support for escapes in autolinks.
-   */
-
-  const parserWithNoEscape = Object.assign({}, parser, {
-    inlineTokenizers: parser.inlineTokenizers.filter(tok => tok.name !== 'escape'),
-  })
-
-  const eater = parserWithNoEscape.eat(subvalue)
-  return renderLink(parserWithNoEscape, decode(link), content, null, now)
+  const exitAutoLink = parser.state.enterAutoLink()
+  const eater = parser.eat(subvalue)
+  return renderLink(parser, decode(link), content, null, now)
     .then(node => {
+      exitAutoLink()
       const addedNode = eater(node)
       return addedNode
     })

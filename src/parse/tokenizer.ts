@@ -6,6 +6,7 @@ interface Tokenizer {
   notInLink?: boolean,
   onlyAtTop?: boolean,
   notInBlockquote?: boolean,
+  notInAutoLink?: boolean,
   onlyAtStart?: boolean,
   locator?: (parser: ParserAndEater, value: string, fromIndex: number) => number,
 }

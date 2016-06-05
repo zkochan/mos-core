@@ -1,5 +1,4 @@
 import trimTrailingLines from 'trim-trailing-lines'
-import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 import {Node} from '../../node'
 
@@ -102,28 +101,28 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
 
     subvalue = value.slice(index + 1)
 
-    return tryBlockTokenize(parser, 'thematicBreak', subvalue, true)
+    return parser.tryTokenizeBlock(parser.eat, 'thematicBreak', subvalue, true)
       .then(found => {
         if (found) return index
 
-        return tryBlockTokenize(parser, 'heading', subvalue, true)
+        return parser.tryTokenizeBlock(parser.eat, 'heading', subvalue, true)
           .then(found => {
             if (found) return index
 
-            return tryBlockTokenize(parser, 'fences', subvalue, true)
+            return parser.tryTokenizeBlock(parser.eat, 'fences', subvalue, true)
               .then(found => {
                 if (found) return index
 
-                return tryBlockTokenize(parser, 'blockquote', subvalue, true)
+                return parser.tryTokenizeBlock(parser.eat, 'blockquote', subvalue, true)
                   .then(found => {
                     if (found) return index
 
-                    return tryBlockTokenize(parser, 'html', subvalue, true)
+                    return parser.tryTokenizeBlock(parser.eat, 'html', subvalue, true)
                       .then(found => {
                         if (found) return index
 
                         if (gfm) {
-                          return tryBlockTokenize(parser, 'list', subvalue, true)
+                          return parser.tryTokenizeBlock(parser.eat, 'list', subvalue, true)
                             .then(found => {
                               if (found) return index
 
@@ -140,15 +139,15 @@ const tokenizeParagraph: Tokenizer = function (parser, value, silent) {
 
     function lastCheck () {
       if (!commonmark) {
-        return tryBlockTokenize(parser, 'lineHeading', subvalue, true)
+        return parser.tryTokenizeBlock(parser.eat, 'lineHeading', subvalue, true)
           .then(found => {
             if (found) return index
 
-            return tryBlockTokenize(parser, 'definition', subvalue, true)
+            return parser.tryTokenizeBlock(parser.eat, 'definition', subvalue, true)
               .then(found => {
                 if (found) return index
 
-                return tryBlockTokenize(parser, 'footnoteDefinition', subvalue, true)
+                return parser.tryTokenizeBlock(parser.eat, 'footnoteDefinition', subvalue, true)
                   .then(found => {
                     if (found) return index
 

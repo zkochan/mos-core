@@ -67,7 +67,6 @@
     "src/parse/shared-constants.ts",
     "src/parse/tokenize-factory.ts",
     "src/parse/tokenizer.ts",
-    "src/parse/try-block-tokenize.ts",
     "src/stringify/compiler.ts",
     "src/stringify/encode-factory.ts",
     "src/stringify/entity-prefix-length.ts",

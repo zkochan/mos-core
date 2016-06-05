@@ -442,7 +442,8 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
           (!tokenizer.func.onlyAtStart || parser.state.atStart) &&
           (!tokenizer.func.onlyAtTop || parser.state.atTop) &&
           (!tokenizer.func.notInBlockquote || !parser.state.inBlockquote) &&
-          (!tokenizer.func.notInLink || !parser.state.inLink)
+          (!tokenizer.func.notInLink || !parser.state.inLink) &&
+          (!tokenizer.func.notInAutoLink || !parser.state.inAutoLink)
         ) {
           const valueLength = value.length
 

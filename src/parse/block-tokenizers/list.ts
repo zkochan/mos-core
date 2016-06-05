@@ -1,6 +1,5 @@
 import {ListNode, Location, ListItemNode} from '../../node'
 import isNumeric from '../is-numeric'
-import tryBlockTokenize from '../try-block-tokenize'
 import Tokenizer from '../tokenizer'
 import {Parser} from '../parser'
 
@@ -294,7 +293,7 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
     let content = startIndex === index ? line : value.slice(index, nextIndex)
 
     if (currentMarker && ruleMarkers.has(currentMarker)) {
-      return tryBlockTokenize(parser, 'thematicBreak', line, true)
+      return parser.tryTokenizeBlock(parser.eat, 'thematicBreak', line, true)
         .then(found => {
           if (found) {
             return
@@ -320,11 +319,11 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
 
     function notCommonmarkNext () {
       if (!commonmark) {
-        return tryBlockTokenize(parser, 'definition', line, true)
+        return parser.tryTokenizeBlock(parser.eat, 'definition', line, true)
           .then(found => {
             if (found) return
 
-            return tryBlockTokenize(parser, 'footnoteDefinition', line, true)
+            return parser.tryTokenizeBlock(parser.eat, 'footnoteDefinition', line, true)
               .then(found => {
                 if (found) return
 
@@ -373,11 +372,11 @@ const tokenizeList: Tokenizer = function (parser, value, silent) {
         }
 
         if (!pedantic) {
-          return tryBlockTokenize(parser, 'fences', line, true)
+          return parser.tryTokenizeBlock(parser.eat, 'fences', line, true)
             .then(found => {
               if (found) return
 
-              return tryBlockTokenize(parser, 'thematicBreak', line, true)
+              return parser.tryTokenizeBlock(parser.eat, 'thematicBreak', line, true)
                 .then(found => {
                   if (found) return
 

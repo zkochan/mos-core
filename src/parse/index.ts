@@ -6,7 +6,9 @@ import removePosition from 'unist-util-remove-position'
 import {raise, clean, validate, stateToggler} from '../utilities'
 import {parse as defaultOptions} from '../defaults'
 import tokenizeFactory from './tokenize-factory'
+import {Eater} from './tokenize-factory'
 import {Decoder, SimpleParser, Parser, Processor, ParserOptions} from './parser'
+import runAsync from 'babel-run-async'
 
 /**
  * Factory to create an entity decoder.
@@ -186,6 +188,7 @@ function parserFactory (processor: Processor) {
     atTop: true,
     atStart: true,
     inBlockquote: false,
+    inAutoLink: false,
   }
 
   const parser: SimpleParser = {
@@ -281,6 +284,7 @@ function parserFactory (processor: Processor) {
 
     state: Object.assign(state, {
       enterLink: stateToggler(state, 'inLink', false),
+      enterAutoLink: stateToggler(state, 'inAutoLink', false),
       exitTop: stateToggler(state, 'atTop', true),
       exitStart: stateToggler(state, 'atStart', true),
       enterBlockquote: stateToggler(state, 'inBlockquote', false),
@@ -349,6 +353,9 @@ function parserFactory (processor: Processor) {
    * @return {Array.<Object>} - Nodes.
    */
   normalParser.tokenizeBlock = tokenizeFactory(normalParser, 'block')
+
+  normalParser.tryTokenizeBlock = (eat: Eater, tokenizerName: string, subvalue: string, silent: boolean): Promise<boolean> =>
+   runAsync(normalParser.blockTokenizers.find(t => t.name === tokenizerName).func)(Object.assign({}, normalParser, {eat}), subvalue, silent)
 
   /**
    * Inline tokenizer.

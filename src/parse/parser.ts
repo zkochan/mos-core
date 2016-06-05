@@ -1,4 +1,4 @@
-import {Tokenize} from './tokenize-factory'
+import {Tokenize, Eater} from './tokenize-factory'
 import Tokenizer from './tokenizer'
 import {Node, Location} from '../node'
 import VFile from 'vfile'
@@ -49,6 +49,8 @@ export type SimpleParser = {
     atTop: boolean,
     atStart: boolean,
     inBlockquote: boolean,
+    inAutoLink: boolean,
+    enterAutoLink: Function,
     enterLink: Function,
     exitTop: Function,
     exitStart: Function,
@@ -66,5 +68,6 @@ export type Parser = SimpleParser & {
   descape: Function,
   tokenizeBlock?: Tokenize,
   tokenizeInline?: Tokenize,
+  tryTokenizeBlock?: (eat: Eater, tokenizerName: string, subvalue: string, silent: boolean) => Promise<boolean>,
   parse(contents: VFile | string, opts?: ParserOptions): Promise<Node>,
 }

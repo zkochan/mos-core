@@ -31,6 +31,11 @@ const tokenizeEscape: Tokenizer = function (parser, value, silent) {
   }
 }
 
+/*
+ * Temporarily remove support for escapes in autolinks.
+ */
+tokenizeEscape.notInAutoLink = true
+
 /**
  * Find a possible escape sequence.
  *
