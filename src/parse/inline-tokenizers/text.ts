@@ -26,8 +26,7 @@ const tokenizeText: Tokenizer = function (parser, value, silent) {
       const locator = tokenizer.func.locator
 
       if (!locator) {
-        parser.eat.file.fail(`${ERR_MISSING_LOCATOR}\`${tokenizer.name}\``)
-        return
+        throw new Error(`${ERR_MISSING_LOCATOR}\`${tokenizer.name}\``)
       }
 
       const position = locator(parser, value, 1)

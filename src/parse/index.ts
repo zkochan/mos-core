@@ -1,7 +1,6 @@
 import {Node, Location} from '../node'
 import decode from 'parse-entities'
-import VFile from 'vfile'
-import vfileLocation from 'vfile-location'
+import filePosition from 'file-position'
 import removePosition from 'unist-util-remove-position'
 import {raise, clean, validate, stateToggler} from '../utilities'
 import {parse as defaultOptions} from '../defaults'
@@ -65,7 +64,7 @@ function decodeFactory (context: SimpleParser): Decoder {
       return
     }
 
-    context.file.warn(reason, position)
+    // TODO: uncomment context.file.warn(reason, position)
   }
 
   /**
@@ -303,13 +302,12 @@ function parserFactory (processor: Processor) {
      * @this {Parser}
      * @return {Object} - `root` node.
      */
-    parse (contents: VFile | string, opts?: ParserOptions): Promise<Node> {
+    parse (contents: string, opts?: ParserOptions): Promise<Node> {
       parser.setOptions(opts)
 
-      const file = contents instanceof VFile ? contents : new VFile(contents)
-      const value = clean(String(file))
-      parser.file = file
-      parser.toOffset = vfileLocation(file).toOffset
+      const value = clean(contents)
+      const getIndex = filePosition(contents)
+      parser.toOffset = (pos: {line: number, column: number}): number => getIndex(pos.line - 1, pos.column - 1)
 
       /*
        * Add an `offset` matrix, used to keep track of

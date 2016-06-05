@@ -34,10 +34,10 @@ declare module 'stringify-entities' {
   export default stringifyEntities;
 }
 
-declare function vfileLocation(file: any): any;
+declare function filePosition(file: string): Function;
 
-declare module 'vfile-location' {
-  export default vfileLocation;
+declare module 'file-position' {
+  export default filePosition;
 }
 
 declare function markdownTable(arg1: any, arg2: any): string;
@@ -50,14 +50,4 @@ declare function unistUtilRemovePosition(node: any): void;
 
 declare module 'unist-util-remove-position' {
   export default unistUtilRemovePosition;
-}
-
-declare class VFile {
-  constructor(m: any)
-  warn: Function
-  fail: Function
-}
-
-declare module 'vfile' {
-  export default VFile;
 }

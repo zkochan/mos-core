@@ -1,7 +1,6 @@
 import {Tokenize, Eater} from './tokenize-factory'
 import Tokenizer from './tokenizer'
 import {Node, Location} from '../node'
-import VFile from 'vfile'
 
 export type Processor = {
   blockTokenizers:  Tokenizers,
@@ -41,7 +40,6 @@ export type ParserOptions = {
 export type SimpleParser = {
   setOptions(options: ParserOptions): SimpleParser,
   indent(start: number): (offset: number) => void,
-  file?: VFile,
   toOffset?: Function,
   offset?: {[line: number]: number},
   state: {
@@ -69,5 +67,5 @@ export type Parser = SimpleParser & {
   tokenizeBlock?: Tokenize,
   tokenizeInline?: Tokenize,
   tryTokenizeBlock?: (eat: Eater, tokenizerName: string, subvalue: string, silent: boolean) => Promise<boolean>,
-  parse(contents: VFile | string, opts?: ParserOptions): Promise<Node>,
+  parse(contents: string, opts?: ParserOptions): Promise<Node>,
 }

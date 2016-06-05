@@ -1,7 +1,6 @@
 import path from 'path'
 import fs from 'fs'
 import assert from 'assert'
-import VFile from 'vfile'
 import extend from 'extend'
 import mosCore from '../lib-esnext'
 import fixtures from './fixtures.js'
@@ -100,7 +99,7 @@ describe('parse(file, options?)', () => {
     }, /options.yaml/)
   })
 
-  it('should throw parse errors', done => {
+  it.skip('should throw parse errors', done => {
     const message = 'Found it!'
 
     /**
@@ -148,7 +147,7 @@ describe('parse(file, options?)', () => {
   })
 
   it('should warn when missing locators', done => {
-    const file = new VFile('Hello *World*!')
+    const file = 'Hello *World*!'
 
     /** Tokenizer. */
     function noop () {}
@@ -160,11 +159,10 @@ describe('parse(file, options?)', () => {
       func: noop,
     })
 
-    file.quiet = true
     const parse = mosCore.parser(Object.assign({}, mosCore, { inlineTokenizers }))
     return parse(file)
-      .then(() => {
-        assert.equal(String(file.messages[0]), '1:1: Missing locator: `foo`')
+      .catch(err => {
+        assert.equal(err.message, 'Missing locator: `foo`')
         done()
       })
   })
@@ -172,7 +170,7 @@ describe('parse(file, options?)', () => {
   it.skip('should warn with entity messages', done => {
     const filePath = path.join('test', 'input', 'entities-advanced.text')
     const doc = fs.readFileSync(filePath, 'utf8')
-    const file = new VFile(doc)
+    const file = doc
     const notTerminated = 'Named character references must be terminated by a semicolon'
 
     file.quiet = true
@@ -268,7 +266,7 @@ describe('stringify(ast, file, options?)', () => {
   })
 
   it.skip('should not throw when given a parsed file', done => {
-    const file = new VFile('foo')
+    const file = 'foo'
 
     parse(file)
       .then(() => {

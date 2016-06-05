@@ -34,7 +34,7 @@ const visitor: SpecificVisitor<CodeNode> = (compiler, node, parent) => {
       options.listItemIndent !== LIST_ITEM_TAB &&
       options.pedantic
     ) {
-      compiler.file.fail(ERROR_LIST_ITEM_INDENT, node.position)
+      throw new Error(ERROR_LIST_ITEM_INDENT + node.position)
     }
 
     return pad(value, 1)

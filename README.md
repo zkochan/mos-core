@@ -32,14 +32,13 @@ const mosCore = require('mos-core')
 - [ccount](https://github.com/wooorm/ccount): Count characters
 - [collapse-white-space](https://github.com/wooorm/collapse-white-space): Replace multiple white-space characters with a single space
 - [core-js](https://github.com/zloirock/core-js): Standard library
+- [file-position](https://github.com/hughsk/file-position): Given a row/column number, return the index of that character within the whole string
 - [longest-streak](https://github.com/wooorm/longest-streak): Count the longest repeating streak of a character
 - [markdown-table](https://github.com/wooorm/markdown-table): Markdown/ASCII tables
 - [parse-entities](https://github.com/wooorm/parse-entities): Parse HTML character references: fast, spec-compliant, positional information
 - [stringify-entities](https://github.com/wooorm/stringify-entities): Encode HTML character references and character entities
 - [trim-trailing-lines](https://github.com/wooorm/trim-trailing-lines): Remove final newline characters from a string
 - [unist-util-remove-position](https://github.com/wooorm/unist-util-remove-position): Remove `position`s from a unist tree
-- [vfile](https://github.com/wooorm/vfile): Virtual file format for text processing
-- [vfile-location](https://github.com/wooorm/vfile-location): Convert between positions (line and column-based) and offsets (range-based) locations in a virtual file
 
 <!--/@-->
 

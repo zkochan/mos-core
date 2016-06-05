@@ -1,4 +1,3 @@
-import VFile from 'vfile'
 import {Node} from '../node'
 
 export type CompilerOptions = {
@@ -33,5 +32,4 @@ export type Compiler = {
   compile(tree: Node, opts: CompilerOptions): string,
   encode?: Function,
   escape?: Function,
-  file?: VFile,
 }

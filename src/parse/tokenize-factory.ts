@@ -4,7 +4,6 @@ import * as MERGEABLE_NODES from '../mergeable-nodes';
 import {mergeable} from '../utilities'
 import runAsync from 'babel-run-async'
 import Tokenizer from './tokenizer';
-import VFile from 'vfile'
 
 export interface Resetter {
   <T extends Node>(node: T, parent?: Node): Promise<Node>
@@ -24,7 +23,6 @@ export type Applier = ApplyFunc & {
 export interface Eater {
   (value: string): Applier
   now: () => Location
-  file: VFile,
 }
 
 export type ParserAndEater = Parser & {
@@ -184,7 +182,7 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
     function validateEat (subvalue: string) {
       /* istanbul ignore if */
       if (value.substring(0, subvalue.length) !== subvalue) {
-        parser.file.fail(ERR_INCORRECTLY_EATEN, now())
+        throw new Error(ERR_INCORRECTLY_EATEN + now())
       }
     }
 
@@ -402,7 +400,6 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
       },
       {
         now,
-        file: parser.file,
       }
     )
 
@@ -433,8 +430,7 @@ export default function tokenizeFactory (parser: Parser, type: string): Tokenize
       function matchMethods (tokenizers: { func: Tokenizer, name: string }[]): Promise<void> {
         const tokenizer = tokenizers.shift()
         if (!tokenizer) {
-          parser.file.fail(ERR_INFINITE_LOOP, eat.now())
-          return Promise.resolve()
+          throw new Error(ERR_INFINITE_LOOP + eat.now())
         }
 
         if (
