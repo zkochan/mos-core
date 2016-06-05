@@ -3,13 +3,11 @@
   "version": "0.0.0-placeholder",
   "description": "Markdown parser",
   "files": [
-    "lib-esnext/",
-    "lib/",
-    "src/"
+    "dist/"
   ],
-  "main": "lib/index.js",
-  "jsnext:main": "lib-esnext/index.js",
-  "typings": "./lib/index.d.ts",
+  "main": "dist/es5/index.js",
+  "jsnext:main": "dist/esnext/index.js",
+  "typings": "dist/es5/index.d.ts",
   "scripts": {
     "test:code": "tsc && mocha --compilers js:babel-register",
     "test": "npm run test:code && npm run lint && mos test",
@@ -22,7 +20,7 @@
     "md": "mos",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "tsc": "tsc",
-    "transpile": "tsc && babel lib-esnext --out-dir lib --copy-files",
+    "transpile": "tsc && babel dist/esnext --out-dir dist/es5 --copy-files",
     "prepublish": "npm run transpile"
   },
   "repository": {

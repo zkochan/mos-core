@@ -7,7 +7,7 @@
     "noImplicitAny": true,
     "suppressImplicitAnyIndexErrors": true,
     "target": "es6",
-    "outDir": "lib-esnext",
+    "outDir": "dist/esnext",
     "module": "es2015",
     "moduleResolution": "node"
   },
