@@ -29,6 +29,7 @@ const tokenizeEscape: Tokenizer = function (parser, value, silent) {
       )
     }
   }
+  return false
 }
 
 /*

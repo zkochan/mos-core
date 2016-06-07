@@ -70,7 +70,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   character = value.charAt(index)
 
   if (character !== '[') {
-    return
+    return false
   }
 
   index++
@@ -97,7 +97,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     value.charAt(index) !== ']' ||
     value.charAt(index + 1) !== ':'
   ) {
-    return
+    return false
   }
 
   const identifier = queue
@@ -142,7 +142,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
 
     if (character !== isEnclosedURLCharacter.delimiter) {
       if (commonmark) {
-        return
+        return false
       }
 
       index -= queue.length + 1
@@ -169,7 +169,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
   }
 
   if (!queue) {
-    return
+    return false
   }
 
   let url = queue
@@ -206,7 +206,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     queue = ''
     index = subvalue.length
   } else if (!queue) {
-    return
+    return false
   } else {
     subvalue += queue + character
     index = subvalue.length
@@ -224,7 +224,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
         character = value.charAt(index)
 
         if (character === '\n' || character === test) {
-          return
+          return false
         }
 
         queue += '\n'
@@ -237,7 +237,7 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
     character = value.charAt(index)
 
     if (character !== test) {
-      return
+      return false
     }
 
     beforeTitle = subvalue
@@ -280,6 +280,8 @@ const tokenizeDefinition: Tokenizer = function (parser, value, silent) {
       url,
     })
   }
+
+  return false
 }
 
 tokenizeDefinition.onlyAtTop = true

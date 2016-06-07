@@ -16,7 +16,7 @@ const tokenizeNewline: Tokenizer = function (parser, value, silent) {
   let character = value.charAt(0)
 
   if (character !== '\n') {
-    return
+    return false
   }
 
   /* istanbul ignore if - never used (yet) */
@@ -46,6 +46,7 @@ const tokenizeNewline: Tokenizer = function (parser, value, silent) {
   }
 
   parser.eat(subvalue)
+  return true
 }
 
 export default tokenizeNewline

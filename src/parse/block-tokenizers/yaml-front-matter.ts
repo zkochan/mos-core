@@ -24,7 +24,7 @@ const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
     value.charAt(2) !== '-' ||
     value.charAt(3) !== '\n'
   ) {
-    return
+    return false
   }
 
   let subvalue = `${YAML_FENCE}\n`
@@ -62,6 +62,8 @@ const tokenizeYAMLFrontMatter: Tokenizer = function (parser, value, silent) {
       queue = ''
     }
   }
+
+  return false
 }
 
 tokenizeYAMLFrontMatter.onlyAtStart = true

@@ -76,7 +76,7 @@ export default function eatHTMLOpeningTag (value: string, isBlock?: boolean): st
     subqueue = character = value.charAt(++index)
 
     if (!isAlphabetic(character)) {
-      return
+      return null
     }
 
     index++
@@ -98,7 +98,7 @@ export default function eatHTMLOpeningTag (value: string, isBlock?: boolean): st
     }
 
     if (isBlock && blockElements.indexOf(subqueue.toLowerCase()) === -1) {
-      return
+      return null
     }
 
     queue += subqueue
@@ -229,14 +229,14 @@ export default function eatHTMLOpeningTag (value: string, isBlock?: boolean): st
 
         if (!test.delimiter) {
           if (!subqueue.length) {
-            return
+            return null
           }
 
           index--
         } else if (character === test.delimiter) {
           subqueue += character
         } else {
-          return
+          return null
         }
 
         queue += subqueue
@@ -263,4 +263,5 @@ export default function eatHTMLOpeningTag (value: string, isBlock?: boolean): st
 
     return character === '>' ? queue + character : null
   }
+  return null
 }

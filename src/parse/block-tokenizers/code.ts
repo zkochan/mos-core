@@ -87,6 +87,8 @@ const tokenizeCode: Tokenizer = function (parser, value, silent) {
 
     return parser.eat(subvalue)(renderCodeBlock(content))
   }
+
+  return false
 }
 
 export default tokenizeCode

@@ -34,12 +34,12 @@ function eatHTMLComment (value: string, settings: any): string {
 
       if (commonmark) {
         if (character === '>' && !hasNonDash) {
-          return
+          return null
         }
 
         if (character === '-') {
           if (value.charAt(index + 1) === '-') {
-            return
+            return null
           }
         } else {
           hasNonDash = true
@@ -50,6 +50,7 @@ function eatHTMLComment (value: string, settings: any): string {
       index++
     }
   }
+  return null
 }
 
 export default eatHTMLComment

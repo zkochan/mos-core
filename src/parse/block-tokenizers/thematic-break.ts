@@ -30,7 +30,7 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
   }
 
   if (!ruleMarkers.has(character)) {
-    return
+    return false
   }
 
   const marker = character
@@ -61,9 +61,10 @@ const tokenizeThematicBreak: Tokenizer = function (parser, value, silent) {
         type: 'thematicBreak',
       })
     } else {
-      return
+      return false
     }
   }
+  return false
 }
 
 export default tokenizeThematicBreak

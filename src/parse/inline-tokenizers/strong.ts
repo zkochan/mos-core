@@ -22,7 +22,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
     !~'*_'.indexOf(character) ||
     value.charAt(++index) !== character
   ) {
-    return
+    return false
   }
 
   const pedantic = parser.options.pedantic
@@ -32,7 +32,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
   let queue = character = ''
 
   if (pedantic && isWhiteSpace(value.charAt(index))) {
-    return
+    return false
   }
 
   let prev: string
@@ -49,7 +49,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
 
       if (character !== marker) {
         if (!queue.trim()) {
-          return
+          return false
         }
 
         /* istanbul ignore if - never used (yet) */
@@ -76,6 +76,7 @@ const tokenizeStrong: Tokenizer = function (parser, value, silent) {
     queue += character
     index++
   }
+  return false
 }
 
 /**

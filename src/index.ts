@@ -11,13 +11,16 @@ import escape from './escape'
 import Tokenizer from './parse/tokenizer'; // tslint:disable-line
 import {Node} from './node' // tslint:disable-line
 
-export default {
-  parser: parse,
+export const parser = parse
+export const compiler = stringify
+export const data = { escape }
+
+export {
   blockTokenizers,
   inlineTokenizers,
-  compiler: stringify,
   visitors,
-  data: {
-    escape,
-  },
+  Tokenizer,
 }
+
+export { ParserOptions } from './parse/parser'
+export { CompilerOptions } from './stringify/compiler'

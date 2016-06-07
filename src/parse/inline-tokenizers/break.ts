@@ -24,7 +24,7 @@ const tokenizeBreak: Tokenizer = function (parser, value, silent) {
 
     if (character === '\n') {
       if (!breaks && index < MIN_BREAK_LENGTH) {
-        return
+        return false
       }
 
       /* istanbul ignore if - never used (yet) */
@@ -39,11 +39,12 @@ const tokenizeBreak: Tokenizer = function (parser, value, silent) {
     }
 
     if (character !== ' ') {
-      return
+      return false
     }
 
     queue += character
   }
+  return false
 }
 
 /**

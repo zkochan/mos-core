@@ -27,7 +27,7 @@ export default function eatHTMLClosingTag (value: string, isBlock?: boolean): st
     subqueue = character = value.charAt(++index)
 
     if (!isAlphabetic(character)) {
-      return
+      return null
     }
 
     index++
@@ -49,7 +49,7 @@ export default function eatHTMLClosingTag (value: string, isBlock?: boolean): st
     }
 
     if (isBlock && blockElements.indexOf(subqueue.toLowerCase()) === -1) {
-      return
+      return null
     }
 
     queue += subqueue
@@ -73,4 +73,5 @@ export default function eatHTMLClosingTag (value: string, isBlock?: boolean): st
       return `${queue}>`
     }
   }
+  return null
 }

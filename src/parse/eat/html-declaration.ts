@@ -41,7 +41,7 @@ export default function eatHTMLDeclaration (value: string): string {
     character = value.charAt(index)
 
     if (!subqueue || !isWhiteSpace(character)) {
-      return
+      return null
     }
 
     queue += subqueue + character
@@ -58,4 +58,5 @@ export default function eatHTMLDeclaration (value: string): string {
       index++
     }
   }
+  return null
 }

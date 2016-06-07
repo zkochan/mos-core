@@ -26,7 +26,7 @@ const tokenizeDeletion: Tokenizer = function (parser, value, silent) {
     value.charAt(1) !== '~' ||
     isWhiteSpace(value.charAt(2))
   ) {
-    return
+    return false
   }
 
   let index = 1
@@ -57,6 +57,7 @@ const tokenizeDeletion: Tokenizer = function (parser, value, silent) {
     preceding = previous
     previous = character
   }
+  return false
 }
 
 /**

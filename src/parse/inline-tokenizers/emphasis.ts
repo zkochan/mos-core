@@ -35,7 +35,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
   let character = value.charAt(index)
 
   if (!~'*_'.indexOf(character)) {
-    return
+    return false
   }
 
   const pedantic = parser.options.pedantic
@@ -45,7 +45,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
   let queue = character = ''
 
   if (pedantic && isWhiteSpace(value.charAt(index))) {
-    return
+    return false
   }
 
   while (index < value.length) {
@@ -60,7 +60,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
 
       if (character !== marker) {
         if (!queue.trim() || prev === marker) {
-          return
+          return false
         }
 
         if (
@@ -95,6 +95,7 @@ const tokenizeEmphasis: Tokenizer = function (parser, value, silent) {
     queue += character
     index++
   }
+  return false
 }
 
 /**

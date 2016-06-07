@@ -30,4 +30,5 @@ export default function eatHTMLCDATA (value: string): string {
       index++
     }
   }
+  return null
 }

@@ -34,4 +34,5 @@ function eatHTMLProcessingInstruction (value: string): string {
       index++
     }
   }
+  return null
 }
