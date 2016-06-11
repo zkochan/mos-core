@@ -9,7 +9,6 @@ import stringify from './stringify'
 import visitors from './stringify/visitors'
 import escape from './escape'
 import Tokenizer from './parse/tokenizer'; // tslint:disable-line
-import {Node} from './node' // tslint:disable-line
 
 export const parser = parse
 export const compiler = stringify
@@ -22,5 +21,7 @@ export {
   Tokenizer,
 }
 
-export { ParserOptions } from './parse/parser'
+export { ParserOptions, Tokenizers } from './parse/parser'
 export { CompilerOptions } from './stringify/compiler'
+export { Node } from './node'
+export { Visitor, VisitorsMap } from './stringify/visitor'

@@ -5,7 +5,7 @@ import encodeFactory from './encode-factory'
 import escapeFactory from './escape-factory'
 import LIST_BULLETS from './list-bullets'
 import {Node, ReferenceNode} from '../node'
-import {Visitor} from './visitor'
+import {VisitorsMap} from './visitor'
 
 import {Compiler, CompilerOptions} from './compiler'
 
@@ -148,7 +148,7 @@ const maps = {
  * @param {Object?} [options] - Passed to
  *   `Compiler#setOptions()`.
  */
-function compilerFactory (visitors: {[type: string]: Visitor}) {
+function compilerFactory (visitors: VisitorsMap) {
   const compiler: Compiler = {
     options: Object.assign({}, defaultOptions),
 

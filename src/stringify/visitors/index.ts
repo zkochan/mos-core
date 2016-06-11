@@ -25,8 +25,9 @@ import footnoteDefinition from './footnote-definition'
 import table from './table'
 import tableCell from './table-cell'
 import {Node} from '../../node';
+import {VisitorsMap} from '../visitor';
 
-const visitors = {
+const visitors: VisitorsMap = {
   block,
   root,
   heading,
